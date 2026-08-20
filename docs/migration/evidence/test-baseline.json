@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "angular-migration-test-baseline-v1",
+  "capturedAt": "2026-08-20T11:15:00.000Z",
+  "unit": {
+    "command": "npm test",
+    "tests": 456,
+    "passed": 439,
+    "failed": 17,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "critical": {
+    "command": "npm run test:critical",
+    "tests": 141,
+    "passed": 120,
+    "failed": 21,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "interpretation": {
+    "buildGateGreen": false,
+    "phase0Regression": false,
+    "note": "Counts match the pre-Phase-0 audit. Failures include stale exact-wiring expectations and real version, difficulty, ownership, HOME/GLOBAL and feature-contract regressions. Phase 1 owns classification and correction."
+  }
+}

@@ -1,6 +1,6 @@
 # Phase 3 — Angular foundation
 
-Status: complete (2026-08-20).
+Status: complete, including the Phase 2–3 documentary hand-off (2026-08-20).
 
 ## Scope
 
@@ -46,3 +46,12 @@ establish the repeatable feature pattern end to end: explicit backend contract, 
 application port/use case, infrastructure adapter, real empty/partial/error states,
 responsive visual parity, tests, feature ownership gate and immediate rollback to
 the verified legacy route. LIVE, Loot and Iris remain out of scope.
+
+## Documentary closure
+
+Before beginning that slice, the target repository received the Phase 0–2
+reports, architecture/data baselines, parity matrix, living visual policy and all
+twenty frozen visual captures. Angular is now the active owner of migration
+coordination and the single changelog. Server/Iris/WCL contracts remain beside
+the backend implementation and are governed by the documentation ownership
+matrix; they were not duplicated.

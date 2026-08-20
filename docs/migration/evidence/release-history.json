@@ -1,0 +1,105 @@
+{
+  "schemaVersion": "avoid-release-history-audit-v1",
+  "auditedAt": "2026-08-20",
+  "source": {
+    "repository": "avoid-raid-ops",
+    "productionCommit": "aff79927649d5e9b22e78bf88bff93e4aee5973f",
+    "phase2Commit": "ec7968b008c4a2475ca92d91496418642230bb90",
+    "historyStart": "2026-08-14",
+    "historyEnd": "2026-08-20",
+    "mainReachableCommits": 1080,
+    "mainFirstParentCommits": 55,
+    "allReferenceCommitsAtAudit": 2031,
+    "tags": 0,
+    "earliestPackageCommit": "e43a6f1c7c6b4f033ac18adc4af1cf0c921805a6",
+    "earliestPackageVersion": "0.3.7-vercel.0"
+  },
+  "documentedPreGit": [
+    "3.1.0", "3.2.0", "3.3.0", "3.4.0", "3.4.1", "3.4.2",
+    "3.5.0", "3.5.1", "3.6.0", "3.6.1", "3.6.2", "3.6.3", "3.7.0"
+  ],
+  "mainlineProductReleases": [
+    "3.7.1", "3.7.2", "3.7.3", "3.7.4", "3.7.5", "3.7.6", "3.7.7",
+    "3.7.8", "3.7.9", "3.7.10", "3.7.11", "3.7.12", "3.7.13",
+    "3.8.0", "3.8.1", "3.8.2", "3.8.3", "3.8.4", "3.8.5", "3.8.6",
+    "3.8.7", "3.8.8", "3.8.9", "3.8.9.1",
+    "3.9.0", "3.9.1", "3.9.2", "3.9.3", "3.9.4", "3.9.5", "3.9.6",
+    "3.9.6.1", "3.9.7", "3.9.8", "3.9.9", "3.9.10", "3.9.11",
+    "3.9.12", "3.9.13", "3.9.14"
+  ],
+  "mainlineIntegratedWithoutStandalonePackageProof": ["3.9.5", "3.9.6.1"],
+  "knownBranchOnlyLabels": [
+    "3.7.14", "3.8.10", "3.8.11", "3.8.12", "3.8.13", "3.8.14",
+    "3.8.15", "3.8.16"
+  ],
+  "evidence": {
+    "documentedPreGit": {
+      "3.1.0": "V3.1-CHANGES.md",
+      "3.2.0": "V3.2-CHANGES.md",
+      "3.3.0": "V3.3-CHANGES.md",
+      "3.4.0": "V3.4-CHANGES.md",
+      "3.4.1": "V3.4.1-CHANGES.md",
+      "3.4.2": "V3.4.2-CHANGES.md",
+      "3.5.0": "V3.5-CHANGES.md",
+      "3.5.1": "V3.5.1-CHANGES.md",
+      "3.6.0": "V3.6-CHANGES.md",
+      "3.6.1": "V3.6.1-CHANGES.md",
+      "3.6.2": "V3.6.2-CHANGES.md",
+      "3.6.3": "V3.6.3-CHANGES.md",
+      "3.7.0": "V3.7-CHANGES.md"
+    },
+    "repositoryHistory": {
+      "3.7.1": { "commit": "dc353fb", "class": "mainline-confirmed" },
+      "3.7.2": { "commit": "a4d74bf", "class": "mainline-confirmed" },
+      "3.7.3": { "commit": "3b0b760", "class": "mainline-confirmed" },
+      "3.7.4": { "commit": "f7502f5", "class": "mainline-confirmed" },
+      "3.7.5": { "commit": "c8a867a", "class": "mainline-confirmed" },
+      "3.7.6": { "commit": "5671470", "class": "mainline-confirmed" },
+      "3.7.7": { "commit": "4e1fd14", "class": "mainline-confirmed" },
+      "3.7.8": { "commit": "3c90c8f", "class": "mainline-confirmed" },
+      "3.7.9": { "commit": "7ac40d6", "class": "mainline-confirmed" },
+      "3.7.10": { "commit": "67c92a4", "class": "mainline-confirmed" },
+      "3.7.11": { "commit": "90d26ad", "class": "mainline-confirmed" },
+      "3.7.12": { "commit": "24671dd", "class": "mainline-confirmed" },
+      "3.7.13": { "commit": "f7826f9", "class": "mainline-confirmed" },
+      "3.8.0": { "commit": "c5fc547", "class": "mainline-confirmed" },
+      "3.8.1": { "commit": "186baa3", "class": "mainline-confirmed" },
+      "3.8.2": { "commit": "0e2050d", "class": "mainline-confirmed" },
+      "3.8.3": { "commit": "317fdb1", "class": "mainline-confirmed" },
+      "3.8.4": { "commit": "7d9c5c1", "class": "mainline-confirmed" },
+      "3.8.5": { "commit": "baaff56", "class": "mainline-confirmed" },
+      "3.8.6": { "commit": "e5677b4", "class": "mainline-confirmed" },
+      "3.8.7": { "commit": "d1ebe8c", "class": "mainline-confirmed" },
+      "3.8.8": { "commit": "cf419e5", "class": "mainline-confirmed" },
+      "3.8.9": { "commit": "3368a55", "class": "mainline-confirmed" },
+      "3.8.9.1": { "commit": "008a93f", "class": "mainline-confirmed" },
+      "3.9.0": { "commit": "207f9e9", "class": "mainline-confirmed" },
+      "3.9.1": { "commit": "8983923", "class": "mainline-confirmed" },
+      "3.9.2": { "commit": "e45f57f", "class": "mainline-confirmed" },
+      "3.9.3": { "commit": "16ffc20", "class": "mainline-confirmed" },
+      "3.9.4": { "commit": "6584d99", "class": "mainline-confirmed" },
+      "3.9.5": { "commit": "79d1ae5", "class": "mainline-integrated" },
+      "3.9.6": { "commit": "3e23d02", "class": "mainline-integrated" },
+      "3.9.6.1": { "commit": "561a1f2", "class": "mainline-integrated" },
+      "3.9.7": { "commit": "c278b81", "class": "mainline-integrated" },
+      "3.9.8": { "commit": "f883722", "class": "mainline-integrated" },
+      "3.9.9": { "commit": "eec029e", "class": "mainline-integrated" },
+      "3.9.10": { "commit": "5b1e6a0", "class": "mainline-integrated" },
+      "3.9.11": { "commit": "5742e74", "class": "mainline-integrated" },
+      "3.9.12": { "commit": "e7cc0cb", "class": "mainline-integrated" },
+      "3.9.13": { "commit": "aff7992", "class": "mainline-confirmed" },
+      "3.9.14": { "commit": "4e0ab51", "class": "migration-baseline-confirmed" }
+    }
+  },
+  "documentConflicts": [
+    {
+      "file": "V3.6.1-CHANGES.md",
+      "conflict": "The filename says v3.6.1 while the document title says v3.6.2."
+    }
+  ],
+  "packageVersionRule": "0.3.9-<integer>-vercel.0",
+  "historicalInvalidPackageExamples": [
+    "0.3.9-6.1-vercel.0", "0.3.9-7.0-vercel.0", "0.3.9-13-vercel.1",
+    "0.3.9-13-vercel.2", "0.3.9-13-vercel.3", "0.3.9-13-vercel.4"
+  ]
+}

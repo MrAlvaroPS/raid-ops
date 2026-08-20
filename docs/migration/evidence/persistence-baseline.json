@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "angular-migration-persistence-baseline-v1",
+  "snapshotId": "phase0-2026-08-20T11-08-00-131Z",
+  "createdAt": "2026-08-20T11:08:33.092Z",
+  "localBackupDirectory": ".migration-backups/phase0-2026-08-20T11-08-00-131Z",
+  "gitPolicy": "ignored-local-state-never-commit",
+  "sources": [
+    {
+      "kind": "corpus",
+      "status": "backed-up",
+      "fileCount": 1251,
+      "bytes": 292735585,
+      "aggregateSha256": "9a5e70af300eecb27ced6fc40d6c9b50983b18fd40842ecd2dda53c56f97c011"
+    }
+  ],
+  "browserCache": {
+    "status": "not-authoritative-not-copied",
+    "reason": "Browser Cache Storage is a derived delivery cache. Persistent corpus and knowledge stores are the migration authority."
+  },
+  "externalDatabase": {
+    "status": "not-observed-in-repository",
+    "note": "No database connection or compose file was found. Confirm any separately managed local database before Phase 1 changes persistence."
+  }
+}

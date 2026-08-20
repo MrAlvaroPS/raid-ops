@@ -8,8 +8,9 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "verify:architecture": "node scripts/verify-architecture.mjs",
+    "verify:docs": "node scripts/verify-documentation.mjs",
     "verify:visual": "node scripts/verify-foundation-visual.mjs",
-    "verify": "npm run verify:architecture && npm test && npm run build"
+    "verify": "npm run verify:docs && npm run verify:architecture && npm test && npm run build"
   },
   "private": true,
   "packageManager": "npm@10.9.8",

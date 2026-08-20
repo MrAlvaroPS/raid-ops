@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "angular-migration-phase1-verification-v1",
+  "capturedAt": "2026-08-20T14:02:26.0541680+02:00",
+  "branch": "phase1-legacy-stabilization",
+  "phase0BaseCommit": "3c5ed37",
+  "release": {
+    "packageVersion": "0.3.9-14-vercel.0",
+    "productVersion": "3.9.14",
+    "sourceOfTruth": "package.json"
+  },
+  "verification": {
+    "unit": {
+      "command": "npm test",
+      "tests": 458,
+      "passed": 458,
+      "failed": 0
+    },
+    "critical": {
+      "command": "npm run test:critical",
+      "tests": 141,
+      "passed": 141,
+      "failed": 0
+    },
+    "build": {
+      "command": "npm run build",
+      "passed": true
+    },
+    "visual": {
+      "mode": "fresh-profile-offline",
+      "captures": 20,
+      "structuralDifferencesFromPhase0": 0,
+      "browserErrors": 0,
+      "browserObservedApiRequests": 0,
+      "knownUnreachableSurfaces": 2,
+      "localEvidence": ".migration-backups/phase1-visual"
+    }
+  },
+  "safety": {
+    "wclCallsExecuted": 0,
+    "providerCallsExecuted": 0,
+    "corpusMutated": false,
+    "databaseMutated": false,
+    "angularTargetChanged": false
+  },
+  "decision": "GO_PHASE_2"
+}

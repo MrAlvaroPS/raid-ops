@@ -1,0 +1,397 @@
+{
+  "schemaVersion": "angular-migration-visual-baseline-v1",
+  "generatedAt": "2026-08-20T11:12:42.114Z",
+  "sourceUrl": "http://127.0.0.1:5173",
+  "mode": "fresh-profile-offline",
+  "safeguards": {
+    "externalHttpBlocked": true,
+    "apiFetchStubbedInBrowser": true,
+    "wclCallsExecuted": 0,
+    "providerCallsExecuted": 0,
+    "corpusMutated": false
+  },
+  "captures": [
+    {
+      "viewport": "desktop",
+      "screen": "Command Center",
+      "heading": "Command Center",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/COMMAND CENTER",
+      "activeNavigationItems": [
+        "⌂Command Center"
+      ],
+      "fixtureMarkers": [
+        "Nether Eruption",
+        "Cosmic Shard",
+        "Pull 25",
+        "Mirael",
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 56,
+      "mainTextSha256": "28741f92308fec5a423820e44db95f7fbe4b5b56a41b8208726b123f00946d5d",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/command-center.webp",
+      "bytes": 99692,
+      "sha256": "600ad7a5dde202ba13f7af2601779fc6ffc2d2a032ad77e13812c73c49f04bd1"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "LIVE",
+      "heading": "LIVE",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/LIVE",
+      "activeNavigationItems": [
+        "●LIVELIVE"
+      ],
+      "fixtureMarkers": [
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "096aa85ca8f948ad574feb6470b2a3ab9263a010a58254c739e1f6453fba4838",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/live.webp",
+      "bytes": 32980,
+      "sha256": "1c608bb5ae851cc084b5fb190772b036534fed23f1aa9f44d4a84ad6efeed26d"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Progress",
+      "heading": "Progress",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/PROGRESS",
+      "activeNavigationItems": [
+        "↗Progress"
+      ],
+      "fixtureMarkers": [
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "7ee3dd71f14126a741d95ed1c21a77fefee22e9431cc6abb7ceb1e5d2939bb86",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/progress.webp",
+      "bytes": 75266,
+      "sha256": "d4818455f6872e4d914d667840a444b04d9dcf52a9242906daf1b198c73f1dd3"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Pull Lab",
+      "heading": "Pull Lab",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/PULL LAB",
+      "activeNavigationItems": [
+        "⌁Pull Lab"
+      ],
+      "fixtureMarkers": [
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "517636c33e99ae60e9297f7cd4e408f21f60c8a6203461919344683077e3c0bb",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/pull-lab.webp",
+      "bytes": 36222,
+      "sha256": "126f227851499aad85a5541575ce477c2f5e68ec54438283ee87423fce837e9b"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Damage & Healing",
+      "heading": "Damage & Healing",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/DAMAGE & HEALING",
+      "activeNavigationItems": [
+        "⌁Damage & Healing"
+      ],
+      "fixtureMarkers": [
+        "Nether Eruption",
+        "Pull 25",
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 64,
+      "mainTextSha256": "789111c274a9dd1c934acda8d2abf52e116014390f0c02c75adfca857e52798a",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/damage-and-healing.webp",
+      "bytes": 80080,
+      "sha256": "8ccd65d8fe26a6c8eec6c55a72ec1d3d74d2d236fe0b578eb19a2f2e95a79755"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Mechanics",
+      "heading": "Mechanics",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/MECHANICS",
+      "activeNavigationItems": [
+        "◎Mechanics"
+      ],
+      "fixtureMarkers": [
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 11,
+      "mainTextSha256": "ea4ee8c2295faad291a441c528cbb1f935438d0af329e950f59549f8d444b0ed",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/mechanics.webp",
+      "bytes": 43542,
+      "sha256": "bc4dde967f906bd765b7099a3b63de6339c865bceeba5d26a6198712fc062f20"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Defensive Audit",
+      "heading": "Defensive Audit",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/DEFENSIVE AUDIT",
+      "activeNavigationItems": [
+        "◇Defensive Audit5"
+      ],
+      "fixtureMarkers": [
+        "Nether Eruption",
+        "Cosmic Shard",
+        "Pull 25",
+        "Krynn",
+        "Veyra",
+        "Thorne",
+        "Mirael",
+        "Ravok",
+        "Sylen",
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 47,
+      "mainTextSha256": "1bed5fc55483c1565dbf03e42428fdd717fcafe80aee9636ea1fdf6d30a68517",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/defensive-audit.webp",
+      "bytes": 88952,
+      "sha256": "eeb1a97319d36c5b65cd104a6d245f394d5a2c948ce53385c63a1f05c98e820c"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Players",
+      "heading": "Players",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/PLAYERS",
+      "activeNavigationItems": [
+        "♙Players"
+      ],
+      "fixtureMarkers": [
+        "Krynn",
+        "Veyra",
+        "Thorne",
+        "Mirael",
+        "Ravok",
+        "Sylen",
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "86b147301863edc2f27d3e741b1e9ae95e828446e9bc64b8338f3ff06f33aba1",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/players.webp",
+      "bytes": 72286,
+      "sha256": "a57c2dd459059102a5fab0806747821fa1306fd1ff4cf42e1895e706f031b214"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Composition",
+      "heading": "Composition",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/COMPOSITION",
+      "activeNavigationItems": [
+        "◫Composition"
+      ],
+      "fixtureMarkers": [
+        "Cosmic Shard",
+        "Simulated Warcraft Logs data"
+      ],
+      "horizontalOverflowPx": 26,
+      "mainTextSha256": "bb66c137c169bf0ac06697ab423823d388134c5dfd1f7cd8b456c974ea41d6a2",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/composition.webp",
+      "bytes": 75446,
+      "sha256": "14862edcbb3dd2997d061381942bcad48f74887de4ddba2dae7587f27e2d3773"
+    },
+    {
+      "viewport": "desktop",
+      "screen": "Loot",
+      "heading": "Composition",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/COMPOSITION",
+      "activeNavigationItems": [
+        "◫Composition",
+        "◫Loot"
+      ],
+      "fixtureMarkers": [],
+      "horizontalOverflowPx": 26,
+      "mainTextSha256": "cee26b7e7477a9ff1a818d951809ea87d4771fe763cefa298ea03afb74f80120",
+      "file": "docs/migration/angular/evidence/visual/offline/desktop/loot.webp",
+      "bytes": 42960,
+      "sha256": "951ac8b9d38212e451d60cdf5a2bad155350c3a4c93c72f3d33d8f1147761be3"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Command Center",
+      "heading": "Command Center",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/COMMAND CENTER",
+      "activeNavigationItems": [
+        "⌂Command Center"
+      ],
+      "fixtureMarkers": [
+        "Nether Eruption",
+        "Cosmic Shard",
+        "Pull 25",
+        "Mirael"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "3eac4ed6c59c4acc9eeab05695c095e16cf91702fc140b49bfa15ee20d1de7c0",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/command-center.webp",
+      "bytes": 76386,
+      "sha256": "3c3e12729e4b70257e6cdbb7be2e32a6cb78e20b92f7a7b1008cda1207efad68"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "LIVE",
+      "heading": "LIVE",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/LIVE",
+      "activeNavigationItems": [
+        "●LIVELIVE"
+      ],
+      "fixtureMarkers": [],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "62533c1901abe4cd1877784515e17dab985026355fa6d7b23c3c869f0e9aa924",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/live.webp",
+      "bytes": 14938,
+      "sha256": "c2eff1e3a7f5be17e456551a5023edd8a3779ac72672875fb5b4b9b7091b3744"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Progress",
+      "heading": "Progress",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/PROGRESS",
+      "activeNavigationItems": [
+        "↗Progress"
+      ],
+      "fixtureMarkers": [],
+      "horizontalOverflowPx": 257,
+      "mainTextSha256": "c1628aa3e04d1d97be11701c1b03b41f7d134d43d6c036a0f9b8627c193cb17c",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/progress.webp",
+      "bytes": 53980,
+      "sha256": "7cad9855cc8a180e3fbe726416b4f736c4a9a04529064e57de967b47da08d4f6"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Pull Lab",
+      "heading": "Pull Lab",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/PULL LAB",
+      "activeNavigationItems": [
+        "⌁Pull Lab"
+      ],
+      "fixtureMarkers": [],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "f75845f3cba7f763d3e161ac6b81885e8805672fe51db95eb79407d77cc91082",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/pull-lab.webp",
+      "bytes": 16932,
+      "sha256": "58f77aa6f101e15614c1537905777156ee413b03d9df1b5685e17df5e5e12773"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Damage & Healing",
+      "heading": "Damage & Healing",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/DAMAGE & HEALING",
+      "activeNavigationItems": [
+        "⌁Damage & Healing"
+      ],
+      "fixtureMarkers": [
+        "Pull 25"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "1869251b4bd36b3465d9b07bcf59165ccd22c6e7cb7f8cd78f1e4084a1904662",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/damage-and-healing.webp",
+      "bytes": 55880,
+      "sha256": "ac76f97d6dc1512947e9e071e1ec3fba0efcc0cf298d80950fb447613d3227fd"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Mechanics",
+      "heading": "Mechanics",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/MECHANICS",
+      "activeNavigationItems": [
+        "◎Mechanics"
+      ],
+      "fixtureMarkers": [],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "ea659a5ef999467f0c3dd24032ef1c10b9745040e9bf485640f7fd1177a07280",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/mechanics.webp",
+      "bytes": 24000,
+      "sha256": "06164ec78a1190c7cee5bc06a9d628878a0f4d7ea6cde5b6cd2cde5aa50ae1c0"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Defensive Audit",
+      "heading": "Defensive Audit",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/DEFENSIVE AUDIT",
+      "activeNavigationItems": [
+        "◇Defensive Audit5"
+      ],
+      "fixtureMarkers": [
+        "Nether Eruption",
+        "Cosmic Shard",
+        "Pull 25",
+        "Krynn",
+        "Veyra",
+        "Thorne",
+        "Mirael",
+        "Ravok",
+        "Sylen"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "f5d31b8d1249b0d4a12ff2a79a7263f1d4dda66d55f1321364444849bef286ea",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/defensive-audit.webp",
+      "bytes": 44840,
+      "sha256": "2e478fe685aec54a23dae839659bca3e0501d652bfec82605025ef77296e6357"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Players",
+      "heading": "Players",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/PLAYERS",
+      "activeNavigationItems": [
+        "♙Players"
+      ],
+      "fixtureMarkers": [
+        "Krynn",
+        "Veyra",
+        "Thorne",
+        "Mirael",
+        "Ravok",
+        "Sylen"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "e8f8e110162ae4e119dcf9c59592cfb14286822608fce85cd9e81a499cb12202",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/players.webp",
+      "bytes": 39832,
+      "sha256": "5b9aeb0d876392397a00ffe0dd341e922879df5a7d0919ca6aee69b899269363"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Composition",
+      "heading": "Composition",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/COMPOSITION",
+      "activeNavigationItems": [
+        "◫Composition"
+      ],
+      "fixtureMarkers": [
+        "Cosmic Shard"
+      ],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "0c83e651797d6fcc50fc063195666506d9911c85f1de9b5d23eecff8a5971853",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/composition.webp",
+      "bytes": 57286,
+      "sha256": "b0e773e4f8ea3200270d77a63dcac9c694c3ce4090cb50587a75364a99e59745"
+    },
+    {
+      "viewport": "mobile",
+      "screen": "Loot",
+      "heading": "Composition",
+      "breadcrumb": "AVOID/NERUB-AR PALACE/COMPOSITION",
+      "activeNavigationItems": [
+        "◫Composition",
+        "◫Loot"
+      ],
+      "fixtureMarkers": [],
+      "horizontalOverflowPx": 0,
+      "mainTextSha256": "e2f7dee4e96a5545e5067e89b38fa7c829d2209ac903a5d815e73f98259b64b9",
+      "file": "docs/migration/angular/evidence/visual/offline/mobile/loot.webp",
+      "bytes": 21626,
+      "sha256": "28d27eebc352310d2728fe679174499611ac9e16e7f50fabf7948f55c6d7b0f4"
+    }
+  ],
+  "unreachableSurfaces": [
+    {
+      "viewport": "desktop",
+      "surface": "Data & Logs",
+      "reason": "#raidops-data-button was not mounted in a fresh offline profile"
+    },
+    {
+      "viewport": "mobile",
+      "surface": "Data & Logs",
+      "reason": "#raidops-data-button was not mounted in a fresh offline profile"
+    }
+  ],
+  "browserErrors": [],
+  "browserObservedApiRequests": []
+}

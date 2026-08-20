@@ -2,7 +2,7 @@
 
 Incremental Angular replacement for the legacy `avoid-raid-ops` frontend.
 
-Current status: **Phase 3 foundation**. Angular owns only its technical foundation page. Every product surface remains explicitly owned by the verified legacy application until its vertical slice passes data-contract, behaviour, visual and rollback gates.
+Current status: **Phase 3 foundation and documentary hand-off complete**. Angular owns only its technical foundation page. Every product surface remains explicitly owned by the verified legacy application until its vertical slice passes data-contract, behaviour, visual, documentation and rollback gates.
 
 ## Commands
 
@@ -23,4 +23,4 @@ src/app/
   shared/     genuinely reusable UI or utilities only
 ```
 
-Architecture and migration decisions live under [`docs/`](./docs/).
+The canonical documentation entry point is [`docs/README.md`](./docs/README.md). It includes the migrated phase history, release changelog, visual evidence, ownership rules and the integral definition of done. Backend/Iris/WCL operating contracts remain beside the legacy backend until that backend changes owner.

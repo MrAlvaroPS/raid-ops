@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "angular-migration-phase-verification-v1",
+  "phase": 2,
+  "scope": "documentation-and-releases",
+  "completedAt": "2026-08-20",
+  "archivedReleaseDocuments": 50,
+  "archivedDeployPreviewFiles": 16,
+  "activeChangelog": "docs/releases/CHANGELOG.md",
+  "livingVisualBaseline": "docs/visual/LIVING-VISUAL-BASELINE.md",
+  "netlifyActive": false,
+  "wclCalls": 0,
+  "providerCalls": 0,
+  "databaseOrCorpusMutations": 0,
+  "verification": {
+    "documentationStructure": "pass",
+    "livingVisualReference": "pass",
+    "unitTests": "458/458 pass",
+    "criticalTests": "141/141 pass",
+    "productionBuild": "pass",
+    "legacyPythonHelpers": "2 remaining helpers not executable: Windows python3 command resolves to the Microsoft Store alias"
+  }
+}

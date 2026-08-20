@@ -1,0 +1,1310 @@
+{
+  "schemaVersion": "angular-migration-inventory-v1",
+  "generatedAt": "2026-08-20T11:14:01.253Z",
+  "repository": {
+    "root": ".",
+    "branch": "phase0-angular-migration-baseline",
+    "commit": "aff79927649d5e9b22e78bf88bff93e4aee5973f"
+  },
+  "safety": {
+    "readsEnvironmentFiles": false,
+    "executesProviderNetworkCalls": false,
+    "executesWclCalls": false,
+    "mutatesCorpus": false
+  },
+  "files": {
+    "count": 742,
+    "bytes": 11001675,
+    "byExtension": {
+      ".mjs": 383,
+      ".js": 125,
+      ".md": 125,
+      ".css": 45,
+      ".json": 25,
+      ".ts": 9,
+      ".html": 8,
+      ".png": 4,
+      ".py": 4,
+      ".svg": 4,
+      "(none)": 4,
+      ".yml": 2,
+      ".local": 1,
+      ".sql": 1,
+      ".toml": 1,
+      ".txt": 1
+    },
+    "byTopDirectory": {
+      "server": 228,
+      "tests": 148,
+      "public": 81,
+      "docs": 62,
+      "apps": 40,
+      "routes": 32,
+      "scripts": 26,
+      "tools": 17,
+      "deploy-preview": 16,
+      "packages": 8,
+      "golden-master": 6,
+      ".github": 2,
+      ".env.local": 1,
+      ".gitignore": 1,
+      "AGENTS.md": 1,
+      "ARCHITECTURE.md": 1,
+      "DATA-TRUTH-MATRIX.md": 1,
+      "deploy-golden-integrity-v32.json": 1,
+      "DEPLOY-NETLIFY.md": 1,
+      "FIDELITY-REPORT.md": 1,
+      "FILE-INVENTORY.txt": 1,
+      "GIT-DEPLOYMENT.md": 1,
+      "golden-master-manifest.json": 1,
+      "index.html": 1,
+      "IRIS-ARCHITECTURE.md": 1,
+      "IRIS-OPERATIONS.md": 1,
+      "LOOT-SIMULATION.md": 1,
+      "MIGRATION-GUARDRAILS.md": 1,
+      "nitro.config.js": 1,
+      "package-lock.json": 1,
+      "package.json": 1,
+      "README.md": 1,
+      "SIMC-UPSTREAM.md": 1,
+      "syntax-results-v32.json": 1,
+      "V3.1-CHANGES.md": 1,
+      "V3.1-VERIFICATION.md": 1,
+      "V3.2-CHANGES.md": 1,
+      "V3.2-VERIFICATION.md": 1,
+      "V3.3-CHANGES.md": 1,
+      "V3.3-SYNTAX-CHECKS.json": 1,
+      "V3.3-VERIFICATION.md": 1,
+      "V3.4-CHANGES.md": 1,
+      "V3.4-GOLDEN-INTEGRITY.json": 1,
+      "V3.4-SYNTAX-CHECKS.json": 1,
+      "V3.4-VERIFICATION.md": 1,
+      "V3.4-WORKBENCH.md": 1,
+      "V3.4.1-CHANGES.md": 1,
+      "V3.4.1-VERIFICATION.md": 1,
+      "V3.4.2-CHANGES.md": 1,
+      "V3.4.2-GOLDEN-INTEGRITY.json": 1,
+      "V3.4.2-VERIFICATION.json": 1,
+      "V3.4.2-VERIFICATION.md": 1,
+      "V3.5-CHANGES.md": 1,
+      "V3.5-ENCOUNTER-CORPUS.md": 1,
+      "V3.5-GOLDEN-INTEGRITY.json": 1,
+      "V3.5-VERIFICATION.json": 1,
+      "V3.5-VERIFICATION.md": 1,
+      "V3.5.1-CHANGES.md": 1,
+      "V3.5.1-GOLDEN-INTEGRITY.json": 1,
+      "V3.5.1-VERIFICATION.json": 1,
+      "V3.5.1-VERIFICATION.md": 1,
+      "V3.6-CHANGES.md": 1,
+      "V3.6-GOLDEN-INTEGRITY.json": 1,
+      "V3.6-HOSTED-RESEARCH.md": 1,
+      "V3.6-SYNTAX-CHECKS.json": 1,
+      "V3.6-VERIFICATION.json": 1,
+      "V3.6-VERIFICATION.md": 1,
+      "V3.6.1-CHANGES.md": 1,
+      "V3.6.1-VERIFICATION.md": 1,
+      "V3.6.2-CHANGES.md": 1,
+      "V3.6.2-VERIFICATION.md": 1,
+      "V3.6.3-CHANGES.md": 1,
+      "V3.6.3-VERIFICATION.md": 1,
+      "V3.7-CHANGES.md": 1,
+      "V3.7-ENCOUNTER-DISCOVERY.md": 1,
+      "V3.7-GOLDEN-INTEGRITY.json": 1,
+      "V3.7-SYNTAX-CHECKS.json": 1,
+      "V3.7-VERIFICATION.json": 1,
+      "V3.7-VERIFICATION.md": 1,
+      "V3.7.9-CHANGES.md": 1,
+      "V3.9-REFACTOR-PLAN.md": 1,
+      "V3.9.3-CHANGES.md": 1,
+      "VERCEL-DEPLOY.md": 1,
+      "vercel.json": 1,
+      "verification-results-v32.json": 1,
+      "vite.config.js": 1,
+      "WCL-QUERY-PLAYBOOK.md": 1,
+      "workflows": 1
+    }
+  },
+  "frontend": {
+    "entrypoint": "index.html",
+    "css": {
+      "count": 28,
+      "bytes": 169315,
+      "importantDeclarations": 110,
+      "assets": [
+        {
+          "asset": "main.css",
+          "bytes": 59445,
+          "importantDeclarations": 7
+        },
+        {
+          "asset": "raidops-v34.css",
+          "bytes": 7367,
+          "importantDeclarations": 8
+        },
+        {
+          "asset": "raidops-v35.css",
+          "bytes": 1873,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v37.css",
+          "bytes": 908,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v373.css",
+          "bytes": 4362,
+          "importantDeclarations": 1
+        },
+        {
+          "asset": "raidops-v374.css",
+          "bytes": 858,
+          "importantDeclarations": 4
+        },
+        {
+          "asset": "raidops-v375.css",
+          "bytes": 3091,
+          "importantDeclarations": 2
+        },
+        {
+          "asset": "raidops-v376.css",
+          "bytes": 3823,
+          "importantDeclarations": 36
+        },
+        {
+          "asset": "raidops-v377.css",
+          "bytes": 1212,
+          "importantDeclarations": 3
+        },
+        {
+          "asset": "raidops-v378.css",
+          "bytes": 6460,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v379.css",
+          "bytes": 2714,
+          "importantDeclarations": 8
+        },
+        {
+          "asset": "raidops-v3710.css",
+          "bytes": 4719,
+          "importantDeclarations": 2
+        },
+        {
+          "asset": "raidops-v3711.css",
+          "bytes": 4799,
+          "importantDeclarations": 2
+        },
+        {
+          "asset": "raidops-v3712.css",
+          "bytes": 4204,
+          "importantDeclarations": 1
+        },
+        {
+          "asset": "raidops-v3713.css",
+          "bytes": 3275,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v386.css",
+          "bytes": 5797,
+          "importantDeclarations": 1
+        },
+        {
+          "asset": "raidops-v390.css",
+          "bytes": 4635,
+          "importantDeclarations": 6
+        },
+        {
+          "asset": "raidops-v392.css",
+          "bytes": 1208,
+          "importantDeclarations": 8
+        },
+        {
+          "asset": "raidops-v3910.css",
+          "bytes": 9943,
+          "importantDeclarations": 1
+        },
+        {
+          "asset": "raidops-v39101.css",
+          "bytes": 2215,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v3910-difficulty.css",
+          "bytes": 3496,
+          "importantDeclarations": 3
+        },
+        {
+          "asset": "raidops-v3911-execution.css",
+          "bytes": 3937,
+          "importantDeclarations": 7
+        },
+        {
+          "asset": "raidops-v3912-operational.css",
+          "bytes": 10770,
+          "importantDeclarations": 4
+        },
+        {
+          "asset": "raidops-v3912-safe-diagnostic.css",
+          "bytes": 1966,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v3912-rl-bridge.css",
+          "bytes": 452,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v3912-mechanics-bridge.css",
+          "bytes": 2750,
+          "importantDeclarations": 5
+        },
+        {
+          "asset": "raidops-v3913-loot.css",
+          "bytes": 6208,
+          "importantDeclarations": 0
+        },
+        {
+          "asset": "raidops-v3913-loot-v2.css",
+          "bytes": 6828,
+          "importantDeclarations": 1
+        }
+      ]
+    },
+    "scripts": {
+      "count": 21,
+      "bytes": 433675,
+      "setIntervals": 10,
+      "mutationObservers": 4,
+      "globalReferences": 75,
+      "uniqueGlobals": [
+        "__AVOID_ACTIVE_REPORT_DATA__",
+        "__AVOID_ACTIVE_REPORT__",
+        "__AVOID_ACTIVITY__",
+        "__AVOID_CORPUS_UI_STABILITY__",
+        "__AVOID_DATA_HUB__",
+        "__AVOID_EXECUTION_CONTEXT__",
+        "__AVOID_EXECUTION__",
+        "__AVOID_HISTORY_REPORT_SELECTION__",
+        "__AVOID_HOME_HISTORY__",
+        "__AVOID_IRIS_CAPABILITIES__",
+        "__AVOID_IRIS_OPERATIONS__",
+        "__AVOID_IRIS__",
+        "__AVOID_KNOWLEDGE_REINDEX__",
+        "__AVOID_LIVE_RL_BRIDGE__",
+        "__AVOID_LIVE_SAFE_FALLBACK__",
+        "__AVOID_LIVE_UI_STABILITY__",
+        "__AVOID_LOOT_PROFILE_BRIDGE__",
+        "__AVOID_LOOT_V391314_LOADER__",
+        "__AVOID_MECHANICS_GLOBAL_CONTEXT__",
+        "__AVOID_MECHANICS_RAID_EXECUTION__",
+        "__AVOID_MECHANICS_STATE__",
+        "__AVOID_OPERATIONAL_EXECUTION__",
+        "__AVOID_OPERATIONAL_OBSERVER_GUARD__",
+        "__AVOID_OPERATIONAL_UI__",
+        "__AVOID_PROGRESS_LEGACY_WRAPPED__",
+        "__AVOID_PROGRESS_V3713__",
+        "__AVOID_PULL_SELECTION__",
+        "__AVOID_RAID_EXECUTION__",
+        "__AVOID_WCL_HISTORY__",
+        "__AVOID_WCL_INTELLIGENCE__",
+        "__AVOID_WCL_TELEMETRY__",
+        "__AVOID_WCL__"
+      ],
+      "assets": [
+        {
+          "asset": "main.js",
+          "bytes": 245581,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 0
+        },
+        {
+          "asset": "avoid-execution-context-v3911.js",
+          "bytes": 18029,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 14
+        },
+        {
+          "asset": "data-hub-v390.js",
+          "bytes": 17202,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 10
+        },
+        {
+          "asset": "knowledge-reindex-v390.js",
+          "bytes": 1893,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 3
+        },
+        {
+          "asset": "encounter-intelligence-v375.js",
+          "bytes": 18971,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 2
+        },
+        {
+          "asset": "corpus-ui-stability-v1.js",
+          "bytes": 2549,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 1
+        },
+        {
+          "asset": "progress-runtime-v3713.js",
+          "bytes": 28754,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 4
+        },
+        {
+          "asset": "iris-runtime-v3713.js",
+          "bytes": 8813,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 5
+        },
+        {
+          "asset": "player-intelligence-v392.js",
+          "bytes": 12760,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 0
+        },
+        {
+          "asset": "iris-mechanics-knowledge-v3910.js",
+          "bytes": 15631,
+          "setIntervals": 1,
+          "mutationObservers": 1,
+          "globalReferences": 1
+        },
+        {
+          "asset": "iris-mechanics-global-reference-v3910.js",
+          "bytes": 4722,
+          "setIntervals": 0,
+          "mutationObservers": 1,
+          "globalReferences": 0
+        },
+        {
+          "asset": "iris-mechanics-header-v3910.js",
+          "bytes": 4029,
+          "setIntervals": 0,
+          "mutationObservers": 1,
+          "globalReferences": 1
+        },
+        {
+          "asset": "avoid-operational-observer-guard-v3912.js",
+          "bytes": 1507,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 1
+        },
+        {
+          "asset": "avoid-operational-ui-v3912.js",
+          "bytes": 23406,
+          "setIntervals": 1,
+          "mutationObservers": 1,
+          "globalReferences": 9
+        },
+        {
+          "asset": "avoid-mechanics-state-v3912.js",
+          "bytes": 1648,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 6
+        },
+        {
+          "asset": "avoid-mechanics-global-context-v3912.js",
+          "bytes": 4232,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 3
+        },
+        {
+          "asset": "avoid-live-safe-fallback-v3912.js",
+          "bytes": 15204,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 4
+        },
+        {
+          "asset": "avoid-live-ui-stability-v3912.js",
+          "bytes": 1829,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 2
+        },
+        {
+          "asset": "avoid-live-rl-bridge-v3912.js",
+          "bytes": 4796,
+          "setIntervals": 1,
+          "mutationObservers": 0,
+          "globalReferences": 3
+        },
+        {
+          "asset": "loot-profile-bridge-v3913.js",
+          "bytes": 1455,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 4
+        },
+        {
+          "asset": "loot-runtime-v39132.js",
+          "bytes": 664,
+          "setIntervals": 0,
+          "mutationObservers": 0,
+          "globalReferences": 2
+        }
+      ],
+      "dynamicallyReferencedAssets": [
+        "loot-runtime-v391310-overlay.js",
+        "loot-runtime-v39137.js"
+      ]
+    },
+    "cacheBusters": [
+      "3.4.2",
+      "3.6.2",
+      "3.7.0",
+      "3.7.3",
+      "3.7.4",
+      "3.7.5",
+      "3.7.6",
+      "3.7.7",
+      "3.7.8",
+      "3.7.9",
+      "3.7.10",
+      "3.7.11",
+      "3.7.12",
+      "3.8.5",
+      "3.8.6",
+      "3.9.0",
+      "3.9.2",
+      "3.9.10",
+      "3.9.10.1",
+      "3.9.10.4",
+      "3.9.12.0",
+      "3.9.12.8",
+      "3.9.12.2",
+      "3.9.12.3",
+      "3.9.13.0",
+      "3.9.13.2",
+      "1.1.0",
+      "3.8.9.1",
+      "3.9.12.5",
+      "3.9.12.7",
+      "3.9.12.10",
+      "3.9.12.1",
+      "3.9.13.14"
+    ]
+  },
+  "api": {
+    "routeCount": 32,
+    "routes": [
+      {
+        "path": "/api/iris/capabilities",
+        "file": "routes/api/iris/capabilities.js",
+        "bytes": 182
+      },
+      {
+        "path": "/api/iris/sources",
+        "file": "routes/api/iris/sources.js",
+        "bytes": 177
+      },
+      {
+        "path": "/api/knowledge",
+        "file": "routes/api/knowledge.js",
+        "bytes": 171
+      },
+      {
+        "path": "/api/knowledge/ability",
+        "file": "routes/api/knowledge/ability.js",
+        "bytes": 182
+      },
+      {
+        "path": "/api/knowledge/encounter",
+        "file": "routes/api/knowledge/encounter.js",
+        "bytes": 193
+      },
+      {
+        "path": "/api/knowledge/global-reference",
+        "file": "routes/api/knowledge/global-reference.js",
+        "bytes": 1134
+      },
+      {
+        "path": "/api/knowledge/raid-catalog",
+        "file": "routes/api/knowledge/raid-catalog.js",
+        "bytes": 3768
+      },
+      {
+        "path": "/api/knowledge/raid-corpus-bootstrap",
+        "file": "routes/api/knowledge/raid-corpus-bootstrap.js",
+        "bytes": 2056
+      },
+      {
+        "path": "/api/knowledge/raid-learning-plan",
+        "file": "routes/api/knowledge/raid-learning-plan.js",
+        "bytes": 2662
+      },
+      {
+        "path": "/api/knowledge/spell-structure",
+        "file": "routes/api/knowledge/spell-structure.js",
+        "bytes": 191
+      },
+      {
+        "path": "/api/loot",
+        "file": "routes/api/loot.js",
+        "bytes": 166
+      },
+      {
+        "path": "/api/wcl/active-report-manifest",
+        "file": "routes/api/wcl/active-report-manifest.js",
+        "bytes": 187
+      },
+      {
+        "path": "/api/wcl/corpus",
+        "file": "routes/api/wcl/corpus.js",
+        "bytes": 14101
+      },
+      {
+        "path": "/api/wcl/evidence-groups",
+        "file": "routes/api/wcl/evidence-groups.js",
+        "bytes": 6645
+      },
+      {
+        "path": "/api/wcl/history",
+        "file": "routes/api/wcl/history.js",
+        "bytes": 176
+      },
+      {
+        "path": "/api/wcl/home-history",
+        "file": "routes/api/wcl/home-history.js",
+        "bytes": 177
+      },
+      {
+        "path": "/api/wcl/home-roster",
+        "file": "routes/api/wcl/home-roster.js",
+        "bytes": 176
+      },
+      {
+        "path": "/api/wcl/intelligence",
+        "file": "routes/api/wcl/intelligence.js",
+        "bytes": 181
+      },
+      {
+        "path": "/api/wcl/live-rl-diagnostic",
+        "file": "routes/api/wcl/live-rl-diagnostic.js",
+        "bytes": 105
+      },
+      {
+        "path": "/api/wcl/matched-null-baseline",
+        "file": "routes/api/wcl/matched-null-baseline.js",
+        "bytes": 7569
+      },
+      {
+        "path": "/api/wcl/mechanic-episode",
+        "file": "routes/api/wcl/mechanic-episode.js",
+        "bytes": 10061
+      },
+      {
+        "path": "/api/wcl/mechanic-knowledge",
+        "file": "routes/api/wcl/mechanic-knowledge.js",
+        "bytes": 2114
+      },
+      {
+        "path": "/api/wcl/operational-execution",
+        "file": "routes/api/wcl/operational-execution.js",
+        "bytes": 108
+      },
+      {
+        "path": "/api/wcl/raid-execution",
+        "file": "routes/api/wcl/raid-execution.js",
+        "bytes": 101
+      },
+      {
+        "path": "/api/wcl/report",
+        "file": "routes/api/wcl/report.js",
+        "bytes": 175
+      },
+      {
+        "path": "/api/wcl/reports",
+        "file": "routes/api/wcl/reports.js",
+        "bytes": 179
+      },
+      {
+        "path": "/api/wcl/semantic-actor-provenance",
+        "file": "routes/api/wcl/semantic-actor-provenance.js",
+        "bytes": 4245
+      },
+      {
+        "path": "/api/wcl/semantic-probe",
+        "file": "routes/api/wcl/semantic-probe.js",
+        "bytes": 11805
+      },
+      {
+        "path": "/api/wcl/statistical-stability",
+        "file": "routes/api/wcl/statistical-stability.js",
+        "bytes": 6083
+      },
+      {
+        "path": "/api/wcl/status",
+        "file": "routes/api/wcl/status.js",
+        "bytes": 180
+      },
+      {
+        "path": "/api/wcl/telemetry",
+        "file": "routes/api/wcl/telemetry.js",
+        "bytes": 178
+      },
+      {
+        "path": "/api/wcl/untouched-holdout",
+        "file": "routes/api/wcl/untouched-holdout.js",
+        "bytes": 15296
+      }
+    ]
+  },
+  "documentation": {
+    "markdownFiles": 125,
+    "atRepositoryRoot": 47,
+    "byTopDirectory": {
+      "docs": 62,
+      "server": 12,
+      "apps": 2,
+      "AGENTS.md": 1,
+      "ARCHITECTURE.md": 1,
+      "DATA-TRUTH-MATRIX.md": 1,
+      "DEPLOY-NETLIFY.md": 1,
+      "deploy-preview": 1,
+      "FIDELITY-REPORT.md": 1,
+      "GIT-DEPLOYMENT.md": 1,
+      "IRIS-ARCHITECTURE.md": 1,
+      "IRIS-OPERATIONS.md": 1,
+      "LOOT-SIMULATION.md": 1,
+      "MIGRATION-GUARDRAILS.md": 1,
+      "README.md": 1,
+      "SIMC-UPSTREAM.md": 1,
+      "tests": 1,
+      "V3.1-CHANGES.md": 1,
+      "V3.1-VERIFICATION.md": 1,
+      "V3.2-CHANGES.md": 1,
+      "V3.2-VERIFICATION.md": 1,
+      "V3.3-CHANGES.md": 1,
+      "V3.3-VERIFICATION.md": 1,
+      "V3.4-CHANGES.md": 1,
+      "V3.4-VERIFICATION.md": 1,
+      "V3.4-WORKBENCH.md": 1,
+      "V3.4.1-CHANGES.md": 1,
+      "V3.4.1-VERIFICATION.md": 1,
+      "V3.4.2-CHANGES.md": 1,
+      "V3.4.2-VERIFICATION.md": 1,
+      "V3.5-CHANGES.md": 1,
+      "V3.5-ENCOUNTER-CORPUS.md": 1,
+      "V3.5-VERIFICATION.md": 1,
+      "V3.5.1-CHANGES.md": 1,
+      "V3.5.1-VERIFICATION.md": 1,
+      "V3.6-CHANGES.md": 1,
+      "V3.6-HOSTED-RESEARCH.md": 1,
+      "V3.6-VERIFICATION.md": 1,
+      "V3.6.1-CHANGES.md": 1,
+      "V3.6.1-VERIFICATION.md": 1,
+      "V3.6.2-CHANGES.md": 1,
+      "V3.6.2-VERIFICATION.md": 1,
+      "V3.6.3-CHANGES.md": 1,
+      "V3.6.3-VERIFICATION.md": 1,
+      "V3.7-CHANGES.md": 1,
+      "V3.7-ENCOUNTER-DISCOVERY.md": 1,
+      "V3.7-VERIFICATION.md": 1,
+      "V3.7.9-CHANGES.md": 1,
+      "V3.9-REFACTOR-PLAN.md": 1,
+      "V3.9.3-CHANGES.md": 1,
+      "VERCEL-DEPLOY.md": 1,
+      "WCL-QUERY-PLAYBOOK.md": 1
+    },
+    "files": [
+      "AGENTS.md",
+      "ARCHITECTURE.md",
+      "DATA-TRUTH-MATRIX.md",
+      "DEPLOY-NETLIFY.md",
+      "FIDELITY-REPORT.md",
+      "GIT-DEPLOYMENT.md",
+      "IRIS-ARCHITECTURE.md",
+      "IRIS-OPERATIONS.md",
+      "LOOT-SIMULATION.md",
+      "MIGRATION-GUARDRAILS.md",
+      "README.md",
+      "SIMC-UPSTREAM.md",
+      "V3.1-CHANGES.md",
+      "V3.1-VERIFICATION.md",
+      "V3.2-CHANGES.md",
+      "V3.2-VERIFICATION.md",
+      "V3.3-CHANGES.md",
+      "V3.3-VERIFICATION.md",
+      "V3.4-CHANGES.md",
+      "V3.4-VERIFICATION.md",
+      "V3.4-WORKBENCH.md",
+      "V3.4.1-CHANGES.md",
+      "V3.4.1-VERIFICATION.md",
+      "V3.4.2-CHANGES.md",
+      "V3.4.2-VERIFICATION.md",
+      "V3.5-CHANGES.md",
+      "V3.5-ENCOUNTER-CORPUS.md",
+      "V3.5-VERIFICATION.md",
+      "V3.5.1-CHANGES.md",
+      "V3.5.1-VERIFICATION.md",
+      "V3.6-CHANGES.md",
+      "V3.6-HOSTED-RESEARCH.md",
+      "V3.6-VERIFICATION.md",
+      "V3.6.1-CHANGES.md",
+      "V3.6.1-VERIFICATION.md",
+      "V3.6.2-CHANGES.md",
+      "V3.6.2-VERIFICATION.md",
+      "V3.6.3-CHANGES.md",
+      "V3.6.3-VERIFICATION.md",
+      "V3.7-CHANGES.md",
+      "V3.7-ENCOUNTER-DISCOVERY.md",
+      "V3.7-VERIFICATION.md",
+      "V3.7.9-CHANGES.md",
+      "V3.9-REFACTOR-PLAN.md",
+      "V3.9.3-CHANGES.md",
+      "VERCEL-DEPLOY.md",
+      "WCL-QUERY-PLAYBOOK.md",
+      "apps/web/src/adapters/README.md",
+      "apps/web/src/types/README.md",
+      "deploy-preview/README.md",
+      "docs/AVOID-EXECUTION-CONTEXT-V1.md",
+      "docs/CORPUS-STANDBY-2026-08-14.md",
+      "docs/IRIS-BOSS-AGNOSTIC-LEARNING-PIPELINE-V1.md",
+      "docs/IRIS-BOSS-MECHANICS-CONTRACT-V3.md",
+      "docs/IRIS-CANONICAL-DEEP-TOPUP-V1.md",
+      "docs/IRIS-EPISODE-OFFICIAL-RECONCILIATION-V1.md",
+      "docs/IRIS-EPISODE-STRUCTURAL-RECONCILIATION-V1.md",
+      "docs/IRIS-GLOBAL-RAID-REFERENCE-V1.md",
+      "docs/IRIS-INDEPENDENT-EVIDENCE-GROUPS-V1.md",
+      "docs/IRIS-KNOWLEDGE-CONTRACT-V1.md",
+      "docs/IRIS-KNOWLEDGE-EVIDENCE-DOCTRINE-V1.md",
+      "docs/IRIS-KNOWLEDGE-IMPLEMENTATION-AUDIT-V1.md",
+      "docs/IRIS-KNOWLEDGE-VALIDATION-MARKER.md",
+      "docs/IRIS-LOCAL-MECHANIC-SYNTHESIS-V1.md",
+      "docs/IRIS-LORRGS-MEMBERSHIP-ABSENCE-SEMANTICS-V1.md",
+      "docs/IRIS-MATCHED-NULL-BASELINE-V1.md",
+      "docs/IRIS-MECHANIC-EPISODE-GRAPH-V1.md",
+      "docs/IRIS-OFFICIAL-ENCOUNTER-KNOWLEDGE-V1.md",
+      "docs/IRIS-OFFICIAL-ENCOUNTER-SMOKE-V1.md",
+      "docs/IRIS-OPERATIONAL-BOSS-READINESS-V1.md",
+      "docs/IRIS-PROVIDER-AWARE-ABILITY-KNOWLEDGE-V1.md",
+      "docs/IRIS-RAID-BOSS-DIFFICULTY-KNOWLEDGE-V1.md",
+      "docs/IRIS-SEMANTIC-ACTOR-PROVENANCE-V1.md",
+      "docs/IRIS-SEMANTIC-CANDIDATE-SPECIFICITY-V3.md",
+      "docs/IRIS-SEMANTIC-PROVENANCE-GATE-V1.md",
+      "docs/IRIS-SEMANTIC-SPECIFICITY-VERIFIER-V2.md",
+      "docs/IRIS-SEMANTIC-SURGICAL-PROBE-EXECUTION-V1.md",
+      "docs/IRIS-SEMANTIC-SURGICAL-PROBE-V1.md",
+      "docs/IRIS-SEMANTIC-SURGICAL-PROBE-V2.md",
+      "docs/IRIS-SIGNAL-TRIAGE-V1.md",
+      "docs/IRIS-SPELL-STRUCTURAL-KNOWLEDGE-V1.md",
+      "docs/IRIS-STATISTICAL-STABILITY-V1.md",
+      "docs/IRIS-UNTOUCHED-HOLDOUT-V1.md",
+      "docs/LOOT-OPERATIONS-V0.1.md",
+      "docs/LOOT-SIMULATION-V1.md",
+      "docs/PRODUCT-REFERENCES.md",
+      "docs/PROGRESS-CHANGELOG.md",
+      "docs/PROGRESS-DATA-INTEGRITY-V2.md",
+      "docs/PROGRESS-DATA-QUALITY.md",
+      "docs/PROGRESS-METRICS-CONTRACT-V2.md",
+      "docs/PROGRESS-METRICS-CONTRACT.md",
+      "docs/PROGRESS-METRICS.md",
+      "docs/PROGRESS-PRESENTATION-CONTRACT.md",
+      "docs/PROGRESS-SCOPE.md",
+      "docs/RELIABILITY-CONTRACT-V1.md",
+      "docs/RELIABILITY-DATA-INTEGRITY-V1.md",
+      "docs/RELIABILITY-SHADOW-STATUS.md",
+      "docs/RELIABILITY-V1-IMPLEMENTATION-AUDIT.md",
+      "docs/V3.7.11-PROGRESS-SINGLE-SOURCE.md",
+      "docs/WCL-QUERY-GUIDED-ENRICHMENT-V1.md",
+      "docs/checkpoints/V3.9.2-PLAYERS-HOTFIX.md",
+      "docs/iris-sources/ARCHON.md",
+      "docs/iris-sources/BLIZZARD-GAME-DATA.md",
+      "docs/iris-sources/LORRGS.md",
+      "docs/iris-sources/MYTHIC-TRAP.md",
+      "docs/iris-sources/PARSE-WOWHEAD.md",
+      "docs/iris-sources/README.md",
+      "docs/iris-sources/SOURCE-RESEARCH-2026-08-17.md",
+      "docs/iris-sources/WAGO-DB2.md",
+      "docs/iris-sources/WARCRAFT-LOGS.md",
+      "docs/iris-sources/WIPEFEST.md",
+      "docs/iris-sources/WOWANALYZER.md",
+      "server/analysis/defensives/README.md",
+      "server/analysis/kill-readiness/README.md",
+      "server/analysis/progression/PROGRESS-METRICS.md",
+      "server/analysis/reliability/README.md",
+      "server/analysis/root-cause/README.md",
+      "server/enrichment/README.md",
+      "server/legacy-v2/README.md",
+      "server/rule-packs/consumables/README.md",
+      "server/rule-packs/defensives/README.md",
+      "server/rule-packs/encounters/README.md",
+      "server/rule-packs/raid-utility/README.md",
+      "server/wcl/rate-limit/README.md",
+      "tests/visual/README.md"
+    ]
+  },
+  "duplicates": {
+    "groups": 12,
+    "fileInstances": 39,
+    "redundantFiles": 27,
+    "redundantBytes": 5019823,
+    "items": [
+      {
+        "hash": "7a9764bd661aa716432173d0d620fb6fea97fbe8d5df76b1b3b59cdd4d17f778",
+        "bytesPerFile": 1392730,
+        "files": [
+          "apps/web/public/og.png",
+          "deploy-preview/public/og.png",
+          "golden-master/og.png",
+          "public/og.png"
+        ]
+      },
+      {
+        "hash": "5c79f478eed4de242d2bef0b19479dd94ec7e01b5d12757815a1e5b6236605cb",
+        "bytesPerFile": 245581,
+        "files": [
+          "deploy-preview/public/main.js",
+          "golden-master/main.js",
+          "public/main.js"
+        ]
+      },
+      {
+        "hash": "3e2e9e6db9369f8cf0976a997b86d0443fa92d7e94230ffb0b1278b13048efd6",
+        "bytesPerFile": 59445,
+        "files": [
+          "apps/web/public/main.css",
+          "deploy-preview/public/main.css",
+          "golden-master/main.css",
+          "public/main.css"
+        ]
+      },
+      {
+        "hash": "1afc11fe992ade0cff8ae793b7afe6fd98bd0609a2de05f907ae25deac4185bc",
+        "bytesPerFile": 121602,
+        "files": [
+          "deploy-preview/public/wcl-runtime.js",
+          "public/wcl-runtime.js"
+        ]
+      },
+      {
+        "hash": "714fecef04c70a23976bc2f1843fb3dc6346457cb0d763c5de7e6d3515c8e8d9",
+        "bytesPerFile": 7367,
+        "files": [
+          "apps/web/public/raidops-v34.css",
+          "deploy-preview/public/raidops-v34.css",
+          "public/raidops-v34.css"
+        ]
+      },
+      {
+        "hash": "9005b7a760ee25330631e062a7f549d3f2cfd650f8daa13d3371e4aa938c71b7",
+        "bytesPerFile": 7343,
+        "files": [
+          "apps/web/public/raidops-v33.css",
+          "deploy-preview/public/raidops-v33.css",
+          "public/raidops-v33.css"
+        ]
+      },
+      {
+        "hash": "d03f254dfc50ddfcdb0ef55443ce279aa65caf70c597fb534c8ec641399e77fb",
+        "bytesPerFile": 5679,
+        "files": [
+          "apps/web/public/raidops-v32.css",
+          "deploy-preview/public/raidops-v32.css",
+          "public/raidops-v32.css"
+        ]
+      },
+      {
+        "hash": "21884e11b885830bba1b30f5de9c8aeadd6da18ad8941086a2504e1e2a16128d",
+        "bytesPerFile": 1873,
+        "files": [
+          "apps/web/public/raidops-v35.css",
+          "deploy-preview/public/raidops-v35.css",
+          "public/raidops-v35.css"
+        ]
+      },
+      {
+        "hash": "7c29828efd1fbf483572d570dfbbb1c94946aa856a368b943075396de3f96c94",
+        "bytesPerFile": 781,
+        "files": [
+          "apps/web/public/404.html",
+          "deploy-preview/public/404.html",
+          "golden-master/404.html",
+          "golden-master/index.html",
+          "public/404.html"
+        ]
+      },
+      {
+        "hash": "ea01ef7c1bf4c06f833a517311b314b8cceacd4d712c96e75679e7d450b39719",
+        "bytesPerFile": 908,
+        "files": [
+          "apps/web/public/raidops-v37.css",
+          "deploy-preview/public/raidops-v37.css",
+          "public/raidops-v37.css"
+        ]
+      },
+      {
+        "hash": "3d73aa3670d67f594e232ac673dae0280d23c02cf8af80d5650e48dd5ae29611",
+        "bytesPerFile": 208,
+        "files": [
+          "apps/web/public/favicon.svg",
+          "deploy-preview/public/favicon.svg",
+          "golden-master/favicon.svg",
+          "public/favicon.svg"
+        ]
+      },
+      {
+        "hash": "f7af946d13fa67152311ce45f1cd157013094f4d79b65a69432499d2c557a06a",
+        "bytesPerFile": 446,
+        "files": [
+          "deploy-preview/public/_redirects",
+          "public/_redirects"
+        ]
+      }
+    ]
+  },
+  "releases": {
+    "packageVersion": "0.3.9-13-vercel.4",
+    "indexCacheBusters": [
+      "3.4.2",
+      "3.6.2",
+      "3.7.0",
+      "3.7.3",
+      "3.7.4",
+      "3.7.5",
+      "3.7.6",
+      "3.7.7",
+      "3.7.8",
+      "3.7.9",
+      "3.7.10",
+      "3.7.11",
+      "3.7.12",
+      "3.8.5",
+      "3.8.6",
+      "3.9.0",
+      "3.9.2",
+      "3.9.10",
+      "3.9.10.1",
+      "3.9.10.4",
+      "3.9.12.0",
+      "3.9.12.8",
+      "3.9.12.2",
+      "3.9.12.3",
+      "3.9.13.0",
+      "3.9.13.2",
+      "1.1.0",
+      "3.8.9.1",
+      "3.9.12.5",
+      "3.9.12.7",
+      "3.9.12.10",
+      "3.9.12.1",
+      "3.9.13.14"
+    ],
+    "runtimeConstants": [
+      {
+        "file": "public/avoid-execution-context-v3911.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.2"
+      },
+      {
+        "file": "public/avoid-execution-context-v3911.js",
+        "symbol": "APP_RELEASE",
+        "value": "3.9.12"
+      },
+      {
+        "file": "public/avoid-live-rl-bridge-v3912.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.3"
+      },
+      {
+        "file": "public/avoid-live-safe-fallback-v3912.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.10"
+      },
+      {
+        "file": "public/avoid-live-ui-stability-v3912.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.1"
+      },
+      {
+        "file": "public/avoid-mechanics-global-context-v3912.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.2"
+      },
+      {
+        "file": "public/avoid-mechanics-state-v3912.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.3"
+      },
+      {
+        "file": "public/avoid-operational-ui-v3912.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.7"
+      },
+      {
+        "file": "public/corpus-ui-stability-v1.js",
+        "symbol": "VERSION",
+        "value": "1.1.0"
+      },
+      {
+        "file": "public/data-hub-v390.js",
+        "symbol": "RELEASE",
+        "value": "3.9.0"
+      },
+      {
+        "file": "public/encounter-intelligence-v371.js",
+        "symbol": "VERSION",
+        "value": "3.7.1"
+      },
+      {
+        "file": "public/encounter-intelligence-v372.js",
+        "symbol": "VERSION",
+        "value": "3.7.2"
+      },
+      {
+        "file": "public/encounter-intelligence-v373.js",
+        "symbol": "VERSION",
+        "value": "3.7.3"
+      },
+      {
+        "file": "public/encounter-intelligence-v374.js",
+        "symbol": "VERSION",
+        "value": "3.7.4"
+      },
+      {
+        "file": "public/encounter-intelligence-v375.js",
+        "symbol": "VERSION",
+        "value": "3.7.5"
+      },
+      {
+        "file": "public/iris-mechanics-global-reference-v3910.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.3"
+      },
+      {
+        "file": "public/iris-mechanics-header-v3910.js",
+        "symbol": "RELEASE",
+        "value": "3.9.12.0"
+      },
+      {
+        "file": "public/iris-mechanics-knowledge-v3910.js",
+        "symbol": "RELEASE",
+        "value": "3.9.10.4"
+      },
+      {
+        "file": "public/iris-runtime-v3710.js",
+        "symbol": "RELEASE",
+        "value": "3.7.10"
+      },
+      {
+        "file": "public/iris-runtime-v3711.js",
+        "symbol": "RELEASE",
+        "value": "3.7.11"
+      },
+      {
+        "file": "public/iris-runtime-v3712.js",
+        "symbol": "RELEASE",
+        "value": "3.7.12"
+      },
+      {
+        "file": "public/iris-runtime-v3713.js",
+        "symbol": "RELEASE",
+        "value": "3.8.5"
+      },
+      {
+        "file": "public/iris-runtime-v376.js",
+        "symbol": "RELEASE",
+        "value": "3.7.6"
+      },
+      {
+        "file": "public/iris-runtime-v377.js",
+        "symbol": "RELEASE",
+        "value": "3.7.7"
+      },
+      {
+        "file": "public/iris-runtime-v378.js",
+        "symbol": "RELEASE",
+        "value": "3.7.8"
+      },
+      {
+        "file": "public/iris-runtime-v379.js",
+        "symbol": "RELEASE",
+        "value": "3.7.9"
+      },
+      {
+        "file": "public/knowledge-reindex-v390.js",
+        "symbol": "RELEASE",
+        "value": "3.9.0"
+      },
+      {
+        "file": "public/loot-runtime-v3913.js",
+        "symbol": "RELEASE",
+        "value": "3.9.13.1"
+      },
+      {
+        "file": "public/loot-runtime-v391310-overlay.js",
+        "symbol": "RELEASE",
+        "value": "3.9.13.14"
+      },
+      {
+        "file": "public/loot-runtime-v39133.js",
+        "symbol": "RELEASE",
+        "value": "3.9.13.3"
+      },
+      {
+        "file": "public/loot-runtime-v39134.js",
+        "symbol": "RELEASE",
+        "value": "3.9.13.4"
+      },
+      {
+        "file": "public/loot-runtime-v39137.js",
+        "symbol": "RELEASE",
+        "value": "3.9.13.9"
+      },
+      {
+        "file": "public/player-intelligence-v386.js",
+        "symbol": "VERSION",
+        "value": "3.8.8"
+      },
+      {
+        "file": "public/player-intelligence-v392.js",
+        "symbol": "VERSION",
+        "value": "3.9.2"
+      },
+      {
+        "file": "public/progress-runtime-v3710.js",
+        "symbol": "RELEASE",
+        "value": "3.7.10"
+      },
+      {
+        "file": "public/progress-runtime-v3711.js",
+        "symbol": "RELEASE",
+        "value": "3.7.11"
+      },
+      {
+        "file": "public/progress-runtime-v3712.js",
+        "symbol": "RELEASE",
+        "value": "3.7.12"
+      },
+      {
+        "file": "public/progress-runtime-v3713.js",
+        "symbol": "RELEASE",
+        "value": "3.7.13"
+      },
+      {
+        "file": "public/progress-runtime-v378.js",
+        "symbol": "RELEASE",
+        "value": "3.7.8"
+      },
+      {
+        "file": "public/progress-runtime-v379.js",
+        "symbol": "RELEASE",
+        "value": "3.7.9"
+      },
+      {
+        "file": "public/wcl-bootstrap-v389.js",
+        "symbol": "RELEASE",
+        "value": "3.8.9.2"
+      },
+      {
+        "file": "tests/critical/v390-screen-data-safety.test.mjs",
+        "symbol": "RELEASE",
+        "value": "3\\.9\\.0"
+      },
+      {
+        "file": "tests/critical/v390-screen-data-safety.test.mjs",
+        "symbol": "RELEASE",
+        "value": "3\\.9\\.0"
+      },
+      {
+        "file": "tests/critical/v3911-execution-header.test.mjs",
+        "symbol": "APP_RELEASE",
+        "value": "3\\.9\\.12"
+      },
+      {
+        "file": "tests/unit/player-intelligence-v386.test.mjs",
+        "symbol": "VERSION",
+        "value": "3\\.8\\.8"
+      },
+      {
+        "file": "tests/unit/player-intelligence-v386.test.mjs",
+        "symbol": "VERSION",
+        "value": "3\\.9\\.2"
+      },
+      {
+        "file": "tests/unit/v3711-release.test.mjs",
+        "symbol": "RELEASE",
+        "value": "3\\.8\\.5"
+      },
+      {
+        "file": "tests/unit/v3711-release.test.mjs",
+        "symbol": "VERSION",
+        "value": "3\\.9\\.2"
+      },
+      {
+        "file": "tests/unit/v3711-release.test.mjs",
+        "symbol": "RELEASE",
+        "value": "3\\.8\\.9"
+      },
+      {
+        "file": "tests/unit/v376-branding-storage.test.mjs",
+        "symbol": "RELEASE",
+        "value": "3\\.7\\.6"
+      }
+    ]
+  },
+  "angularTarget": {
+    "present": true,
+    "relativePath": "../raid-ops",
+    "packageName": "raid-ops",
+    "packageVersion": "0.0.0",
+    "angularVersion": "^21.2.0",
+    "trackedSourceShape": [
+      {
+        "file": "src/app/app.config.ts",
+        "bytes": 324
+      },
+      {
+        "file": "src/app/app.html",
+        "bytes": 20488
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "bytes": 80
+      },
+      {
+        "file": "src/app/app.scss",
+        "bytes": 0
+      },
+      {
+        "file": "src/app/app.spec.ts",
+        "bytes": 698
+      },
+      {
+        "file": "src/app/app.ts",
+        "bytes": 303
+      },
+      {
+        "file": "src/index.html",
+        "bytes": 306
+      },
+      {
+        "file": "src/main.ts",
+        "bytes": 228
+      },
+      {
+        "file": "src/styles.scss",
+        "bytes": 81
+      }
+    ]
+  }
+}
