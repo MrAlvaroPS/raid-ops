@@ -22,5 +22,4 @@ export interface FeatureDefinition {
   readonly icon: string;
   readonly owner: SurfaceOwner;
   readonly complexity: MigrationComplexity;
-  readonly migrationPhase: number;
 }

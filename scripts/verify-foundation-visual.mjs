@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 
 const baseUrl = process.argv.find(value => value.startsWith('http')) || 'http://127.0.0.1:4200';
-const output = resolve('.migration-evidence', 'phase2');
+const output = resolve('.migration-evidence', 'phase3');
 const edge = [
   process.env.RAID_OPS_BROWSER_PATH,
   'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
@@ -89,7 +89,7 @@ async function capture(cdp, name) {
 if (!edge) throw new Error('Microsoft Edge not found; set RAID_OPS_BROWSER_PATH');
 await mkdir(output, { recursive: true });
 const port = await freePort();
-const profile = await mkdtemp(join(tmpdir(), 'raid-ops-phase2-'));
+const profile = await mkdtemp(join(tmpdir(), 'raid-ops-phase3-'));
 const browser = spawn(edge, [
   '--headless=new', '--disable-gpu', '--disable-background-networking', '--no-first-run',
   `--remote-debugging-port=${port}`, `--user-data-dir=${profile}`, 'about:blank',
@@ -143,7 +143,7 @@ const failures = audits.filter(audit => audit.bodyLength === 0 || audit.overlay 
 if (audits.filter(audit => audit.route === 'mechanics').some(audit => !audit.currentOwner || !audit.legacyOwner)) {
   failures.push({ route: 'mechanics', reason: 'legacy ownership is not explicit' });
 }
-const report = { schemaVersion: 'phase2-foundation-visual-v1', baseUrl, audits, errors, apiRequests };
+const report = { schemaVersion: 'phase3-foundation-visual-v1', baseUrl, audits, errors, apiRequests };
 await writeFile(join(output, 'report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
 if (errors.length || apiRequests.length || failures.length) {
   console.error(JSON.stringify({ errors, apiRequests, failures }, null, 2));

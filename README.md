@@ -2,7 +2,7 @@
 
 Incremental Angular replacement for the legacy `avoid-raid-ops` frontend.
 
-Current status: **Phase 2 foundation**. Angular owns only its technical foundation page. Every product surface remains explicitly owned by the verified legacy application until its vertical slice passes data-contract, behaviour, visual and rollback gates.
+Current status: **Phase 3 foundation**. Angular owns only its technical foundation page. Every product surface remains explicitly owned by the verified legacy application until its vertical slice passes data-contract, behaviour, visual and rollback gates.
 
 ## Commands
 

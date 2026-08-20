@@ -19,7 +19,7 @@ infrastructure → application/domain
 
 `domain` and `application` cannot import Angular, RxJS, infrastructure or presentation. `core` contains cross-cutting framework configuration and the legacy HTTP anti-corruption boundary; it must not become a second domain layer. `shared` accepts only code proven reusable by more than one feature.
 
-`npm run verify:architecture` enforces the dependency direction and prevents Phase 2 from claiming product ownership.
+`npm run verify:architecture` enforces the dependency direction and prevents Phase 3 from claiming product ownership.
 
 ## Backend boundary
 

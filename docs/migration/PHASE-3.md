@@ -1,4 +1,4 @@
-# Phase 2 — Angular foundation
+# Phase 3 — Angular foundation
 
 Status: complete (2026-08-20).
 
@@ -19,7 +19,7 @@ Status: complete (2026-08-20).
 - Loot and SimulationCraft;
 - production routing or Vercel deployment changes.
 
-Source baseline: legacy Phase 1 commit `4e0ab51` on `phase1-legacy-stabilization`.
+Source baseline: legacy Phase 2 commit `5556ab4` on `phase2-documentation-releases`.
 
 ## Exit evidence
 
@@ -35,13 +35,14 @@ Source baseline: legacy Phase 1 commit `4e0ab51` on `phase1-legacy-stabilization
 - production switch: statically disabled.
 
 Screenshots and the browser report are generated under the Git-ignored
-`.migration-evidence/phase2/` directory by `npm run verify:visual` while the local
+`.migration-evidence/phase3/` directory by `npm run verify:visual` while the local
 Angular server is running.
 
-## Phase 3 hand-off
+## Product-slice hand-off
 
-The first product vertical slice will be **Composition**. It must establish the
-repeatable feature pattern end to end: explicit backend contract, domain model,
+The first product vertical slice is not assigned a phase number by this foundation.
+When the roadmap schedules it, **Composition** remains the safest candidate to
+establish the repeatable feature pattern end to end: explicit backend contract, domain model,
 application port/use case, infrastructure adapter, real empty/partial/error states,
 responsive visual parity, tests, feature ownership gate and immediate rollback to
 the verified legacy route. LIVE, Loot and Iris remain out of scope.

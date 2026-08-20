@@ -35,9 +35,9 @@ for (const file of files) {
 }
 
 const catalog = await readFile(new URL('../src/app/features/migration-control/domain/feature-catalog.ts', import.meta.url), 'utf8');
-if (/owner:\s*'angular'/.test(catalog)) failures.push('Phase 2 cannot claim Angular ownership of a product surface');
+if (/owner:\s*'angular'/.test(catalog)) failures.push('Phase 3 cannot claim Angular ownership of a product surface');
 const runtime = await readFile(new URL('../src/app/core/config/runtime-config.ts', import.meta.url), 'utf8');
-if (!/productionSwitchEnabled:\s*false/.test(runtime)) failures.push('Phase 2 production switch must remain statically false');
+if (!/productionSwitchEnabled:\s*false/.test(runtime)) failures.push('Phase 3 production switch must remain statically false');
 
 if (failures.length) {
   for (const failure of failures) console.error(`[architecture] ${failure}`);

@@ -28,7 +28,7 @@ function cleanBaseUrl(value: unknown, fallback: string): string {
 export function readRuntimeConfig(input: unknown = globalThis.window?.__RAID_OPS_CONFIG__): RaidOpsRuntimeConfig {
   const candidate = input && typeof input === 'object' ? input as Record<string, unknown> : {};
   if (candidate['productionSwitchEnabled'] === true) {
-    throw new Error('Phase 2 cannot enable the Angular production switch');
+    throw new Error('Phase 3 cannot enable the Angular production switch');
   }
   if (candidate['migrationMode'] != null && candidate['migrationMode'] !== 'foundation') {
     throw new Error('Unsupported Angular migration mode');
