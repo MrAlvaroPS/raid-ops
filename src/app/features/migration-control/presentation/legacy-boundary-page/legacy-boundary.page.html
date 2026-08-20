@@ -1,0 +1,20 @@
+<header>
+  <small>AVOID // PRODUCT SURFACE</small>
+  <h1>{{ feature().label }}</h1>
+  <p>This route is registered so migration ownership is explicit. Its real implementation and visual baseline remain in the legacy application.</p>
+</header>
+
+<section>
+  <div class="state"><small>CURRENT OWNER</small><b>LEGACY</b><span>No Angular substitution is active</span></div>
+  <div class="details">
+    <span>PLANNED PHASE {{ feature().migrationPhase }}</span>
+    <h2>Functionality has not moved yet.</h2>
+    <p>Angular will claim this route only after its data contracts, empty/partial/error states, desktop/mobile visuals and rollback gate pass.</p>
+    <dl>
+      <div><dt>Complexity</dt><dd>{{ feature().complexity }}</dd></div>
+      <div><dt>Feature ID</dt><dd>{{ feature().id }}</dd></div>
+      <div><dt>Production routing</dt><dd>disabled</dd></div>
+    </dl>
+    <a [href]="legacyAppUrl">OPEN VERIFIED LEGACY APPLICATION</a>
+  </div>
+</section>

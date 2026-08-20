@@ -1,0 +1,31 @@
+<header class="page-heading">
+  <small>AVOID // ANGULAR MIGRATION</small>
+  <h1>Foundation</h1>
+  <p>The scalable Angular boundary is running. Product functionality remains safely owned by the verified legacy application.</p>
+</header>
+
+<section class="hero">
+  <div>
+    <span>PHASE 2 · FOUNDATION ONLY</span>
+    <h2>Build the boundary before moving the product.</h2>
+    <p>Routing, runtime configuration and the typed legacy API adapter are available. No Golden fixture, WCL request or product metric has been recreated here.</p>
+  </div>
+  <aside><small>PRODUCTION SWITCH</small><b>DISABLED</b><em>Rollback remains the legacy application</em></aside>
+</section>
+
+<section class="metrics" aria-label="Migration ownership summary">
+  <article><small>KNOWN SURFACES</small><b>{{ readiness.totalSurfaces }}</b><span>registered in the router</span></article>
+  <article><small>ANGULAR OWNED</small><b>{{ readiness.angularOwnedSurfaces }}</b><span>product surfaces</span></article>
+  <article><small>LEGACY OWNED</small><b>{{ readiness.legacyOwnedSurfaces }}</b><span>no false migration claims</span></article>
+  <article><small>API BOUNDARY</small><b>READY</b><span>runtime-decoded responses</span></article>
+</section>
+
+<section class="layers">
+  <header><small>CLEAN ARCHITECTURE</small><h2>Dependency direction</h2></header>
+  <div>
+    <article><b>DOMAIN</b><p>Business identities and rules without Angular or HTTP.</p></article>
+    <article><b>APPLICATION</b><p>Use cases and ports that coordinate domain behaviour.</p></article>
+    <article><b>INFRASTRUCTURE</b><p>Legacy API adapters, persistence and external providers.</p></article>
+    <article><b>PRESENTATION</b><p>Standalone Angular components and route-level state.</p></article>
+  </div>
+</section>

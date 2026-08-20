@@ -1,1 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  color-scheme: dark;
+  --avoid-bg: #07090c;
+  --avoid-surface: #0d1115;
+  --avoid-surface-raised: #11171b;
+  --avoid-border: #202c30;
+  --avoid-border-strong: #2c3e42;
+  --avoid-text: #f4f7f6;
+  --avoid-text-muted: #77858a;
+  --avoid-accent: #62e8bd;
+  --avoid-accent-soft: rgb(98 232 189 / 10%);
+  --avoid-warning: #f1bd65;
+  --avoid-danger: #ff6b6b;
+  --avoid-sidebar-width: 244px;
+  --avoid-radius: 6px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--avoid-bg);
+  color: var(--avoid-text);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--avoid-bg);
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--avoid-accent);
+  outline-offset: 3px;
+}
