@@ -74,4 +74,17 @@ describe('App', () => {
     expect(compiled.textContent).not.toContain('18.7M');
     expect(compiled.textContent).not.toContain('Execute DPS');
   });
+
+  it('renders Pull Lab in Angular without a mock comparison before scope is explicit', async () => {
+    const fixture = TestBed.createComponent(App);
+    await TestBed.inject(Router).navigateByUrl('/pull-lab');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Pull Lab');
+    expect(compiled.textContent).toContain('CONTEXT REQUIRED');
+    expect(compiled.textContent).not.toContain('Why pull 25 was better');
+    expect(compiled.textContent).not.toContain('18.7M');
+  });
 });

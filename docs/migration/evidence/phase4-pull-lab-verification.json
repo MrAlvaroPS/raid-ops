@@ -1,0 +1,72 @@
+{
+  "schemaVersion": "phase4-pull-lab-verification-v1",
+  "verifiedAt": "2026-08-20T20:05:00+02:00",
+  "phase": 4,
+  "surface": "pull-lab",
+  "frontendOwner": "angular",
+  "backendOwner": "avoid-raid-ops Node/Nitro",
+  "productionSwitchEnabled": false,
+  "results": {
+    "angularTests": 49,
+    "angularTestsPassed": 49,
+    "legacyContractTests": 20,
+    "legacyContractTestsPassed": 20,
+    "productionBuild": "pass",
+    "architectureGate": "pass",
+    "documentationGate": "pass",
+    "browserAudits": 10,
+    "browserErrors": 0,
+    "horizontalOverflowFindings": 0,
+    "exactScopeStubbedApiRequests": 6,
+    "wclProviderCalls": 0,
+    "databaseOrCorpusMutations": 0,
+    "goldenFixtureFindings": 0
+  },
+  "scopeContract": {
+    "required": ["report", "encounter", "difficulty"],
+    "identity": "report+encounter+difficulty",
+    "crossDifficultyComparisonForbidden": true,
+    "selection": "two distinct eligible fight IDs; URL-owned",
+    "onePullPolicy": "insufficient-data",
+    "phaseModel": "absolute-stage"
+  },
+  "metricContract": {
+    "version": "pull-lab-comparison-v1",
+    "raidDpsDirection": "same absolute stage only",
+    "raidHpsDirection": "observational",
+    "durationDirection": "observational",
+    "deathSemantics": "raw and meaningful remain separate",
+    "mechanicSemantics": "observed occurrence does not imply classified failure"
+  },
+  "operationalBoundary": {
+    "endpoint": "/api/wcl/operational-execution",
+    "newBackendOrWclQuery": false,
+    "visualDispatch": false,
+    "existingHomeSideEffects": "eligible HOME requests may persist existing roster, diagnostic/comparison and execution snapshots"
+  },
+  "visualEvidence": {
+    "fixture": "sanitized operational-execution response; external traffic blocked before dispatch",
+    "report": "docs/migration/evidence/visual/pull-lab/report.json",
+    "captures": [
+      { "file": "desktop-context.png", "sha256": "609161810b2d975d7b0f22f2c4e85888dc3f354e07ce6cad1ee7d5a152ee2fe8" },
+      { "file": "desktop-ready.png", "sha256": "c174d6022df1ea2e62944dc165ace1e4eeeecde243e81976268b36c4b8f3d699" },
+      { "file": "desktop-selected.png", "sha256": "8c61ef095ee460108b718e35d44f98767153ac70e13fdbd1f6c6c1d6edcf61a7" },
+      { "file": "desktop-mechanics-gated.png", "sha256": "1e8544264392e231b88bd9f67d7bcd5b48eb1614f6ae1dc6e67afeda8a48da17" },
+      { "file": "desktop-insufficient.png", "sha256": "7d39af0bd77411064eb2d0767e655b496c720b783f105aeb08eb0f49b2d9b409" },
+      { "file": "mobile-context.png", "sha256": "4b02e450e8b6c6e65bccca132247a365d8d170bd951e9fffc6b4b8404088d9c5" },
+      { "file": "mobile-ready.png", "sha256": "927eb0f57019bb86eed45750a1e071839dd739a0a080523c1382e30642260565" },
+      { "file": "mobile-selected.png", "sha256": "925d159e9ef0cbfe16aa45bd7d57cda0fe13c4be2a56fefd384aafc74af68757" },
+      { "file": "mobile-mechanics-gated.png", "sha256": "76c61f97cd58b32024032a64b2d4b65b9a19bdae2d078cbeea1dc5e97fc6e6b3" },
+      { "file": "mobile-insufficient.png", "sha256": "8181e9befee6c99345640d3d42a31f70fed006aa9b7733c8d270ce595c5d12b6" }
+    ]
+  },
+  "tooling": {
+    "primary": "cumulative repository Phase 4 Edge/CDP verifier",
+    "agentBrowserCli": "unavailable; repository verifier used without dependency changes"
+  },
+  "legacyRollback": {
+    "retained": true,
+    "newFrontendChangesAllowed": false,
+    "deletionGate": "explicit production cutover approval and closed rollback window"
+  }
+}

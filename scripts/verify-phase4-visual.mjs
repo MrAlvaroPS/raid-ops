@@ -48,12 +48,61 @@ const reportFixture = {
   overview: { bestPull, raidDps: 1_370_000, raidHps: 235_000, executeDps: 1_580_000, overhealPct: 24.6 },
   diagnostics: { detailStatus: 'ready' }, evidenceContract,
 };
+const pullFact = ({ fightId, pullNumber, fightPercentage, durationMs, stageCount, raidDps, raidHps, firstDeathMs, meaningfulDeaths, rosterFingerprint = '1-2-3-4' }) => ({
+  fightId, pullNumber, kill: fightPercentage === 0, fightPercentage, bossPercentage: fightPercentage, durationMs, stageCount,
+  stages: stages.slice(0, stageCount).map((stage, index) => ({ ...stage, endTime: Math.min(stage.endTime, 1_000 + durationMs), absoluteStageIndex: index + 1 })),
+  raidDps, raidHps, firstDeathMs, firstDeath: firstDeathMs == null ? null : { fightId, actorId: 1, player: 'Aster', fightRelativeMs: firstDeathMs, abilityId: 100, killingBlow: 'Sanitized impact', overkill: 100 },
+  rawDeaths: firstDeathMs == null ? 0 : meaningfulDeaths + 1, meaningfulDeaths,
+  rawDeathTimeline: firstDeathMs == null ? [] : [
+    { fightId, actorId: 1, player: 'Aster', fightRelativeMs: firstDeathMs, abilityId: 100, killingBlow: 'Sanitized impact', overkill: 100 },
+    { fightId, actorId: 3, player: 'Cinder', fightRelativeMs: Math.min(durationMs - 1_000, firstDeathMs + 18_000), abilityId: 101, killingBlow: 'Sanitized follow-up', overkill: 50 },
+  ],
+  meaningfulDeathTimeline: firstDeathMs == null ? [] : [{ fightId, actorId: 1, player: 'Aster', fightRelativeMs: firstDeathMs, abilityId: 100, killingBlow: 'Sanitized impact', overkill: 100 }],
+  rosterFingerprint, rosterSize: 4, analysisEligible: true,
+});
+const pullRows = [
+  pullFact({ fightId: 75, pullNumber: 1, fightPercentage: 61.2, durationMs: 126_000, stageCount: 1, raidDps: 1_020_000, raidHps: 210_000, firstDeathMs: 74_000, meaningfulDeaths: 3 }),
+  pullFact({ fightId: 76, pullNumber: 3, fightPercentage: 35.8, durationMs: 181_000, stageCount: 2, raidDps: 1_240_000, raidHps: 248_000, firstDeathMs: 119_000, meaningfulDeaths: 2 }),
+  pullFact({ fightId: 77, pullNumber: 4, fightPercentage: 12.5, durationMs: 200_000, stageCount: 3, raidDps: 1_370_000, raidHps: 235_000, firstDeathMs: 164_000, meaningfulDeaths: 1, rosterFingerprint: '1-2-3-5' }),
+];
+const excludedPull = { fightId: 78, pullNumber: 2, durationMs: 11_000, fightPercentage: 99.2, bossPercentage: 99.2, stageCount: 1, firstDeathMs: null, classification: 'short-reset', reason: 'Pull ended before the analytical minimum.', reasons: ['duration-below-threshold'] };
+const pullTelemetryFixture = {
+  ...telemetryFixture,
+  pullIntelligence: {
+    pulls: pullRows, excludedPulls: [excludedPull], rawClosedPullCount: 4, analysisPullCount: 3,
+    analysisPopulation: { rawPulls: 4, eligiblePulls: 3, excludedPulls: [excludedPull], eligibleFightIds: [75, 76, 77], policy: 'called-wipe/reset pulls remain in WCL history but are excluded from product analytics' },
+    latest: pullRows[2], previous: pullRows[1], best: pullRows[2], status: 'ready',
+  },
+};
+const operationalFixture = {
+  ok: true, version: 'operational-execution-v1', generatedAt: 1787230800000, status: 'ready', report: { code: 'SANITIZED01' }, encounter,
+  analysisPopulation: pullTelemetryFixture.pullIntelligence.analysisPopulation, telemetry: pullTelemetryFixture,
+  mechanics: {
+    observations: [
+      { fightId: 76, key: 'sanitized-cast', name: 'Sanitized cast', occurrences: 2, occurrenceSource: 'cast', affectedPlayers: 0 },
+      { fightId: 77, key: 'sanitized-wave', name: 'Sanitized wave', occurrences: 3, occurrenceSource: 'damage-window', affectedPlayers: 2 },
+    ],
+    failures: [{ fightId: 76, mechanicKey: 'sanitized-soak', mechanicName: 'Sanitized soak', actorId: 3, reason: 'Observed impact did not satisfy the active rule.' }],
+  },
+  dataCompleteness: { mechanicDamage: { events: 8, pages: 1, truncated: false }, assignmentAuras: { events: 4, truncated: false }, meaningfulDeaths: { events: 3, truncated: false } },
+  evidenceContract: { ...evidenceContract, observedMechanicDoesNotImplyFailure: true },
+};
+const gatedOperationalFixture = { ...operationalFixture, status: 'boss-reference-not-ready', mechanics: null, evidenceContract: { sameDifficultyOnly: true, noUnrehearsedMechanicClassification: true } };
+const insufficientPull = pullRows[0];
+const insufficientOperationalFixture = {
+  ...gatedOperationalFixture,
+  telemetry: { ...pullTelemetryFixture, pullIntelligence: { pulls: [insufficientPull], excludedPulls: [], analysisPopulation: { rawPulls: 1, eligiblePulls: 1, excludedPulls: [], eligibleFightIds: [75], policy: 'called-wipe/reset pulls excluded' }, status: 'insufficient-data' } },
+};
 const bodies = {
   report: Buffer.from(JSON.stringify(reportFixture)).toString('base64'),
   telemetry: Buffer.from(JSON.stringify(telemetryFixture)).toString('base64'),
   partialTelemetry: Buffer.from(JSON.stringify(partialTelemetryFixture)).toString('base64'),
+  operational: Buffer.from(JSON.stringify(operationalFixture)).toString('base64'),
+  gatedOperational: Buffer.from(JSON.stringify(gatedOperationalFixture)).toString('base64'),
+  insufficientOperational: Buffer.from(JSON.stringify(insufficientOperationalFixture)).toString('base64'),
 };
 let partialMode = false;
+let pullMode = 'ready';
 let currentSurface = 'unknown';
 const edge = [process.env.RAID_OPS_BROWSER_PATH, 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', 'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'].find(value => value && existsSync(value));
 const sleep = milliseconds => new Promise(resolvePromise => setTimeout(resolvePromise, milliseconds));
@@ -102,7 +151,8 @@ async function evaluate(cdp, expression) {
 
 async function navigate(cdp, path, readyText) {
   partialMode = path.includes('visual=partial');
-  currentSurface = path.startsWith('/composition') ? 'composition' : path.startsWith('/damage-healing') ? 'damage-healing' : 'unknown';
+  pullMode = path.includes('visual=gated') ? 'gated' : path.includes('visual=insufficient') ? 'insufficient' : 'ready';
+  currentSurface = path.startsWith('/composition') ? 'composition' : path.startsWith('/damage-healing') ? 'damage-healing' : path.startsWith('/pull-lab') ? 'pull-lab' : 'unknown';
   await cdp.send('Page.navigate', { url: new URL(path, baseUrl).href });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const ready = await evaluate(cdp, `document.readyState === 'complete' && document.body?.innerText?.includes(${JSON.stringify(readyText)})`);
@@ -127,6 +177,10 @@ async function audit(cdp, viewport, surface, state) {
     contextRequired: document.body?.innerText?.includes('CONTEXT REQUIRED') || false,
     rosterReady: document.body?.innerText?.includes('Roster intelligence') || false,
     throughputReady: document.body?.innerText?.includes('Throughput diagnostics') || false,
+    pullReady: document.body?.innerText?.includes('Pull comparator') || false,
+    pullSelected: document.querySelectorAll('.selectors select').length === 2 && document.querySelectorAll('.selectors select')[0]?.value !== document.querySelectorAll('.selectors select')[1]?.value,
+    mechanicsGated: document.body?.innerText?.includes('CLASSIFICATION GATED') || false,
+    insufficientData: document.body?.innerText?.includes('One eligible pull is not a comparison') || false,
     partialVisible: document.body?.innerText?.includes('PARTIAL EVIDENCE') || false,
     graphVisible: Boolean(document.querySelector('app-throughput-chart svg polyline')),
     graphUnavailable: document.body?.innerText?.includes('GRAPH UNAVAILABLE') || false,
@@ -152,8 +206,8 @@ try {
     if (message.method === 'Network.requestWillBeSent') requests.push({ url: message.params.request.url, surface: currentSurface });
     if (message.method !== 'Fetch.requestPaused') return;
     const url = new URL(message.params.request.url); const pathname = url.pathname;
-    if (pathname === '/api/wcl/report' || pathname === '/api/wcl/telemetry') {
-      const body = pathname.endsWith('/report') ? bodies.report : partialMode ? bodies.partialTelemetry : bodies.telemetry;
+    if (pathname === '/api/wcl/report' || pathname === '/api/wcl/telemetry' || pathname === '/api/wcl/operational-execution') {
+      const body = pathname.endsWith('/report') ? bodies.report : pathname.endsWith('/telemetry') ? (partialMode ? bodies.partialTelemetry : bodies.telemetry) : pullMode === 'gated' ? bodies.gatedOperational : pullMode === 'insufficient' ? bodies.insufficientOperational : bodies.operational;
       void cdp.send('Fetch.fulfillRequest', { requestId: message.params.requestId, responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'application/json' }], body });
     } else if (url.origin !== baseOrigin) void cdp.send('Fetch.failRequest', { requestId: message.params.requestId, errorReason: 'BlockedByClient' });
     else void cdp.send('Fetch.continueRequest', { requestId: message.params.requestId });
@@ -167,6 +221,11 @@ try {
     await navigate(cdp, '/damage-healing?report=SANITIZED01&encounter=3010&difficulty=5', 'Throughput diagnostics'); await audit(cdp, viewport.id, 'damage-healing', 'ready-damage');
     await evaluate(cdp, `[...document.querySelectorAll('.mode-toggle button')].find(button => button.textContent.trim() === 'Healing')?.click()`); await sleep(100); await audit(cdp, viewport.id, 'damage-healing', 'ready-healing');
     await navigate(cdp, '/damage-healing?report=SANITIZED01&encounter=3010&difficulty=5&visual=partial', 'PARTIAL EVIDENCE'); await evaluate(cdp, `[...document.querySelectorAll('.mode-toggle button')].find(button => button.textContent.trim() === 'Healing')?.click()`); await sleep(100); await audit(cdp, viewport.id, 'damage-healing', 'partial-healing');
+    await navigate(cdp, '/pull-lab', 'CONTEXT REQUIRED'); await audit(cdp, viewport.id, 'pull-lab', 'context');
+    await navigate(cdp, '/pull-lab?report=SANITIZED01&encounter=3010&difficulty=5', 'Pull comparator'); await audit(cdp, viewport.id, 'pull-lab', 'ready');
+    await evaluate(cdp, `(() => { const select = document.querySelectorAll('.selectors select')[1]; select.value = '75'; select.dispatchEvent(new Event('change', { bubbles: true })); })()`); await sleep(150); await audit(cdp, viewport.id, 'pull-lab', 'selected');
+    await navigate(cdp, '/pull-lab?report=SANITIZED01&encounter=3010&difficulty=5&visual=gated', 'CLASSIFICATION GATED'); await audit(cdp, viewport.id, 'pull-lab', 'mechanics-gated');
+    await navigate(cdp, '/pull-lab?report=SANITIZED01&encounter=3010&difficulty=5&visual=insufficient', 'One eligible pull is not a comparison'); await audit(cdp, viewport.id, 'pull-lab', 'insufficient');
   }
   await cdp.send('Browser.close').catch(() => {}); cdp.close();
 } finally {
@@ -181,9 +240,12 @@ if (audits.filter(item => item.surface === 'composition' && item.state === 'read
 if (audits.filter(item => item.surface === 'damage-healing' && item.state.startsWith('ready')).some(item => !item.throughputReady || !item.graphVisible)) failures.push({ reason: 'Damage & Healing ready graph state incomplete' });
 if (audits.filter(item => item.state === 'ready-healing').some(item => !item.healingSelected)) failures.push({ reason: 'Healing toggle interaction failed' });
 if (audits.filter(item => item.state === 'partial-healing').some(item => !item.partialVisible || !item.graphUnavailable || !item.healingSelected)) failures.push({ reason: 'Damage & Healing partial graph state incomplete' });
-if (apiRequests.length !== 10 || apiRequests.some(url => !/[?&]report=SANITIZED01/.test(url) || !/[?&]encounter=3010/.test(url) || !/[?&]difficulty=5/.test(url))) failures.push({ reason: 'API requests are not exact-scope and deterministic', apiRequests });
+if (audits.filter(item => item.surface === 'pull-lab' && (item.state === 'ready' || item.state === 'selected')).some(item => !item.pullReady || !item.pullSelected)) failures.push({ reason: 'Pull Lab comparison/selection state incomplete' });
+if (audits.filter(item => item.state === 'mechanics-gated').some(item => !item.pullReady || !item.mechanicsGated)) failures.push({ reason: 'Pull Lab gated mechanics state incomplete' });
+if (audits.filter(item => item.state === 'insufficient').some(item => !item.insufficientData || item.pullReady)) failures.push({ reason: 'Pull Lab insufficient-data state incomplete' });
+if (apiRequests.length !== 16 || apiRequests.some(url => !/[?&]report=SANITIZED01/.test(url) || !/[?&]encounter=3010/.test(url) || !/[?&]difficulty=5/.test(url))) failures.push({ reason: 'API requests are not exact-scope and deterministic', apiRequests });
 const externalRequestRecords = requests.filter(request => new URL(request.url).origin !== baseOrigin);
-for (const surface of ['composition', 'damage-healing']) {
+for (const surface of ['composition', 'damage-healing', 'pull-lab']) {
   const report = {
     schemaVersion: 'phase4-visual-v1', surface, fixture: 'sanitized WCL-shaped local response; external traffic blocked before dispatch', baseUrl,
     audits: audits.filter(item => item.surface === surface), errors,
@@ -193,4 +255,4 @@ for (const surface of ['composition', 'damage-healing']) {
   await writeFile(join(output, surface, 'report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
 }
 if (errors.length || failures.length) { console.error(JSON.stringify({ errors, apiRequests, failures }, null, 2)); process.exit(1); }
-console.log(`[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 10 exact-scope stubbed API requests - 0 provider calls`);
+console.log(`[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 16 exact-scope stubbed API requests - 0 provider calls`);

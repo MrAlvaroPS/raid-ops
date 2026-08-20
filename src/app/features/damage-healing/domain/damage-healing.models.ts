@@ -1,4 +1,7 @@
 import { WclScope } from '../../../shared/domain/wcl-scope';
+import { AbsoluteStage, StageBand } from '../../../shared/domain/absolute-stage';
+
+export type { AbsoluteStage, StageBand } from '../../../shared/domain/absolute-stage';
 
 export type DamageHealingScope = WclScope;
 export type ThroughputMode = 'damage' | 'healing';
@@ -10,14 +13,6 @@ export interface DamageHealingEncounter {
   readonly difficultyName: string;
   readonly scopeKey: string;
   readonly pulls: number;
-}
-
-export interface AbsoluteStage {
-  readonly absoluteStageIndex: number;
-  readonly semanticPhaseId: number | null;
-  readonly startTime: number | null;
-  readonly endTime: number | null;
-  readonly inferred: boolean;
 }
 
 export interface ThroughputSummary {
@@ -83,12 +78,4 @@ export interface DamageHealingSnapshot {
 export interface ChartPoint {
   readonly x: number;
   readonly y: number;
-}
-
-export interface StageBand {
-  readonly absoluteStageIndex: number;
-  readonly semanticPhaseId: number | null;
-  readonly leftPct: number;
-  readonly widthPct: number;
-  readonly inferred: boolean;
 }

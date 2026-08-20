@@ -1,3 +1,4 @@
+import { absoluteStageBands } from '../../../shared/domain/absolute-stage';
 import { AbsoluteStage, ChartPoint, StageBand, StageThroughput, ThroughputMode } from './damage-healing.models';
 
 export function chartPoints(values: readonly number[], width = 100, height = 42): readonly ChartPoint[] {
@@ -19,20 +20,7 @@ export function chartArea(values: readonly number[]): string {
 }
 
 export function stageBands(stages: readonly AbsoluteStage[], durationMs: number): readonly StageBand[] {
-  const measured = stages.filter(stage => stage.startTime != null && stage.endTime != null);
-  if (!measured.length || durationMs <= 0) return [];
-  const origin = measured[0].startTime as number;
-  return measured.map(stage => {
-    const start = Math.max(0, (stage.startTime as number) - origin);
-    const end = Math.max(start, (stage.endTime as number) - origin);
-    return {
-      absoluteStageIndex: stage.absoluteStageIndex,
-      semanticPhaseId: stage.semanticPhaseId,
-      leftPct: Math.min(100, start * 100 / durationMs),
-      widthPct: Math.min(100, Math.max(0, (end - start) * 100 / durationMs)),
-      inferred: stage.inferred,
-    };
-  });
+  return absoluteStageBands(stages, durationMs);
 }
 
 export function stageMetric(stage: StageThroughput, mode: ThroughputMode): number | null {

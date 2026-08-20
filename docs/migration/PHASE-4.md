@@ -1,7 +1,7 @@
 # Phase 4 — incremental product migration
 
-Status: in progress. Composition and Damage & Healing are complete in Angular
-(2 of 11 product surfaces); production-wide routing remains on the legacy
+Status: in progress. Composition, Damage & Healing and Pull Lab are complete in
+Angular (3 of 11 product surfaces); production-wide routing remains on the legacy
 application.
 
 This is the next original roadmap phase after the Phase 3 Clean Architecture
@@ -113,7 +113,7 @@ blocked before dispatch.
 
 ### Ownership and rollback
 
-`feature-catalog.ts` now marks exactly Composition and Damage & Healing as
+`feature-catalog.ts` now marks Composition and Damage & Healing as
 `angular`. The architecture gate rejects accidental ownership drift. The global
 production switch remains statically disabled, and both legacy routes remain as
 rollback implementations until the later cutover gate.
@@ -121,18 +121,76 @@ rollback implementations until the later cutover gate.
 Detailed truth and contradiction decisions are canonical in
 [the Damage & Healing feature contract](../features/damage-healing/README.md).
 
-## Next slice inside Phase 4 — Pull Lab
+## Slice 4.3 — Pull Lab (complete)
 
-The next recommended vertical slice is **Pull Lab**. It should reuse the exact
-scope and analytical-population decisions already proven here, then freeze pull
-selection, same-report comparison, excluded-reset visibility and partial
-mechanics semantics before implementation. It must not absorb LIVE polling or
-invent comparison data.
+### Completed scope
 
-This next slice is **high complexity**: it combines selection state, two-pull
-comparisons, absolute-stage alignment and operational/mechanics evidence whose
-absence must remain explicit. Use a high-reasoning model. LIVE, Loot and Iris
-remain deferred until their own slices.
+- audited Golden, reconstructed React, both legacy runtime generations,
+  analytical pull construction/exclusion, operational execution, execution
+  context, tests, evidence doctrine and desktop/mobile baselines;
+- migrated Pull Lab into domain, application, infrastructure and presentation
+  layers using one existing exact-scope `/api/wcl/operational-execution` read;
+- made A/B fight selection distinct, URL-owned and deterministic; a lone pull is
+  visible but is never compared with itself;
+- retained boss progress, duration, absolute stage, first death, meaningful
+  deaths, raid DPS/HPS, roster-change context, excluded resets and mechanic
+  evidence;
+- restored a useful real-data version of the Golden timeline with measured
+  absolute stages plus raw/meaningful death markers, without fictional
+  Bloodlust/cooldown events;
+- corrected DPS direction to same absolute stage only, kept HPS and duration
+  observational, and made no-death semantics explicit;
+- separated observed mechanic occurrence from classified failure, including
+  gated and truncated evidence states;
+- rejected scope, population and eligible/excluded-mechanic contradictions;
+- extracted the absolute-stage model into `shared` only after this second real
+  feature consumer proved the reuse.
+
+### Verified gates
+
+- 49 Angular tests across 15 files pass;
+- 20 focused legacy pull-population, execution-context and operational evidence
+  tests pass without modifying the backend;
+- production build, Clean Architecture and documentation gates pass;
+- the cumulative Edge/CDP verifier passes 22 route/viewport checks: ten Pull
+  Lab captures plus the refreshed Composition and Damage & Healing baselines;
+- desktop and mobile context, ready, changed-selection, mechanics-gated and
+  insufficient-data states have zero overflow, browser exception, framework
+  overlay or Golden fixture finding;
+- sixteen exact-scope stubbed API reads across the cumulative matrix and zero
+  provider dispatch or visual-fixture data mutation;
+- the first visual run exposed and the implementation corrected a native-select
+  display mismatch before evidence was accepted.
+
+### Operational boundary and rollback
+
+The Angular route introduces no endpoint, WCL query, polling loop or new
+backend mutation. It reuses the active legacy operational endpoint. That
+existing endpoint can, for an eligible HOME report, persist operational roster,
+diagnostic/comparison and execution snapshots; this pre-existing server
+behaviour is documented rather than incorrectly describing the production call
+as read-only. The deterministic visual verifier intercepts it before dispatch
+and performs zero provider or persistence operation.
+
+`feature-catalog.ts` now marks exactly Pull Lab, Damage & Healing and
+Composition as `angular`. The production switch remains disabled and the legacy
+route remains rollback-only until cutover.
+
+Detailed behaviour and contradiction decisions are canonical in
+[the Pull Lab feature contract](../features/pull-lab/README.md).
+
+## Next slice inside Phase 4 — Progress
+
+The next recommended vertical slice is **Progress**. It should freeze the
+persisted HOME history source, longitudinal eligible population, report/night
+grouping, metric version/null policy and excluded-pull visibility before UI
+migration. It must ignore an active single-pull selector unless an explicit
+detail view opts in, and normal page load must remain zero WCL.
+
+Progress is a **high-complexity** slice because historical aggregation can
+silently change denominators, merge difficulties or confuse persisted HOME
+history with an Active Report. Use a high-reasoning model. LIVE, Loot and Iris
+remain deferred until their own later slices.
 
 ## Phase exit condition
 

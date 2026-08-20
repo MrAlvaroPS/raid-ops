@@ -10,6 +10,8 @@ function productRoute(feature: FeatureDefinition): Route {
       return { ...route, loadComponent: () => import('./features/composition/presentation/composition-page/composition.page').then(module => module.CompositionPage) };
     case 'damage-healing':
       return { ...route, loadComponent: () => import('./features/damage-healing/presentation/damage-healing-page/damage-healing.page').then(module => module.DamageHealingPage) };
+    case 'pull-lab':
+      return { ...route, loadComponent: () => import('./features/pull-lab/presentation/pull-lab-page/pull-lab.page').then(module => module.PullLabPage) };
     default:
       return { ...route, loadComponent: () => import('./features/migration-control/presentation/legacy-boundary-page/legacy-boundary.page').then(module => module.LegacyBoundaryPage) };
   }

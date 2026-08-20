@@ -8,6 +8,17 @@ without tags they must not be read as independently proven deployment dates.
 
 ## Unreleased — Angular migration
 
+- Completed the Pull Lab Angular vertical slice with distinct URL-owned A/B
+  selection, absolute-stage/death timelines, excluded-reset visibility and one
+  existing exact-scope operational read.
+- Corrected legacy comparison contradictions: a single pull is never compared
+  with itself, DPS is directional only at equal absolute stage, HPS is always
+  observational, and gated mechanic classification never implies zero failures.
+- Separated observed mechanic occurrences from classified failures and added
+  ten responsive Pull Lab captures covering context, ready, changed selection,
+  gated mechanics and insufficient-data states with zero provider dispatch.
+- Extracted the absolute-stage model only after it acquired a second real
+  consumer in Pull Lab.
 - Completed the Damage & Healing Angular vertical slice with two existing
   exact-scope backend reads, runtime-decoded cross-endpoint contracts, absolute
   stages, real WCL Total graphs and safe partial degradation.

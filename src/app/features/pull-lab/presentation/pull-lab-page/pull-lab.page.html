@@ -1,0 +1,285 @@
+<section class="pull-lab-page">
+  <header class="page-heading">
+    <div>
+      <small>AVOID // RAID OPERATIONS CENTER</small>
+      <h1>Pull Lab</h1>
+    </div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  <app-wcl-scope-form
+    label="Pull Lab WCL scope"
+    [initialScope]="currentScope()"
+    [loading]="state().kind === 'loading'"
+    (scopeSubmitted)="applyScope($event)"
+  />
+
+  @switch (state().kind) {
+    @case ('context-required') {
+      <section class="state-panel">
+        <span>CONTEXT REQUIRED</span>
+        <h2>Select an exact WCL scope</h2>
+        <p>
+          No request has been made. Enter a report, encounter and difficulty to compare real
+          analytical pulls.
+        </p>
+      </section>
+    }
+    @case ('loading') {
+      <section class="state-panel loading" aria-live="polite">
+        <span>WCL · EXACT SCOPE</span>
+        <h2>Loading Pull Intelligence</h2>
+        <p>
+          Reading the existing operational contract. No mock comparison or cross-difficulty evidence
+          is introduced.
+        </p>
+      </section>
+    }
+    @case ('error') {
+      <section class="state-panel error" role="alert">
+        <span>SAFE FAILURE</span>
+        <h2>Pull Lab is unavailable</h2>
+        <p>{{ $any(state()).message }}</p>
+        @if ($any(state()).retryable) {
+          <button type="button" (click)="retry()">Retry</button>
+        }
+      </section>
+    }
+    @case ('empty') {
+      <section class="state-panel">
+        <span>OBSERVED EMPTY STATE</span>
+        <h2>No analytical pull for this scope</h2>
+        <p>{{ data()?.emptyReason }}</p>
+        <small>No Golden pull, death or metric has been substituted.</small>
+      </section>
+    }
+    @case ('insufficient-data') {
+      <section class="state-panel">
+        <span>INSUFFICIENT DATA</span>
+        <h2>One eligible pull is not a comparison</h2>
+        <p>{{ data()?.emptyReason }}</p>
+        <small
+          >The available pull remains visible below, but it is never compared with itself.</small
+        >
+      </section>
+      @if (pullA(); as pull) {
+        <section class="single-pull">
+          <b>PULL {{ pull.pullNumber }}</b
+          ><span>{{ progress(pull.fightPercentage) }} boss remaining</span
+          ><span>{{ duration(pull.durationMs) }}</span
+          ><span>{{ pull.meaningfulDeaths }} meaningful death(s)</span>
+        </section>
+      }
+    }
+    @case ('ready') {
+      <section class="hero-panel">
+        <div>
+          <span>SYNCHRONIZED ANALYTICAL PULLS</span>
+          <h2>{{ data()!.encounter?.name ?? 'Encounter ' + data()!.encounter?.id }}</h2>
+          <p>
+            {{ data()!.encounter?.difficultyName }} · report {{ data()!.reportCode }} · excluded
+            resets remain outside comparison
+          </p>
+        </div>
+        <div class="population">
+          <small>ANALYSIS POPULATION</small
+          ><b>{{ data()!.population?.eligiblePulls ?? data()!.pulls.length }}</b
+          ><span
+            >eligible / {{ data()!.population?.rawPulls ?? data()!.pulls.length }} completed</span
+          >
+        </div>
+      </section>
+
+      @if (data()!.partialReasons.length) {
+        <aside class="partial" role="status">
+          <b>PARTIAL EVIDENCE</b><span>{{ data()!.partialReasons.join(' · ') }}</span>
+        </aside>
+      }
+
+      <section class="selectors" aria-label="Pull comparison selection">
+        <label
+          ><span>PULL A</span
+          ><select (change)="selectPull('A', $event)">
+            @for (pull of data()!.pulls; track trackPull($index, pull)) {
+              <option
+                [value]="pull.fightId"
+                [selected]="pull.fightId === selectedPullA()"
+                [disabled]="pull.fightId === selectedPullB()"
+              >
+                #{{ pull.pullNumber }} · {{ progress(pull.fightPercentage) }} ·
+                {{ duration(pull.durationMs) }}
+              </option>
+            }
+          </select></label
+        >
+        <div class="versus">A <i></i> VS <i></i> B</div>
+        <label
+          ><span>PULL B</span
+          ><select (change)="selectPull('B', $event)">
+            @for (pull of data()!.pulls; track trackPull($index, pull)) {
+              <option
+                [value]="pull.fightId"
+                [selected]="pull.fightId === selectedPullB()"
+                [disabled]="pull.fightId === selectedPullA()"
+              >
+                #{{ pull.pullNumber }} · {{ progress(pull.fightPercentage) }} ·
+                {{ duration(pull.durationMs) }}
+              </option>
+            }
+          </select></label
+        >
+      </section>
+
+      @if (pullA() && pullB() && comparison(); as compared) {
+        <section class="panel timeline-panel">
+          <header>
+            <span>01</span>
+            <div>
+              <h2>Absolute-stage timelines</h2>
+              <p>
+                Measured stage windows and observed friendly deaths; no inferred cooldown markers
+              </p>
+            </div>
+            <div class="legend"><i></i> raw death <i class="meaningful"></i> meaningful</div>
+          </header>
+          <div class="timeline-list">
+            @for (pull of [pullA()!, pullB()!]; track pull.fightId; let index = $index) {
+              <article class="pull-timeline">
+                <div class="timeline-label">
+                  <b>{{ index === 0 ? 'A' : 'B' }} · #{{ pull.pullNumber }}</b
+                  ><span>{{ progress(pull.fightPercentage) }}</span
+                  ><small>{{ duration(pull.durationMs) }}</small>
+                </div>
+                <div
+                  class="timeline-track"
+                  [attr.aria-label]="'Pull ' + pull.pullNumber + ' stage and death timeline'"
+                >
+                  @for (band of pull.stageBands; track band.absoluteStageIndex) {
+                    <span
+                      class="stage"
+                      [class.inferred]="band.inferred"
+                      [style.left.%]="band.leftPct"
+                      [style.width.%]="band.widthPct"
+                      ><em>S{{ band.absoluteStageIndex }}</em></span
+                    >
+                  }
+                  @for (death of pull.rawDeathTimeline; track death.fightRelativeMs) {
+                    <i
+                      class="death"
+                      [class.meaningful]="meaningful(death, pull)"
+                      [style.left.%]="deathLeft(death, pull)"
+                      [attr.title]="deathLabel(death)"
+                      [attr.aria-label]="deathLabel(death)"
+                    ></i>
+                  }
+                </div>
+              </article>
+            }
+          </div>
+        </section>
+
+        <section class="panel comparator-panel">
+          <header>
+            <span>02</span>
+            <div>
+              <h2>Pull comparator</h2>
+              <p>Direction is applied only where the metric contract supports it</p>
+            </div>
+            @if (compared.rosterChanged) {
+              <b class="roster-warning">ROSTER CHANGED</b>
+            }
+          </header>
+          <div class="comparison-table" role="table" aria-label="Pull A versus Pull B metrics">
+            @for (signal of compared.signals; track signal.key) {
+              <div class="metric-row" role="row">
+                <b role="cell">{{ signalValue(signal.current, signal) }}</b>
+                <div role="cell">
+                  <span>{{ signal.label }}</span
+                  ><small>{{ signal.evidence }}</small>
+                </div>
+                <em role="cell" [class]="signal.status">{{ statusLabel(signal) }}</em>
+                <b role="cell">{{ signalValue(signal.baseline, signal) }}</b>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="panel mechanics-panel">
+          <header>
+            <span>03</span>
+            <div>
+              <h2>Mechanic evidence</h2>
+              <p>Observed occurrences and classified failures remain separate</p>
+            </div>
+            <b class="mechanics-status" [class.gated]="data()!.mechanics.status === 'gated'">{{
+              data()!.mechanics.status === 'ready' ? 'CLASSIFICATION READY' : 'CLASSIFICATION GATED'
+            }}</b>
+          </header>
+          @if (data()!.mechanics.status === 'gated') {
+            <div class="mechanics-gated">
+              <b>No failure claim is available</b>
+              <p>{{ data()!.mechanics.reason }}</p>
+            </div>
+          } @else {
+            <div class="mechanics-columns">
+              @for (pull of [pullA()!, pullB()!]; track pull.fightId; let index = $index) {
+                <article>
+                  <h3>{{ index === 0 ? 'A' : 'B' }} · PULL {{ pull.pullNumber }}</h3>
+                  <h4>OBSERVED OCCURRENCES</h4>
+                  @for (row of mechanicsFor(pull).observations; track row.key) {
+                    <div class="mechanic-row">
+                      <b>{{ row.name }}</b
+                      ><span
+                        >{{ row.occurrences }} occurrence(s) ·
+                        {{ row.affectedPlayers }} affected</span
+                      >
+                    </div>
+                  } @empty {
+                    <p class="none">No observed mechanic occurrence in the available streams.</p>
+                  }
+                  <h4>CLASSIFIED FAILURES</h4>
+                  @for (row of mechanicsFor(pull).failures; track $index) {
+                    <div class="mechanic-row failure">
+                      <b>{{ row.mechanicName }}</b
+                      ><span
+                        >{{ row.reason
+                        }}{{ row.actorId != null ? ' · actor ' + row.actorId : '' }}</span
+                      >
+                    </div>
+                  } @empty {
+                    <p class="none">
+                      No classified failure was proven for this pull. This does not imply perfect
+                      execution.
+                    </p>
+                  }
+                </article>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      @if (data()!.excludedPulls.length) {
+        <details class="excluded">
+          <summary>{{ data()!.excludedPulls.length }} excluded reset/called-wipe pull(s)</summary>
+          <div>
+            @for (pull of data()!.excludedPulls; track pull.fightId) {
+              <article>
+                <b>#{{ pull.pullNumber }}</b
+                ><span>{{ pull.classification }}</span>
+                <p>{{ pull.reason }}</p>
+              </article>
+            }
+          </div>
+        </details>
+      }
+
+      <footer class="evidence">
+        <span>{{ data()!.evidence?.source }}</span
+        ><span>{{ data()!.encounter?.scopeKey }}</span
+        ><span>{{ data()!.evidence?.metricContract }}</span
+        ><span>Observations ≠ failures</span><span>Cross-difficulty comparison forbidden</span>
+      </footer>
+    }
+  }
+</section>

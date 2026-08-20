@@ -36,9 +36,9 @@ for (const file of files) {
 
 const catalog = await readFile(new URL('../src/app/features/migration-control/domain/feature-catalog.ts', import.meta.url), 'utf8');
 const angularOwners = [...catalog.matchAll(/id:\s*'([^']+)'[^\n]+owner:\s*'angular'/g)].map(match => match[1]);
-const expectedAngularOwners = ['damage-healing', 'composition'];
+const expectedAngularOwners = ['pull-lab', 'damage-healing', 'composition'];
 if (angularOwners.length !== expectedAngularOwners.length || angularOwners.some((owner, index) => owner !== expectedAngularOwners[index])) {
-  failures.push(`incremental ownership must contain only Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`);
+  failures.push(`incremental ownership must contain only Pull Lab, Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`);
 }
 const routes = await readFile(new URL('../src/app/app.routes.ts', import.meta.url), 'utf8');
 if (!routes.includes("case 'composition'") || !routes.includes("features/composition/presentation/composition-page")) {
@@ -46,6 +46,9 @@ if (!routes.includes("case 'composition'") || !routes.includes("features/composi
 }
 if (!routes.includes("case 'damage-healing'") || !routes.includes("features/damage-healing/presentation/damage-healing-page")) {
   failures.push('Damage & Healing must resolve to its Angular presentation route');
+}
+if (!routes.includes("case 'pull-lab'") || !routes.includes("features/pull-lab/presentation/pull-lab-page")) {
+  failures.push('Pull Lab must resolve to its Angular presentation route');
 }
 const compositionRepository = await readFile(new URL('../src/app/features/composition/infrastructure/composition-api.repository.ts', import.meta.url), 'utf8');
 for (const parameter of ['report', 'encounter', 'difficulty']) {
@@ -58,6 +61,11 @@ for (const parameter of ['report', 'encounter', 'difficulty']) {
 for (const endpoint of ['/api/wcl/report?', '/api/wcl/telemetry?']) {
   if (!damageHealingRepository.includes(endpoint)) failures.push(`Damage & Healing must reuse existing ${endpoint} read`);
 }
+const pullLabRepository = await readFile(new URL('../src/app/features/pull-lab/infrastructure/pull-lab-api.repository.ts', import.meta.url), 'utf8');
+for (const parameter of ['report', 'encounter', 'difficulty']) {
+  if (!pullLabRepository.includes(`${parameter}:`)) failures.push(`Pull Lab request must include explicit ${parameter}`);
+}
+if (!pullLabRepository.includes('/api/wcl/operational-execution?')) failures.push('Pull Lab must reuse the existing operational-execution read');
 const runtime = await readFile(new URL('../src/app/core/config/runtime-config.ts', import.meta.url), 'utf8');
 if (!/productionSwitchEnabled:\s*false/.test(runtime)) failures.push('global production switch must remain statically false');
 
@@ -66,4 +74,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`[architecture] PASS · ${files.length} source files · dependency direction and two-surface incremental ownership preserved`);
+console.log(`[architecture] PASS · ${files.length} source files · dependency direction and three-surface incremental ownership preserved`);

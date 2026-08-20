@@ -29,10 +29,10 @@
     "fixture": "sanitized WCL-shaped local response",
     "report": "docs/migration/evidence/visual/composition/report.json",
     "captures": [
-      { "file": "desktop-context.png", "sha256": "447a19350d31914d46379cf61d5fd45c35b89d4964fcf2914c9033037c6429eb" },
-      { "file": "desktop-ready.png", "sha256": "fb6a56a08d6c02f6ec70a2a7578ae812ad3331b8f1921ebd4fae5022084b3e5a" },
-      { "file": "mobile-context.png", "sha256": "279e0ca5ffdbb13bf95bb8381237cb8c080ab4985fdb50361a4cf73f7fa27ae7" },
-      { "file": "mobile-ready.png", "sha256": "a83dbbff07f77557c9495ec3dc634cfd6338754b6a71334fbb8f323fb3263f95" }
+      { "file": "desktop-context.png", "sha256": "164a9c0ba844873b60da0cd79374772ef743a8c6f17ef9a4049b5cf1bfff97ac" },
+      { "file": "desktop-ready.png", "sha256": "38dc2699db43531e96f01b4f3a4c753a8bda254af642c3b48d619c9783ee65f8" },
+      { "file": "mobile-context.png", "sha256": "7546568f76918cf4abaed1e670655f4f0462f963752c5430e8307d7ad3ad40e4" },
+      { "file": "mobile-ready.png", "sha256": "a1e6ccdce053911fe74a2c0b7536901cb4d8cb58ee840537b5e9fbe483dc3f87" }
     ]
   },
   "tooling": {

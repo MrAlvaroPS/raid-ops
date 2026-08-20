@@ -40,14 +40,14 @@
     "fixture": "sanitized WCL-shaped local report and telemetry responses",
     "report": "docs/migration/evidence/visual/damage-healing/report.json",
     "captures": [
-      { "file": "desktop-context.png", "sha256": "27622297019adb2dbc556676aceacdadbcbfa4a847661c1df6be035d105fd03e" },
-      { "file": "desktop-ready-damage.png", "sha256": "6b7aee7b343429eef602de32679e5c0c5de9439b6050dd956a0ba41e4e359b96" },
-      { "file": "desktop-ready-healing.png", "sha256": "5581d0a0c0c2f1f8eca66ff0e3f4d921fb0ccbdd9a3a05d8bd9e59142c010d7f" },
-      { "file": "desktop-partial-healing.png", "sha256": "d57e9c752bfb5a84fef07f67246004436aee36a2ee68440514bf06cf037313b7" },
-      { "file": "mobile-context.png", "sha256": "5c944e0c918291ff43aa0a361faddcd3db4e78ad89e6e47d78b1dd7d1a4bef57" },
-      { "file": "mobile-ready-damage.png", "sha256": "9aab804c12c2cfe5b064031644087b5cd1a462f4d7d275627792b0b366dab93d" },
-      { "file": "mobile-ready-healing.png", "sha256": "2861ba254a17b23aada5a940a4f57fb6080c4e8bd941b9641790661172372403" },
-      { "file": "mobile-partial-healing.png", "sha256": "13a1c1d04bfcc0a042c92b758f48a552f4d67c81746814fb22e25e689335c427" }
+      { "file": "desktop-context.png", "sha256": "e29747c3018e16285945cf6743e377dbd81004914a3f4932ef74784fb46f8856" },
+      { "file": "desktop-ready-damage.png", "sha256": "8da9821d60a09dcd9ad77251d11a5e2b1510d749eb940d67214c450b44d79101" },
+      { "file": "desktop-ready-healing.png", "sha256": "641f55b31046f494f501903b5878ccb2a2d79bfaaaa7e19971bd54cfc1fe52fe" },
+      { "file": "desktop-partial-healing.png", "sha256": "6cd7378c0560b35ec7f780795cf660846ed4abff08a38141b69e834f0c671631" },
+      { "file": "mobile-context.png", "sha256": "c64b6de38e6b64ea2ad95a6044023f4fc4030730bfe6ae8767ee730dd7ffe31a" },
+      { "file": "mobile-ready-damage.png", "sha256": "db78e9826b92b296837526767786016a1e57432188d11a86fa85700b8fec1248" },
+      { "file": "mobile-ready-healing.png", "sha256": "c27ad3eb10f815fc8539941a65bbb70a5755d4aba159c34f04ce04a49aa241c0" },
+      { "file": "mobile-partial-healing.png", "sha256": "80883b26628957a6afaa22048b8b5eab590eed4e53fca3009075d0df77400a73" }
     ]
   },
   "tooling": {
