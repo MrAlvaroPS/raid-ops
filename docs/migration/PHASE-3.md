@@ -19,7 +19,7 @@ Status: complete (2026-08-20).
 - Loot and SimulationCraft;
 - production routing or Vercel deployment changes.
 
-Source baseline: legacy Phase 2 commit `5556ab4` on `phase2-documentation-releases`.
+Source baseline: legacy Phase 2 commit `ec7968b` on `phase2-documentation-releases`.
 
 ## Exit evidence
 
