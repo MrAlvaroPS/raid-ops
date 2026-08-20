@@ -54,6 +54,12 @@ new baseline for that route. The old Golden capture remains archived context and
 is never silently overwritten. No visual verification may acquire WCL/provider
 data or mutate the corpus merely to populate a screenshot.
 
+Accepted Phase 4 route baselines currently cover Composition, Damage & Healing,
+Pull Lab, Progress and Players. The Players baseline deliberately replaces the
+fictional Golden roster, score and trend with context-required, Reliability
+pending/published/data-error and external-not-applicable evidence on desktop and
+mobile; it retains the compact roster+dossier visual hierarchy.
+
 The former immutable hash manifest is archived because it had drifted from the
 retained files before this policy was adopted. `npm run verify:visual-reference`
 checks that the currently served legacy fallback and reusable design assets remain

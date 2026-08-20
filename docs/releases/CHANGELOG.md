@@ -8,6 +8,15 @@ without tags they must not be read as independently proven deployment dates.
 
 ## Unreleased — Angular migration
 
+- Completed the Players Angular vertical slice with explicit report, encounter
+  and difficulty scope; HOME-only population enforcement; real best-pull roster,
+  execution evidence, persisted attendance and Reliability `1.1.0` decoding.
+- Closed legacy publication and identity contradictions: no shadow/component
+  score leaks, no missing-profile-as-pending, no unknown-role-to-DPS coercion,
+  no name-only attendance join and no external player admission.
+- Replaced Golden roster, trend, coaching and scores with distinct empty,
+  external, partial, pending, published, data-error and no-profile states while
+  retaining the desktop/mobile roster-dossier-matrix hierarchy.
 - Completed the Progress Angular vertical slice on persisted HOME history with
   an explicit encounter+difficulty selector, active `progress-model-v2` /
   metrics `2.0.0`, zero-WCL normal reads and no Active Report contamination.

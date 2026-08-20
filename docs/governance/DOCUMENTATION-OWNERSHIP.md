@@ -7,18 +7,18 @@ contract has one canonical repository. A historical copy may remain frozen for
 audit and rollback, but it must identify its successor and must not receive new
 changes.
 
-| Documentation set | Active owner now | Status in Angular | Transfer trigger |
-|---|---|---|---|
-| Migration phases, parity and guardrails | `raid-ops/docs/migration` | Transferred | Already satisfied |
-| Product changelog and release provenance | `raid-ops/docs/releases` | Transferred | Already satisfied |
-| Living visual policy and Phase 0 captures | `raid-ops/docs/visual` and `docs/migration/evidence/visual` | Transferred | New accepted captures replace route baselines individually |
-| Angular architecture and ADRs | `raid-ops/docs/architecture` | Native | Always owned by Angular |
-| Per-route frontend behaviour | `raid-ops`, as each route passes its slice gate | Progress, Pull Lab, Damage & Healing and Composition transferred; seven routes pending | Functional, data, visual, documentation and rollback gates pass |
-| Backend API implementation | `avoid-raid-ops/server` | Referenced, not copied | Backend moves or a stable published API contract is extracted |
-| Iris/WCL/provider/evidence doctrine | `avoid-raid-ops` root and `docs` | Referenced, not copied | The owning backend capability moves |
-| Persistence and corpus operations | `avoid-raid-ops` | Baseline copied; operating contract remains at source | Storage implementation changes owner |
-| Vercel production deployment | `avoid-raid-ops/docs/current/deployment` | Pending | Angular becomes a production route owner |
-| Historical release/checkpoint files | `avoid-raid-ops/docs/archive/releases/legacy` | Indexed through provenance only | Never; immutable evidence remains archived |
+| Documentation set                         | Active owner now                                            | Status in Angular                                                                             | Transfer trigger                                                |
+| ----------------------------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Migration phases, parity and guardrails   | `raid-ops/docs/migration`                                   | Transferred                                                                                   | Already satisfied                                               |
+| Product changelog and release provenance  | `raid-ops/docs/releases`                                    | Transferred                                                                                   | Already satisfied                                               |
+| Living visual policy and Phase 0 captures | `raid-ops/docs/visual` and `docs/migration/evidence/visual` | Transferred                                                                                   | New accepted captures replace route baselines individually      |
+| Angular architecture and ADRs             | `raid-ops/docs/architecture`                                | Native                                                                                        | Always owned by Angular                                         |
+| Per-route frontend behaviour              | `raid-ops`, as each route passes its slice gate             | Progress, Pull Lab, Damage & Healing, Players and Composition transferred; six routes pending | Functional, data, visual, documentation and rollback gates pass |
+| Backend API implementation                | `avoid-raid-ops/server`                                     | Referenced, not copied                                                                        | Backend moves or a stable published API contract is extracted   |
+| Iris/WCL/provider/evidence doctrine       | `avoid-raid-ops` root and `docs`                            | Referenced, not copied                                                                        | The owning backend capability moves                             |
+| Persistence and corpus operations         | `avoid-raid-ops`                                            | Baseline copied; operating contract remains at source                                         | Storage implementation changes owner                            |
+| Vercel production deployment              | `avoid-raid-ops/docs/current/deployment`                    | Pending                                                                                       | Angular becomes a production route owner                        |
+| Historical release/checkpoint files       | `avoid-raid-ops/docs/archive/releases/legacy`               | Indexed through provenance only                                                               | Never; immutable evidence remains archived                      |
 
 ## Rules
 

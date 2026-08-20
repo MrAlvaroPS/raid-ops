@@ -1,8 +1,8 @@
 # Phase 4 — incremental product migration
 
-Status: in progress. Progress, Pull Lab, Damage & Healing and Composition are complete in
-Angular (4 of 11 product surfaces); production-wide routing remains on the legacy
-application.
+Status: in progress. Players, Progress, Pull Lab, Damage & Healing and
+Composition are complete in Angular (5 of 11 product surfaces); production-wide
+routing remains on the legacy application.
 
 This is the next original roadmap phase after the Phase 3 Clean Architecture
 foundation. It migrates one complete vertical capability at a time and remains
@@ -226,15 +226,75 @@ switch remains disabled and the legacy route remains rollback-only.
 Detailed behaviour and contradiction decisions are canonical in
 [the Progress feature contract](../features/progress/README.md).
 
-## Next slice inside Phase 4 — Players
+## Slice 4.5 — Players (complete)
 
-The next recommended vertical slice is **Players**. It should freeze report
-roster/profile facts, longitudinal HOME attendance, Reliability metric version,
-publication/contradiction gates and null semantics before migrating dossiers.
-It must not turn missing profiles or pending Reliability into scores.
+### Completed scope
 
-Players is a **high-complexity** slice because it joins multiple scopes and
-evidence classes while preserving identity and publication provenance. Use a
+- audited Golden/React, both active and historical Players runtimes, telemetry,
+  Intelligence, persisted HOME history, Reliability `1.1.0`, identity rules,
+  tests, releases and desktop/mobile evidence before editing;
+- migrated Players into domain, application, infrastructure and presentation
+  layers with exact report+encounter+difficulty reads and a separate persisted
+  HOME attendance read;
+- retained real best-pull output, deaths, utility, classified mechanics,
+  current-report participation, longitudinal presence and the four mandatory
+  Reliability dimensions;
+- enforced the public Reliability double gate and excluded shadow values,
+  parse/output and unpublished component numbers;
+- separated published, pending, data-error, no-profile and external-not-
+  applicable states without inventing a fallback score;
+- prohibited external identities and name-only longitudinal joins;
+- retained matrix-only classified actors with explicit provenance while
+  disclosing that the backend still lacks a complete encounter participant
+  union;
+- removed the fictional Golden roster, trend, coaching, scores and status
+  labels while preserving the dense roster+dossier hierarchy and responsive
+  interaction;
+- made optional transport failures partial but optional contract
+  contradictions fail closed;
+- transferred active Players frontend behaviour, scope, metric/null,
+  interaction, contradiction and visual documentation to Angular.
+
+### Verified gates
+
+- 71 Angular tests across 21 files pass, including contract decoders, exact
+  requests, HOME/external isolation, identity joins and publication gates;
+- 44 focused legacy tests preserve the active Players header, attendance,
+  Intelligence and Reliability evidence/formula contracts;
+- production build, bundle budgets, Clean Architecture and documentation gates
+  pass;
+- cumulative Edge/CDP verification passes 40 route/viewport checks, including
+  ten Players captures for context, pending, published, data-integrity and
+  external states at 1440x900 and 390x844;
+- 54 deterministic local reads are intercepted cumulatively, 24 for Players,
+  with zero provider calls, persistence mutations, overflow, browser errors,
+  framework overlays or Golden fixture findings.
+
+### Operational boundary and rollback
+
+Angular adds no endpoint, WCL query, polling or mutation. The current backend
+performs duplicated telemetry work because Intelligence internally invokes
+Telemetry but does not return its roster; this is recorded debt for a later
+backend composite-read slice, not hidden by a second frontend truth. Persisted
+HOME history remains a zero-WCL read.
+
+`feature-catalog.ts` now marks exactly Players, Progress, Pull Lab, Damage &
+Healing and Composition as Angular-owned. The global production switch remains
+disabled and the React implementation remains rollback-only.
+
+Detailed behaviour and contradiction decisions are canonical in
+[the Players feature contract](../features/players/README.md).
+
+## Next slice inside Phase 4 — Defensive Audit
+
+The next recommended vertical slice is **Defensive Audit**. Before changing its
+UI it must freeze the exact report/encounter/difficulty population, death-chain
+semantics, defensive-availability evidence, player attribution, null policy and
+the boundary between observed sequence and proven causality. Golden audit
+fixtures must never become readiness or blame claims.
+
+Defensive Audit is a **high-complexity** slice because incomplete availability
+and causal evidence can easily be presented as a player failure. Use a
 high-reasoning model. LIVE, Loot and Iris remain deferred until their own later
 slices.
 

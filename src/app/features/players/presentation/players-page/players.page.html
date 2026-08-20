@@ -1,0 +1,223 @@
+<section class="players-page">
+  <header class="page-heading">
+    <div>
+      <small>AVOID // RAID OPERATIONS CENTER</small>
+      <h1>Players</h1>
+    </div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  @if (state().kind === 'context-required') {
+    <section class="context-card">
+      <span>EXACT WCL CONTEXT REQUIRED</span>
+      <h2>Load player execution evidence</h2>
+      <p>
+        Players combines one report-scoped roster with HOME-only Reliability and persisted
+        longitudinal attendance. It never assumes a report, boss or difficulty.
+      </p>
+      <app-wcl-scope-form
+        label="Players WCL scope"
+        [loading]="false"
+        (scopeSubmitted)="applyScope($event)"
+      />
+    </section>
+  } @else if (state().kind === 'loading') {
+    <section class="state-panel loading" aria-live="polite">
+      <span>PLAYER INTELLIGENCE · EXACT SCOPE</span>
+      <h2>Loading observed player evidence</h2>
+      <p>
+        Reading report telemetry, publication-gated Reliability and persisted HOME attendance
+        without substituting Golden roster values.
+      </p>
+    </section>
+  } @else if (state().kind === 'error') {
+    <section class="state-panel error" role="alert">
+      <span>SAFE FAILURE</span>
+      <h2>Players is unavailable</h2>
+      <p>{{ $any(state()).message }}</p>
+      @if ($any(state()).retryable) {
+        <button type="button" (click)="retry()">Retry</button>
+      }
+      <small>A contract contradiction is never converted into a partial score.</small>
+    </section>
+  } @else if (state().kind === 'external') {
+    <section class="state-panel external">
+      <span>HOME PLAYER BOUNDARY</span>
+      <h2>External players are not applicable</h2>
+      <p>
+        This report may inform boss evaluation, but its roster cannot enter AvoiD player knowledge,
+        Reliability, attendance or player-focus recommendations.
+      </p>
+      <small
+        >The scope was rejected as a player population; no external identity is displayed or
+        retained here.</small
+      >
+    </section>
+  } @else if (state().kind === 'empty') {
+    <section class="state-panel">
+      <span>OBSERVED EMPTY STATE</span>
+      <h2>No player roster in this scope</h2>
+      <p>
+        No completed pull supplied player actors for the exact report, encounter and difficulty.
+      </p>
+      <small>No fictional roster, score or cross-difficulty fallback was used.</small>
+    </section>
+  } @else if (data(); as snapshot) {
+    <section class="hero-panel">
+      <div>
+        <span>RELIABILITY, NOT PARSE</span>
+        <h2>Player Intelligence</h2>
+        <p>
+          Observed output, execution evidence and longitudinal presence for HOME raiders. Throughput
+          is context only and never changes Reliability.
+        </p>
+      </div>
+      <div class="roster-score">
+        <small>ROSTER RELIABILITY</small
+        ><b>{{ rosterScore().value == null ? '—' : rosterScore().value!.toFixed(0) }}</b>
+        <span>{{ rosterScore().published }}/{{ snapshot.players.length }} published profiles</span>
+        <em>MODEL {{ snapshot.reliabilityModelVersion ?? 'UNAVAILABLE' }}</em>
+      </div>
+    </section>
+
+    <section class="scope-strip">
+      <div>
+        <span>REPORT</span><b>{{ snapshot.reportCode }}</b
+        ><small>Explicit active analysis source</small>
+      </div>
+      <div>
+        <span>ENCOUNTER</span
+        ><b>{{ snapshot.encounter?.name ?? 'Encounter ' + snapshot.encounter?.id }}</b
+        ><small
+          >{{ snapshot.encounter?.difficultyName }} ·
+          {{ snapshot.encounter?.eligiblePulls }} eligible pulls</small
+        >
+      </div>
+      <div>
+        <span>PROFILE STATES</span
+        ><b>{{ publishedProfiles() }} published · {{ pendingProfiles() }} pending</b
+        ><small
+          >{{ dataErrors() }} integrity errors ·
+          {{ snapshot.players.length - publishedProfiles() - pendingProfiles() - dataErrors() }}
+          without profile</small
+        >
+      </div>
+      <div>
+        <span>HOME HISTORY</span
+        ><b>{{ snapshot.historyNetworkExecuted === false ? 'PERSISTED · 0 WCL' : 'UNAVAILABLE' }}</b
+        ><small>Separate from current-report Reliability</small>
+      </div>
+    </section>
+
+    @if (snapshot.partialReasons.length) {
+      <details class="data-disclosure">
+        <summary>DATA COVERAGE · {{ snapshot.partialReasons.length }} DISCLOSURE(S)</summary>
+        @for (reason of snapshot.partialReasons; track reason) {
+          <p>{{ reason }}</p>
+        }
+      </details>
+    }
+
+    <section class="players-layout">
+      <article class="panel roster-panel">
+        <header>
+          <span>01</span>
+          <div>
+            <h2>Observed player set</h2>
+            <p>Best-pull roster + classified execution actors</p>
+          </div>
+        </header>
+        <div class="roster-list">
+          @for (player of snapshot.players; track player.actorId) {
+            <button
+              type="button"
+              [class.selected]="selected()?.actorId === player.actorId"
+              [attr.aria-pressed]="selected()?.actorId === player.actorId"
+              (click)="selectPlayer(player)"
+            >
+              <i>{{ initial(player) }}</i>
+              <span
+                ><b>{{ player.name }}</b
+                ><small
+                  >{{ player.spec ?? player.className ?? 'Unknown spec' }} ·
+                  {{ role(player) }}</small
+                ></span
+              >
+              <strong>{{ reliability(player) }}</strong
+              ><em [class]="reliabilityTone(player)">{{ reliabilityStatus(player) }}</em>
+            </button>
+          }
+        </div>
+        <footer>
+          Selection is URL-owned within this report. Actor IDs are report-scoped and are not used as
+          longitudinal identity.
+        </footer>
+      </article>
+
+      @if (selected(); as player) {
+        <app-player-dossier [player]="player" [snapshot]="snapshot" />
+      }
+    </section>
+
+    <article class="panel matrix-panel">
+      <header>
+        <span>02</span>
+        <div>
+          <h2>Player evidence matrix</h2>
+          <p>Output is deliberately separate from publication-gated Reliability</p>
+        </div>
+      </header>
+      <div class="matrix-scroll">
+        <div class="matrix-head">
+          <span>PLAYER</span><span>OUTPUT · NOT SCORE</span><span>MECHANICS</span
+          ><span>SURVIVAL</span><span>DEFENSIVES</span><span>DUTIES</span><span>STATUS</span>
+        </div>
+        @for (player of snapshot.players; track player.actorId) {
+          <button
+            type="button"
+            class="matrix-row"
+            [class.selected]="selected()?.actorId === player.actorId"
+            (click)="selectPlayer(player)"
+          >
+            <span
+              ><b>{{ player.name }}</b
+              ><small
+                >{{ player.spec ?? player.className ?? 'Unknown spec' }} · {{ role(player) }}</small
+              ></span
+            >
+            <span
+              ><b>{{ output(player) }}</b
+              ><small>{{
+                player.source === 'best-pull-roster'
+                  ? 'Selected best pull'
+                  : 'Outside selected best-pull roster'
+              }}</small></span
+            >
+            <span
+              ><b>{{ component(player, 'mechanics') }}</b
+              ><small
+                >{{ metric(player.encounterFacts.classifiedFailures) }} classified failures</small
+              ></span
+            >
+            <span
+              ><b>{{ component(player, 'survival') }}</b
+              ><small
+                >{{ metric(player.encounterFacts.firstDeaths) }} first ·
+                {{ metric(player.encounterFacts.meaningfulDeaths) }} meaningful</small
+              ></span
+            >
+            <span
+              ><b>{{ component(player, 'defensives') }}</b
+              ><small>Confirmed availability required</small></span
+            >
+            <span
+              ><b>{{ component(player, 'duties') }}</b
+              ><small>Proven assignment required</small></span
+            >
+            <em [class]="reliabilityTone(player)">{{ reliabilityStatus(player) }}</em>
+          </button>
+        }
+      </div>
+    </article>
+  }
+</section>

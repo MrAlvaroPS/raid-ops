@@ -23,6 +23,7 @@ retained in the legacy repository, but it is not edited in two places.
 - [Composition behaviour, contract and visual decisions](./features/composition/README.md)
 - [Damage & Healing behaviour, metric contract and visual decisions](./features/damage-healing/README.md)
 - [Pull Lab behaviour, comparison contract and visual decisions](./features/pull-lab/README.md)
+- [Players behaviour, Reliability publication and identity decisions](./features/players/README.md)
 
 ## Architecture and governance
 

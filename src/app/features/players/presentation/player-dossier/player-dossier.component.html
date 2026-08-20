@@ -1,0 +1,183 @@
+<article class="dossier-panel">
+  <header class="identity-head">
+    <div class="identity">
+      <i>{{ initial() }}</i>
+      <div>
+        <span [class]="reliabilityTone()">{{ reliabilityStatus() }}</span>
+        <h2>{{ player().name }}</h2>
+        <p>
+          {{ player().spec ?? 'Unknown spec' }} · {{ role() }} ·
+          {{ player().server ?? 'Realm unavailable' }}
+        </p>
+      </div>
+    </div>
+    <div class="score" [class]="reliabilityTone()">
+      <b>{{ reliability() }}</b
+      ><small>RELIABILITY</small
+      ><em>{{ player().reliability?.confidence?.toUpperCase() ?? 'NO CONFIDENCE' }}</em>
+    </div>
+  </header>
+
+  <section class="score-grid">
+    <article>
+      <label>BEST-PULL OUTPUT</label><b>{{ output() }}</b
+      ><small>Performance · not a Reliability input</small>
+    </article>
+    <article>
+      <label>MECHANICS</label><b>{{ component('mechanics') }}</b
+      ><small>{{ componentMeta('mechanics') }}</small>
+    </article>
+    <article>
+      <label>SURVIVAL</label><b>{{ component('survival') }}</b
+      ><small>{{ componentMeta('survival') }}</small>
+    </article>
+    <article>
+      <label>DEFENSIVES</label><b>{{ component('defensives') }}</b
+      ><small>{{ componentMeta('defensives') }}</small>
+    </article>
+    <article>
+      <label>DUTIES</label><b>{{ component('duties') }}</b
+      ><small>{{ componentMeta('duties') }}</small>
+    </article>
+  </section>
+
+  <div class="dossier-body">
+    <section class="evidence-card">
+      <header>
+        <h3>Execution evidence</h3>
+        <span>REPORT-SCOPED</span>
+      </header>
+      <div class="fact-grid">
+        <article>
+          <label>CLASSIFIED FAILURES</label
+          ><b>{{ metric(player().encounterFacts.classifiedFailures) }}</b
+          ><small
+            >{{ metric(player().encounterFacts.recentFailures) }} in last five eligible pulls</small
+          >
+        </article>
+        <article>
+          <label>DEATH-LINKED</label><b>{{ metric(player().encounterFacts.linkedDeaths) }}</b
+          ><small>Probable temporal association, not causation</small>
+        </article>
+        <article>
+          <label>MEANINGFUL DEATHS</label
+          ><b>{{ metric(player().encounterFacts.meaningfulDeaths) }}</b
+          ><small>{{ metric(player().encounterFacts.firstDeaths) }} first deaths</small>
+        </article>
+        <article>
+          <label>RAW UTILITY</label
+          ><b
+            >{{ metric(player().encounterFacts.interrupts) }} /
+            {{ metric(player().encounterFacts.dispels) }}</b
+          ><small>Interrupts / dispels · descriptive only</small>
+        </article>
+      </div>
+      <div class="mechanic-list">
+        <h4>OBSERVED CLASSIFIED MECHANICS</h4>
+        @for (item of mechanicEntries(); track item[0]) {
+          <p>
+            <span>{{ item[0] }}</span
+            ><b>{{ item[1] }}</b>
+          </p>
+        } @empty {
+          <small
+            >No player-attributed classified failure is present in the available matrix. This is not
+            proof of clean execution.</small
+          >
+        }
+      </div>
+    </section>
+
+    <section class="evidence-card attendance-card">
+      <header>
+        <h3>Raid presence</h3>
+        <span>NOT RELIABILITY</span>
+      </header>
+      <article class="current-presence">
+        <label>CURRENT REPORT</label
+        ><b>{{
+          player().reliability
+            ? player().reliability!.pullsAttended +
+              '/' +
+              (snapshot().encounter?.eligiblePulls ?? player().reliability!.pullsAttended) +
+              ' pulls'
+            : '—'
+        }}</b
+        ><small>Profile participation in this exact analytical scope</small>
+      </article>
+      @if (player().attendance; as attendance) {
+        <div class="fact-grid">
+          <article>
+            <label>RAID NIGHTS</label
+            ><b>{{ attendance.sessionsAttended }}/{{ attendance.eligibleSessions }}</b
+            ><small
+              >{{ percentage(attendance.sessionAttendancePct) }} since first indexed
+              appearance</small
+            >
+          </article>
+          <article>
+            <label>PULL PRESENCE</label
+            ><b>{{ attendance.pullsAttended }}/{{ attendance.eligiblePulls }}</b
+            ><small>{{ percentage(attendance.pullPresencePct) }} observed presence</small>
+          </article>
+          <article>
+            <label>FIRST INDEXED</label><b>{{ date(attendance.firstIndexedAt) }}</b
+            ><small>Beginning of measurable scope</small>
+          </article>
+          <article>
+            <label>LAST INDEXED</label><b>{{ date(attendance.lastIndexedAt) }}</b
+            ><small>Most recent comparable appearance</small>
+          </article>
+        </div>
+        <p class="disclosure">
+          {{
+            snapshot().attendanceSemantics ??
+              'Observed WCL presence is not a guild-membership, bench or excused-absence register.'
+          }}
+        </p>
+      } @else {
+        <div class="pending-block">
+          No exact realm+name identity join is available. Name-only matching is deliberately
+          forbidden; current-report participation remains separate.
+        </div>
+      }
+    </section>
+  </div>
+
+  <section class="explanation" [class.error]="player().reliability?.status === 'data-error'">
+    <span [class]="reliabilityTone()">{{
+      player().reliability?.status === 'published'
+        ? 'WHY THIS SCORE'
+        : player().reliability?.status === 'data-error'
+          ? 'WHY BLOCKED'
+          : player().reliability
+            ? 'WHY PENDING'
+            : 'PROFILE UNAVAILABLE'
+    }}</span>
+    <p>
+      {{
+        player().reliability?.explanation ??
+          'The backend did not produce a Reliability profile for this actor. Absence is not treated as a pending or successful score.'
+      }}
+    </p>
+    @if (player().reliability?.publicationReasons?.length) {
+      <ul>
+        @for (reason of player().reliability!.publicationReasons; track reason) {
+          <li>{{ reason }}</li>
+        }
+      </ul>
+    }
+    @if (player().reliability?.dataIntegrityErrors?.length) {
+      <div class="integrity">
+        <b>DATA INTEGRITY</b>
+        <p>{{ player().reliability!.dataIntegrityErrors.join(' · ') }}</p>
+      </div>
+    }
+    @if (player().reliability?.observedNotScored?.length) {
+      <div class="observed">
+        <b>OBSERVED · NOT SCORED</b>
+        <p>{{ player().reliability!.observedNotScored.join(' · ') }}</p>
+      </div>
+    }
+  </section>
+</article>

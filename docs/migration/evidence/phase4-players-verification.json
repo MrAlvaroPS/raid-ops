@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "phase4-players-verification-v1",
+  "verifiedAt": "2026-08-20T22:40:46+02:00",
+  "phase": 4,
+  "surface": "players",
+  "frontendOwner": "angular",
+  "backendOwner": "avoid-raid-ops Node/Nitro",
+  "productionSwitchEnabled": false,
+  "results": {
+    "angularTests": 71,
+    "angularTestsPassed": 71,
+    "legacyContractTests": 44,
+    "legacyContractTestsPassed": 44,
+    "productionBuild": "pass",
+    "architectureGate": "pass",
+    "documentationGate": "pass",
+    "cumulativeBrowserAudits": 40,
+    "playersBrowserAudits": 10,
+    "browserErrors": 0,
+    "horizontalOverflowFindings": 0,
+    "playersLocalApiReads": 24,
+    "playersReportScopedLocalApiReads": 16,
+    "playersPersistedHistoryReads": 8,
+    "wclProviderCalls": 0,
+    "databaseOrCorpusMutations": 0,
+    "goldenFixtureFindings": 0
+  },
+  "scopeContract": {
+    "required": ["report", "encounter", "difficulty"],
+    "identity": "HOME+report+encounter+difficulty",
+    "historyIdentity": "HOME+raid+encounter+difficulty",
+    "actorSelection": "report-local actor ID; URL-owned",
+    "attendanceJoin": "exact normalized realm+name only",
+    "crossDifficultyAggregationForbidden": true,
+    "externalPlayersAdmitted": false,
+    "normalHistoryReadPathWclCalls": 0
+  },
+  "metricContract": {
+    "reliabilityModelVersion": "1.1.0",
+    "publicationGate": "status published + publication publishable + finite value",
+    "shadowValueDecoded": false,
+    "performanceOrParseIncluded": false,
+    "dimensions": ["mechanics", "survival", "defensives", "duties"],
+    "pendingProfileIsScore": false,
+    "missingProfileState": "no-profile",
+    "dataIntegrityState": "data-error"
+  },
+  "populationContract": {
+    "primaryRoster": "selected best-pull telemetry roster",
+    "secondaryPopulation": "classified execution actors absent from selected best pull",
+    "completeEncounterUnionAvailable": false,
+    "coverageDebtVisible": true,
+    "attendanceMeaning": "observed persisted HOME presence; not membership, bench or absence policy"
+  },
+  "operationalBoundary": {
+    "telemetryEndpoint": "/api/wcl/telemetry?report=&encounter=&difficulty=",
+    "intelligenceEndpoint": "/api/wcl/intelligence?report=&encounter=&difficulty=",
+    "historyEndpoint": "/api/wcl/home-history?encounter=&difficulty=",
+    "newBackendOrWclQuery": false,
+    "visualDispatch": false,
+    "knownBackendDebt": "Intelligence internally recomputes telemetry; a later composite read should remove duplication"
+  },
+  "visualEvidence": {
+    "fixture": "sanitized WCL-shaped and persisted HOME responses; external traffic blocked before dispatch",
+    "report": "docs/migration/evidence/visual/players/report.json",
+    "captures": [
+      {
+        "file": "desktop-context.png",
+        "sha256": "33bb1ec24705981e84ba415630e51a020d4c33108e0ce88218cef4fd73f9bcd6"
+      },
+      {
+        "file": "desktop-data-error.png",
+        "sha256": "6e16e45534435b96b623b415e25ccca513843af2eedf5fe0d32c4025ae0d030d"
+      },
+      {
+        "file": "desktop-external.png",
+        "sha256": "205f5f8b8aee11506ae50d3dcd97623edb686c262b10df45504eb36d1584a718"
+      },
+      {
+        "file": "desktop-pending.png",
+        "sha256": "4dcf710f1c96ad58b5a3f2f17862cfd5ff2aa648a3eaf1e47624e1db383619a6"
+      },
+      {
+        "file": "desktop-published.png",
+        "sha256": "ef2d015898f54fdab1f667d5437cfafed83a54f0c8decc4e4bef0bde19abd9f2"
+      },
+      {
+        "file": "mobile-context.png",
+        "sha256": "94ca3fc337f284d5f76f1a5af98642bc3713ce648c655fa4c5548fb2bb640270"
+      },
+      {
+        "file": "mobile-data-error.png",
+        "sha256": "15fc14293a8c1fc0045b3ff56bf3b642ea886446be1c5eaa43ed14e500d9b552"
+      },
+      {
+        "file": "mobile-external.png",
+        "sha256": "7e687a37bf57dbe8249ddb4a0f5b4fb71502829f6c6f5502c008290fbd0ccda9"
+      },
+      {
+        "file": "mobile-pending.png",
+        "sha256": "35ad6bdab339d11781fdf62777bcbf46c62a0d84f3aa496136d25a94b489cedb"
+      },
+      {
+        "file": "mobile-published.png",
+        "sha256": "deab899c8670b390fba04093677f1b9739ad9d0b66f127fd929aeda4ba047fd7"
+      }
+    ]
+  },
+  "tooling": {
+    "primary": "cumulative repository Phase 4 Edge/CDP verifier",
+    "agentBrowserCli": "unavailable; repository verifier used without dependency changes"
+  },
+  "legacyRollback": {
+    "retained": true,
+    "newFrontendChangesAllowed": false,
+    "deletionGate": "explicit production cutover approval and closed rollback window"
+  }
+}

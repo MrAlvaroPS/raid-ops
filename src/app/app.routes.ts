@@ -4,18 +4,60 @@ import { PRODUCT_FEATURES } from './features/migration-control/domain/feature-ca
 import { AppShell } from './shell/app-shell/app-shell';
 
 function productRoute(feature: FeatureDefinition): Route {
-  const route: Route = { path: feature.route, title: `${feature.label} · AvoiD Raid Ops`, data: { feature } };
+  const route: Route = {
+    path: feature.route,
+    title: `${feature.label} · AvoiD Raid Ops`,
+    data: { feature },
+  };
   switch (feature.id) {
     case 'progress':
-      return { ...route, loadComponent: () => import('./features/progress/presentation/progress-page/progress.page').then(module => module.ProgressPage) };
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/progress/presentation/progress-page/progress.page').then(
+            (module) => module.ProgressPage,
+          ),
+      };
     case 'composition':
-      return { ...route, loadComponent: () => import('./features/composition/presentation/composition-page/composition.page').then(module => module.CompositionPage) };
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/composition/presentation/composition-page/composition.page').then(
+            (module) => module.CompositionPage,
+          ),
+      };
     case 'damage-healing':
-      return { ...route, loadComponent: () => import('./features/damage-healing/presentation/damage-healing-page/damage-healing.page').then(module => module.DamageHealingPage) };
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/damage-healing/presentation/damage-healing-page/damage-healing.page').then(
+            (module) => module.DamageHealingPage,
+          ),
+      };
     case 'pull-lab':
-      return { ...route, loadComponent: () => import('./features/pull-lab/presentation/pull-lab-page/pull-lab.page').then(module => module.PullLabPage) };
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/pull-lab/presentation/pull-lab-page/pull-lab.page').then(
+            (module) => module.PullLabPage,
+          ),
+      };
+    case 'players':
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/players/presentation/players-page/players.page').then(
+            (module) => module.PlayersPage,
+          ),
+      };
     default:
-      return { ...route, loadComponent: () => import('./features/migration-control/presentation/legacy-boundary-page/legacy-boundary.page').then(module => module.LegacyBoundaryPage) };
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/migration-control/presentation/legacy-boundary-page/legacy-boundary.page').then(
+            (module) => module.LegacyBoundaryPage,
+          ),
+      };
   }
 }
 
@@ -28,7 +70,10 @@ export const routes: Routes = [
       {
         path: 'foundation',
         title: 'Angular Foundation · AvoiD Raid Ops',
-        loadComponent: () => import('./features/migration-control/presentation/foundation-page/foundation.page').then(module => module.FoundationPage),
+        loadComponent: () =>
+          import('./features/migration-control/presentation/foundation-page/foundation.page').then(
+            (module) => module.FoundationPage,
+          ),
       },
       ...PRODUCT_FEATURES.map(productRoute),
     ],
