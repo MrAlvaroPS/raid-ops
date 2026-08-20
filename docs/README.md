@@ -15,6 +15,12 @@ retained in the legacy repository, but it is not edited in two places.
 - [Phase 1](./migration/PHASE-1.md)
 - [Phase 2](./migration/PHASE-2.md)
 - [Phase 3](./migration/PHASE-3.md)
+- [Phase 4 — incremental product migration](./migration/PHASE-4.md)
+
+## Migrated features
+
+- [Composition behaviour, contract and visual decisions](./features/composition/README.md)
+- [Damage & Healing behaviour, metric contract and visual decisions](./features/damage-healing/README.md)
 
 ## Architecture and governance
 

@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "phase4-visual-v1",
+  "surface": "composition",
+  "fixture": "sanitized WCL-shaped local response; external traffic blocked before dispatch",
+  "baseUrl": "http://127.0.0.1:4200",
+  "audits": [
+    {
+      "viewport": "desktop",
+      "surface": "composition",
+      "state": "context",
+      "title": "Composition · AvoiD Raid Ops",
+      "heading": "Composition",
+      "bodyLength": 829,
+      "overlay": false,
+      "overflow": 0,
+      "contextRequired": true,
+      "rosterReady": false,
+      "throughputReady": false,
+      "partialVisible": false,
+      "graphVisible": false,
+      "graphUnavailable": false,
+      "healingSelected": false,
+      "fixtureLeak": false
+    },
+    {
+      "viewport": "desktop",
+      "surface": "composition",
+      "state": "ready",
+      "title": "Composition · AvoiD Raid Ops",
+      "heading": "Composition",
+      "bodyLength": 2459,
+      "overlay": false,
+      "overflow": 0,
+      "contextRequired": false,
+      "rosterReady": true,
+      "throughputReady": false,
+      "partialVisible": true,
+      "graphVisible": false,
+      "graphUnavailable": false,
+      "healingSelected": false,
+      "fixtureLeak": false
+    },
+    {
+      "viewport": "mobile",
+      "surface": "composition",
+      "state": "context",
+      "title": "Composition · AvoiD Raid Ops",
+      "heading": "Composition",
+      "bodyLength": 812,
+      "overlay": false,
+      "overflow": 0,
+      "contextRequired": true,
+      "rosterReady": false,
+      "throughputReady": false,
+      "partialVisible": false,
+      "graphVisible": false,
+      "graphUnavailable": false,
+      "healingSelected": false,
+      "fixtureLeak": false
+    },
+    {
+      "viewport": "mobile",
+      "surface": "composition",
+      "state": "ready",
+      "title": "Composition · AvoiD Raid Ops",
+      "heading": "Composition",
+      "bodyLength": 2380,
+      "overlay": false,
+      "overflow": 0,
+      "contextRequired": false,
+      "rosterReady": true,
+      "throughputReady": false,
+      "partialVisible": true,
+      "graphVisible": false,
+      "graphUnavailable": false,
+      "healingSelected": false,
+      "fixtureLeak": false
+    }
+  ],
+  "errors": [],
+  "apiRequests": [
+    "http://127.0.0.1:4200/api/wcl/telemetry?report=SANITIZED01&encounter=3010&difficulty=5",
+    "http://127.0.0.1:4200/api/wcl/telemetry?report=SANITIZED01&encounter=3010&difficulty=5"
+  ],
+  "externalRequestsBlocked": [
+    "https://wow.zamimg.com/js/tooltips.js",
+    "https://wow.zamimg.com/js/tooltips.js",
+    "https://wow.zamimg.com/js/tooltips.js",
+    "https://wow.zamimg.com/js/tooltips.js"
+  ]
+}

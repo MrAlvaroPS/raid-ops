@@ -1,0 +1,80 @@
+<section class="damage-healing-page">
+  <header class="page-heading">
+    <div><small>AVOID // RAID OPERATIONS CENTER</small><h1>Damage &amp; Healing</h1></div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  <app-wcl-scope-form label="Damage and Healing WCL scope" [initialScope]="currentScope()" [loading]="state().kind === 'loading'" (scopeSubmitted)="applyScope($event)" />
+
+  @switch (state().kind) {
+    @case ('context-required') {
+      <section class="state-panel"><span>CONTEXT REQUIRED</span><h2>Select an exact WCL scope</h2><p>No request has been made. Enter a report, encounter and difficulty to inspect observed throughput.</p></section>
+    }
+    @case ('loading') {
+      <section class="state-panel loading" aria-live="polite"><span>WCL · EXACT SCOPE</span><h2>Loading Throughput Intelligence</h2><p>Reading the existing report and telemetry contracts. No peer cohort or additional WCL query is acquired.</p></section>
+    }
+    @case ('error') {
+      <section class="state-panel error" role="alert"><span>SAFE FAILURE</span><h2>Damage &amp; Healing is unavailable</h2><p>{{ $any(state()).message }}</p>@if ($any(state()).retryable) {<button type="button" (click)="retry()">Retry</button>}</section>
+    }
+    @case ('empty') {
+      <section class="state-panel"><span>OBSERVED EMPTY STATE</span><h2>No completed pull for this scope</h2><p>{{ data()?.emptyReason }}</p><small>No Golden metric, graph or event marker has been substituted.</small></section>
+    }
+    @case ('ready') {
+      <section class="hero-panel">
+        <div><span>WCL THROUGHPUT · BEST ANALYTICAL PULL</span><h2>Output Intelligence</h2><p>{{ data()!.encounter?.name ?? 'Encounter ' + data()!.encounter?.id }} · {{ data()!.encounter?.difficultyName }} · pull {{ data()!.bestPull?.pullNumber }}</p></div>
+        <div class="pull-result"><small>BOSS REMAINING</small><b>{{ bossProgress(data()!.bestPull?.fightPercentage) }}</b><span>fight {{ data()!.bestPull?.fightId }}</span></div>
+      </section>
+
+      @if (data()!.partialReasons.length) {
+        <aside class="partial" role="status"><b>PARTIAL EVIDENCE</b><span>{{ data()!.partialReasons.join(' · ') }}</span></aside>
+      }
+
+      <section class="stats" aria-label="Observed throughput summary">
+        <article><small>RAID DPS</small><b>{{ compact(data()!.metrics.raidDps) }}</b><span>best pull</span></article>
+        <article><small>RAID HPS</small><b>{{ compact(data()!.metrics.raidHps) }}</b><span>observational</span></article>
+        <article><small>STAGE 3 DPS</small><b>{{ compact(data()!.metrics.stage3Dps) }}</b><span>absolute stage</span></article>
+        <article><small>OVERHEAL</small><b>{{ percentage(data()!.metrics.overhealPct) }}</b><span>effective + overheal</span></article>
+        <article><small>HEALING DEATH GAP</small><b>—</b><span>pending contract</span></article>
+      </section>
+
+      <section class="panel timeline-panel">
+        <header>
+          <span>01</span><div><h2>Throughput graph</h2><p>Ordered WCL Total-series buckets for the selected best pull</p></div>
+          <div class="mode-toggle" role="group" aria-label="Throughput metric">
+            <button type="button" [class.active]="mode() === 'damage'" [attr.aria-pressed]="mode() === 'damage'" (click)="setMode('damage')">Damage</button>
+            <button type="button" [class.active]="mode() === 'healing'" [attr.aria-pressed]="mode() === 'healing'" (click)="setMode('healing')">Healing</button>
+          </div>
+        </header>
+        <app-throughput-chart [graph]="currentGraph()" [stages]="data()!.bestPull?.stages ?? []" [durationMs]="data()!.bestPull?.durationMs ?? 0" [mode]="mode()" />
+      </section>
+
+      <section class="panel stage-panel">
+        <header><span>02</span><div><h2>Absolute stage output</h2><p>{{ modeUnit() }} by ordered stage; semantic phase IDs can repeat</p></div></header>
+        <div class="stage-list">
+          @for (stage of data()!.stages; track stage.absoluteStageIndex) {
+            <div class="stage-row" [class.unavailable]="!stage.available">
+              <small>STAGE {{ stage.absoluteStageIndex }}</small><i><span [style.width.%]="stageWidth(stage)"></span></i>
+              <b>{{ compact(stageValue(stage)) }}</b><em>{{ stage.available ? modeUnit() : 'UNAVAILABLE' }}</em>
+            </div>
+          }
+        </div>
+        <div class="stage-note"><b>INTERPRETATION</b><p>DPS supports directional comparison only within the same absolute stage and scope. HPS remains observational because healing demand changes with incoming damage and deaths.</p></div>
+      </section>
+
+      <section class="panel diagnostics-panel">
+        <header><span>03</span><div><h2>Throughput diagnostics</h2><p>Claims are limited to evidence exposed by the current contracts</p></div></header>
+        <div class="diagnostic-grid">
+          <article><span>OBSERVED</span><b>Analysis population</b><p>{{ data()!.population?.eligiblePulls ?? '—' }} eligible of {{ data()!.population?.rawPulls ?? '—' }} completed pull(s); {{ data()!.population?.excludedPulls ?? '—' }} excluded.</p></article>
+          <article><span>PENDING</span><b>Peer benchmark</b><p>No matched same-encounter, difficulty and partition cohort is available in this view contract.</p></article>
+          <article><span>PENDING</span><b>Preventable deaths</b><p>Throughput alone cannot classify failure or causality. Mechanics evidence is required.</p></article>
+          <article><span>PENDING</span><b>Cooldown stacking</b><p>The current endpoints do not expose a validated defensive or healing-cooldown overlap metric.</p></article>
+        </div>
+      </section>
+
+      <footer class="evidence">
+        <span>{{ data()!.evidence?.source }}</span><span>{{ data()!.encounter?.scopeKey }}</span><span>{{ data()!.evidence?.metricContract }}</span>
+        <span>Absolute-stage model</span><span>Cross-difficulty comparison forbidden</span>
+      </footer>
+    }
+  }
+</section>

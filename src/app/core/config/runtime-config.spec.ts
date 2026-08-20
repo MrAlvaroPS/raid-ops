@@ -13,9 +13,9 @@ describe('readRuntimeConfig', () => {
     expect(Object.isFrozen(config)).toBe(true);
   });
 
-  it('rejects an attempt to activate Angular ownership during phase 2', () => {
+  it('rejects an attempt to activate the global Angular production switch', () => {
     expect(() => readRuntimeConfig({ productionSwitchEnabled: true })).toThrowError(
-      /cannot enable the Angular production switch/i,
+      /cannot enable the global Angular production switch/i,
     );
   });
 });

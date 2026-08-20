@@ -1,0 +1,8 @@
+:host { display: block; }
+.scope-form { display: grid; grid-template-columns: minmax(180px, 1.4fr) minmax(130px, .7fr) minmax(140px, .8fr) auto; gap: 10px; align-items: end; border: 1px solid var(--avoid-border); border-radius: var(--avoid-radius); background: var(--avoid-surface); padding: 13px; }
+.scope-form label { display: grid; gap: 6px; color: var(--avoid-text-muted); font-size: 9px; font-weight: 800; letter-spacing: .08em; }
+input, select { min-width: 0; height: 38px; border: 1px solid var(--avoid-border-strong); border-radius: 4px; background: #090d10; padding: 0 10px; color: var(--avoid-text); }
+button { min-height: 38px; border: 1px solid rgb(98 232 189 / 45%); border-radius: 4px; background: var(--avoid-accent-soft); padding: 0 15px; color: var(--avoid-accent); font-weight: 800; cursor: pointer; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.scope-form p { grid-column: 1 / -1; margin: 0; color: var(--avoid-text-muted); font-size: 10px; }
+@media (max-width: 660px) { .scope-form { grid-template-columns: 1fr 1fr; }.scope-form label:first-child, .scope-form button { grid-column: 1 / -1; } }

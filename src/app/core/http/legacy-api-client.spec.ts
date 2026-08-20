@@ -22,7 +22,7 @@ describe('LegacyApiClient', () => {
     const config: RaidOpsRuntimeConfig = {
       apiBaseUrl: 'http://legacy.test',
       legacyAppUrl: 'http://legacy.test',
-      migrationMode: 'foundation',
+      migrationMode: 'incremental',
       productionSwitchEnabled: false,
     };
     TestBed.configureTestingModule({

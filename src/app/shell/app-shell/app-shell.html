@@ -7,23 +7,23 @@
 
     <div class="division">
       <small>ANGULAR MIGRATION</small>
-      <b>FOUNDATION</b>
+      <b>INCREMENTAL</b>
     </div>
 
     <nav>
       <a routerLink="/foundation" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeNavigation()">
-        <i aria-hidden="true">◆</i><span>Foundation</span><em>ANGULAR</em>
+        <i aria-hidden="true">◆</i><span>Foundation</span><em class="angular">ANGULAR</em>
       </a>
       @for (feature of features; track feature.id) {
         <a [routerLink]="['/', feature.route]" routerLinkActive="active" (click)="closeNavigation()">
-          <i aria-hidden="true">{{ feature.icon }}</i><span>{{ feature.label }}</span><em>LEGACY</em>
+          <i aria-hidden="true">{{ feature.icon }}</i><span>{{ feature.label }}</span><em [class.angular]="feature.owner === 'angular'">{{ feature.owner.toUpperCase() }}</em>
         </a>
       }
     </nav>
 
     <footer>
-      <span><i></i> LEGACY SAFE</span>
-      <small>Production switch disabled</small>
+      <span><i></i> INCREMENTAL SAFE</span>
+      <small>{{ angularOwnedCount }} Angular routes · global switch disabled</small>
     </footer>
   </aside>
 
@@ -32,8 +32,8 @@
   <section class="workspace">
     <header class="topbar">
       <button class="menu" type="button" aria-label="Toggle navigation" [attr.aria-expanded]="navigationOpen()" (click)="toggleNavigation()">☰</button>
-      <div><small>AVOID / ANGULAR</small><b>CLEAN ARCHITECTURE FOUNDATION</b></div>
-      <span>PHASE 3</span>
+      <div><small>AVOID / ANGULAR</small><b>INCREMENTAL CLEAN ARCHITECTURE</b></div>
+      <span>{{ angularOwnedCount }} / {{ features.length }} ROUTES</span>
     </header>
     <main>
       <router-outlet />

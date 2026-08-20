@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "phase4-damage-healing-verification-v1",
+  "verifiedAt": "2026-08-20T19:12:00+02:00",
+  "phase": 4,
+  "surface": "damage-healing",
+  "frontendOwner": "angular",
+  "backendOwner": "avoid-raid-ops Node/Nitro",
+  "productionSwitchEnabled": false,
+  "results": {
+    "angularTests": 37,
+    "angularTestsPassed": 37,
+    "productionBuild": "pass",
+    "architectureGate": "pass",
+    "documentationGate": "pass",
+    "browserAudits": 8,
+    "browserErrors": 0,
+    "horizontalOverflowFindings": 0,
+    "exactScopeStubbedApiRequests": 8,
+    "wclProviderCalls": 0,
+    "databaseOrCorpusMutations": 0,
+    "goldenFixtureFindings": 0
+  },
+  "scopeContract": {
+    "required": ["report", "encounter", "difficulty"],
+    "identity": "encounter+difficulty",
+    "crossDifficultyComparisonForbidden": true,
+    "selectedPull": "best eligible analytical pull",
+    "phaseModel": "absolute-stage",
+    "semanticPhaseIdsMayRepeat": true
+  },
+  "metricContract": {
+    "version": "damage-healing-view-v1",
+    "executeDpsVisibleLabel": "Stage 3 DPS",
+    "graphSeries": "Total",
+    "graphPointSemantics": "ordered-wcl-graph-buckets",
+    "healingDeathGap": "pending",
+    "peerBenchmark": "pending"
+  },
+  "visualEvidence": {
+    "fixture": "sanitized WCL-shaped local report and telemetry responses",
+    "report": "docs/migration/evidence/visual/damage-healing/report.json",
+    "captures": [
+      { "file": "desktop-context.png", "sha256": "27622297019adb2dbc556676aceacdadbcbfa4a847661c1df6be035d105fd03e" },
+      { "file": "desktop-ready-damage.png", "sha256": "6b7aee7b343429eef602de32679e5c0c5de9439b6050dd956a0ba41e4e359b96" },
+      { "file": "desktop-ready-healing.png", "sha256": "5581d0a0c0c2f1f8eca66ff0e3f4d921fb0ccbdd9a3a05d8bd9e59142c010d7f" },
+      { "file": "desktop-partial-healing.png", "sha256": "d57e9c752bfb5a84fef07f67246004436aee36a2ee68440514bf06cf037313b7" },
+      { "file": "mobile-context.png", "sha256": "5c944e0c918291ff43aa0a361faddcd3db4e78ad89e6e47d78b1dd7d1a4bef57" },
+      { "file": "mobile-ready-damage.png", "sha256": "9aab804c12c2cfe5b064031644087b5cd1a462f4d7d275627792b0b366dab93d" },
+      { "file": "mobile-ready-healing.png", "sha256": "2861ba254a17b23aada5a940a4f57fb6080c4e8bd941b9641790661172372403" },
+      { "file": "mobile-partial-healing.png", "sha256": "13a1c1d04bfcc0a042c92b758f48a552f4d67c81746814fb22e25e689335c427" }
+    ]
+  },
+  "tooling": {
+    "primary": "cumulative repository Phase 4 Edge/CDP verifier",
+    "agentBrowserCli": "unavailable; repository verifier used without dependency changes"
+  },
+  "legacyRollback": {
+    "retained": true,
+    "newFrontendChangesAllowed": false,
+    "deletionGate": "explicit production cutover approval and closed rollback window"
+  }
+}

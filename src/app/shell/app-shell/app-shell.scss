@@ -15,7 +15,7 @@ nav a.active { border-left-color: var(--avoid-accent); background: linear-gradie
 nav i { color: #728187; font-style: normal; text-align: center; }
 nav span { font-size: 12px; font-weight: 700; }
 nav em { border: 1px solid var(--avoid-border-strong); border-radius: 3px; padding: 2px 4px; color: #66757a; font-size: 6px; font-style: normal; letter-spacing: .08em; }
-nav a:first-child em { border-color: rgb(98 232 189 / 35%); color: var(--avoid-accent); }
+nav em.angular { border-color: rgb(98 232 189 / 35%); color: var(--avoid-accent); }
 footer { display: grid; gap: 5px; margin-top: auto; border: 1px solid var(--avoid-border); border-radius: var(--avoid-radius); background: var(--avoid-surface); padding: 13px; }
 footer span { color: var(--avoid-accent); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
 footer span i { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--avoid-accent); }

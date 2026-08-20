@@ -9,7 +9,7 @@
     "test": "ng test --watch=false",
     "verify:architecture": "node scripts/verify-architecture.mjs",
     "verify:docs": "node scripts/verify-documentation.mjs",
-    "verify:visual": "node scripts/verify-foundation-visual.mjs",
+    "verify:visual": "node scripts/verify-phase4-visual.mjs",
     "verify": "npm run verify:docs && npm run verify:architecture && npm test && npm run build"
   },
   "private": true,

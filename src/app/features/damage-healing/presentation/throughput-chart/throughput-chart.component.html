@@ -1,0 +1,22 @@
+@if (graph(); as series) {
+  <div class="chart-shell">
+    <div class="axis"><span>{{ compact(maximum()) }}</span><span>{{ compact(maximum() / 2) }}</span><span>0</span></div>
+    <svg viewBox="0 0 100 42" preserveAspectRatio="none" role="img" [attr.aria-label]="ariaLabel()">
+      <defs><linearGradient id="throughput-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--avoid-accent)" stop-opacity=".28"/><stop offset="1" stop-color="var(--avoid-accent)" stop-opacity="0"/></linearGradient></defs>
+      <line x1="2" y1="4" x2="98" y2="4"/><line x1="2" y1="21" x2="98" y2="21"/><line x1="2" y1="38" x2="98" y2="38"/>
+      <polygon [attr.points]="area()" fill="url(#throughput-area)" />
+      <polyline [attr.points]="polyline()" />
+    </svg>
+    <div class="stage-bands" aria-label="Absolute stage windows">
+      @for (band of bands(); track band.absoluteStageIndex) {
+        <span [style.left.%]="band.leftPct" [style.width.%]="band.widthPct" [class.inferred]="band.inferred">
+          STAGE {{ band.absoluteStageIndex }}@if (band.semanticPhaseId != null) { · P{{ band.semanticPhaseId }}}
+        </span>
+      }
+    </div>
+    <div class="time-axis"><span>0:00</span><span>{{ duration(durationMs()) }}</span></div>
+  </div>
+  <footer><span>WCL · TOTAL SERIES</span><span>Ordered graph buckets · no fabricated event markers</span></footer>
+} @else {
+  <div class="graph-empty"><b>GRAPH UNAVAILABLE</b><p>The server did not return a valid Total series. Values and event overlays have not been synthesized.</p></div>
+}

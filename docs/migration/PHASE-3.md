@@ -35,14 +35,15 @@ Legacy documentary hand-off: commit `c300993` on the same branch.
 - Angular-owned product surfaces: 0; all 11 remain explicitly legacy-owned;
 - production switch: statically disabled.
 
-Screenshots and the browser report are generated under the Git-ignored
-`.migration-evidence/phase3/` directory by `npm run verify:visual` while the local
-Angular server is running.
+The Phase 3 screenshots and browser report were generated under the Git-ignored
+`.migration-evidence/phase3/` directory by the then-active foundation verifier.
+That one-off script was retired when the current `npm run verify:visual` gate
+moved to the first product slice; the committed Phase 3 evidence remains frozen.
 
 ## Product-slice hand-off
 
-The first product vertical slice is not assigned a phase number by this foundation.
-When the roadmap schedules it, **Composition** remains the safest candidate to
+The first product vertical slice was subsequently assigned to Phase 4.
+**Composition** remained the safest candidate to
 establish the repeatable feature pattern end to end: explicit backend contract, domain model,
 application port/use case, infrastructure adapter, real empty/partial/error states,
 responsive visual parity, tests, feature ownership gate and immediate rollback to

@@ -8,6 +8,25 @@ without tags they must not be read as independently proven deployment dates.
 
 ## Unreleased — Angular migration
 
+- Completed the Damage & Healing Angular vertical slice with two existing
+  exact-scope backend reads, runtime-decoded cross-endpoint contracts, absolute
+  stages, real WCL Total graphs and safe partial degradation.
+- Removed fictional throughput, peer, event-marker, death-gap and diagnostic
+  values; corrected the visible legacy `Execute DPS` misnomer to `Stage 3 DPS`
+  without changing its formula.
+- Added a cumulative Phase 4 visual verifier instead of one script per feature,
+  refreshed Composition evidence and recorded Damage, Healing and partial-graph
+  desktop/mobile states with zero provider calls.
+- Extracted the proven reusable WCL scope form/parser and transferred Damage &
+  Healing frontend, metric, null, UX and visual documentation to Angular.
+- Completed the first Angular product vertical slice for Composition with a
+  Clean Architecture feature boundary, runtime-decoded exact-scope WCL roster,
+  explicit states, safe unknowns, responsive roster details and Wowhead links.
+- Removed obsolete Golden peer/fit/recommendation fixtures from the Angular
+  route and documented the legacy runtime's missing-difficulty and unknown-role
+  contradictions rather than reproducing them.
+- Added deterministic desktop/mobile browser evidence with a sanitised WCL-shaped
+  response, zero provider calls and Composition-only ownership enforcement.
 - Transferred migration phases, architecture/data baselines, parity rules and
   all twenty Phase 0 visual captures to the Angular target.
 - Made Angular the active owner of migration documentation, visual policy and

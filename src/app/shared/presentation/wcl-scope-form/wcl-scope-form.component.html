@@ -1,0 +1,7 @@
+<form class="scope-form" [formGroup]="form" (ngSubmit)="submit()" [attr.aria-label]="label()">
+  <label>WCL report code<input formControlName="report" autocomplete="off" placeholder="Report code" /></label>
+  <label>Encounter ID<input formControlName="encounter" type="number" min="1" inputmode="numeric" placeholder="Encounter" /></label>
+  <label>Difficulty<select formControlName="difficulty"><option [ngValue]="null">Select difficulty</option>@for (item of difficulties; track item.id) {<option [ngValue]="item.id">{{ item.label }}</option>}</select></label>
+  <button type="submit" [disabled]="form.invalid || loading()">Load exact scope</button>
+  <p>All three fields are mandatory. The page never falls back to another report, boss or difficulty.</p>
+</form>

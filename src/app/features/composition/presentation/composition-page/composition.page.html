@@ -1,0 +1,87 @@
+<section class="composition-page">
+  <header class="page-heading">
+    <div><small>AVOID // RAID OPERATIONS CENTER</small><h1>Composition</h1></div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  <app-wcl-scope-form label="Composition WCL scope" [initialScope]="currentScope()" [loading]="state().kind === 'loading'" (scopeSubmitted)="applyScope($event)" />
+
+  @switch (state().kind) {
+    @case ('context-required') {
+      <section class="state-panel"><span>CONTEXT REQUIRED</span><h2>Select an exact WCL scope</h2><p>No request has been made. Enter a report, encounter and difficulty to inspect observed roster data.</p></section>
+    }
+    @case ('loading') {
+      <section class="state-panel loading" aria-live="polite"><span>WCL · EXACT SCOPE</span><h2>Loading Composition Intelligence</h2><p>Reading the existing telemetry contract. This screen does not trigger peer or corpus acquisition.</p></section>
+    }
+    @case ('error') {
+      <section class="state-panel error" role="alert"><span>SAFE FAILURE</span><h2>Composition is unavailable</h2><p>{{ $any(state()).message }}</p>@if ($any(state()).retryable) {<button type="button" (click)="retry()">Retry</button>}</section>
+    }
+    @case ('empty') {
+      <section class="state-panel"><span>OBSERVED EMPTY STATE</span><h2>No roster available for this scope</h2><p>{{ data()?.emptyReason }}</p><small>No Golden actors or balance values have been substituted.</small></section>
+    }
+    @case ('ready') {
+      <section class="hero-panel">
+        <div><span>WCL ROSTER INTELLIGENCE</span><h2>Composition Intelligence</h2><p>Current roster, roles, item level and CombatantInfo from WCL.</p></div>
+        <div class="fit"><small>COMPOSITION FIT</small><b>—</b><span>peer cohort pending</span></div>
+      </section>
+
+      @if (data()!.partialReasons.length || summary().unclassified) {
+        <aside class="partial" role="status"><b>PARTIAL EVIDENCE</b><span>@if (summary().unclassified) {<strong>{{ summary().unclassified }}</strong> actor(s) have an unclassified role.} {{ data()!.partialReasons.join(' · ') }}</span></aside>
+      }
+
+      <section class="stats" aria-label="Observed roster summary">
+        <article><small>TANKS</small><b>{{ summary().tanks }}</b><span>observed</span></article>
+        <article><small>HEALERS</small><b>{{ summary().healers }}</b><span>observed</span></article>
+        <article><small>MELEE DPS</small><b>{{ summary().melee }}</b><span>observed</span></article>
+        <article><small>RANGED DPS</small><b>{{ summary().ranged }}</b><span>observed</span></article>
+        <article><small>UNIQUE RAID BUFFS</small><b>—</b><span>not calculated</span></article>
+      </section>
+
+      <div class="analysis-grid">
+        <section class="panel roles"><header><span>01</span><div><h2>Role distribution</h2><p>Observed actors in the selected best pull</p></div></header>
+          @for (role of [{label:'TANK', value:summary().tanks}, {label:'HEALER', value:summary().healers}, {label:'MELEE', value:summary().melee}, {label:'RANGED', value:summary().ranged}]; track role.label) {
+            <div class="role-row"><small>{{ role.label }}</small><i><span [style.width.%]="percentage(role.value)"></span></i><b>{{ percentage(role.value) }}%</b></div>
+          }
+          <div class="notice"><b>OBSERVED</b><span>Peer comparison is pending; no recommended split is inferred.</span></div>
+        </section>
+        <section class="panel verdict"><header><span>02</span><div><h2>Composition verdict</h2><p>What the current evidence can support</p></div></header>
+          <div class="verdict-grid">
+            <article><span>OBSERVED</span><b>Current roster</b><p>{{ summary().roster }} actors across {{ summary().classes }}/13 classes.</p></article>
+            <article [class.warning]="summary().missingClasses.length"><span>{{ summary().missingClasses.length ? 'REVIEW' : 'OBSERVED' }}</span><b>Class coverage</b><p>{{ summary().missingClasses.length ? summary().missingClasses.length + ' class(es) absent in this pull.' : 'All retail classes represented.' }}</p></article>
+            <article><span>PENDING</span><b>Peer role comparison</b><p>No matched peer cohort is available in this contract.</p></article>
+            <article><span>PENDING</span><b>Recommendation</b><p>Roster changes require validated utility and encounter evidence.</p></article>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel class-panel"><header><span>03</span><div><h2>Class representation</h2><p>Observed players; peer prevalence remains pending</p></div></header>
+        <div class="class-grid">@for (item of classes; track item.key) {<div class="class-row"><span class="dot" [style.background]="item.color"></span><small>{{ item.name }}</small><i><span [style.width.%]="(classCounts().get(item.key) ?? 0) * 34" [style.background]="item.color"></span></i><b>{{ classCounts().get(item.key) ?? 0 }}</b><em>peer —</em></div>}</div>
+      </section>
+
+      <section class="panel roster-panel"><header><span>04</span><div><h2>Roster intelligence</h2><p>{{ data()!.profileSource ?? 'WCL player telemetry' }}</p></div></header>
+        <div class="roster-summary">
+          <article><small>RAIDERS</small><b>{{ summary().roster }}</b></article><article><small>CLASSES</small><b>{{ summary().classes }}/13</b></article>
+          <article><small>AVG ILVL</small><b>{{ number(summary().averageItemLevel, 1) }}</b></article><article><small>GEAR</small><b>{{ data()!.coverage?.gearPct ?? 0 }}%</b></article>
+          <article><small>TALENTS</small><b>{{ data()!.coverage?.talentPct ?? 0 }}%</b></article><article><small>SCOPE</small><b>{{ data()!.encounter?.difficultyName }}</b></article>
+        </div>
+        <div class="roster-head" aria-hidden="true"><span>PLAYER</span><span>CLASS / SPEC</span><span>ROLE</span><span>ILVL</span><span>GEAR</span><span>TALENTS</span><span>OUTPUT</span><span>RELIABILITY</span></div>
+        @for (player of data()!.players; track player.actorId) {
+          <details class="player-row">
+            <summary>
+              <span data-label="PLAYER"><b>{{ player.name }}</b><small>{{ player.server ?? 'Server unknown' }}</small></span>
+              <span data-label="CLASS / SPEC"><i class="class-dot" [style.background]="classColor(player.className)"></i>{{ player.className ?? 'Unknown' }}<small>{{ player.spec ?? 'Spec unknown' }}</small></span>
+              <span data-label="ROLE">{{ roleLabel(player.role) }}</span><span data-label="ILVL">{{ number(player.itemLevel, 1) }}</span>
+              <span data-label="GEAR">{{ player.character.gearCount || '—' }}</span><span data-label="TALENTS">{{ player.character.talentCount || (player.character.talentImportCode ? 'IMPORT' : '—') }}</span>
+              <span data-label="OUTPUT">{{ output(player) }}</span><span data-label="RELIABILITY"><em>{{ reliability(player) }}</em></span>
+            </summary>
+            <div class="player-detail">
+              <section><h3>Gear</h3>@if (player.character.gear.length) {<ul>@for (gear of player.character.gear; track $index) {<li><span>{{ gear.slot ?? 'Inventory' }}</span>@if (itemUrl(gear.id); as href) {<a [href]="href" target="_blank" rel="noreferrer" data-wowhead="">{{ gear.name ?? 'Item ' + gear.id }}</a>} @else {<b>{{ gear.name ?? 'Unresolved item' }}</b>}<small>{{ number(gear.itemLevel) }} ilvl</small></li>}</ul>} @else {<p>Gear unavailable for this actor.</p>}</section>
+              <section><h3>Talents</h3>@if (player.character.talentWowheadUrl) {<a class="build-link" [href]="player.character.talentWowheadUrl" target="_blank" rel="noreferrer">Open build in Wowhead</a>}@if (player.character.talents.length) {<ul>@for (talent of player.character.talents; track $index) {@if (talentLabel(talent); as label) {<li><b>{{ label }}</b><small>{{ talent.points ?? 1 }} point(s)</small></li>}}</ul>} @else {<p>Resolved talents unavailable. Opaque node IDs are hidden.</p>}</section>
+            </div>
+          </details>
+        }
+        <footer class="evidence"><span>{{ data()!.evidence?.source }}</span><span>{{ data()!.encounter?.scopeKey }}</span><span>Cross-difficulty comparison forbidden</span></footer>
+      </section>
+    }
+  }
+</section>

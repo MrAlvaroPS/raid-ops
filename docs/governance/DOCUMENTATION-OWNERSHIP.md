@@ -13,7 +13,7 @@ changes.
 | Product changelog and release provenance | `raid-ops/docs/releases` | Transferred | Already satisfied |
 | Living visual policy and Phase 0 captures | `raid-ops/docs/visual` and `docs/migration/evidence/visual` | Transferred | New accepted captures replace route baselines individually |
 | Angular architecture and ADRs | `raid-ops/docs/architecture` | Native | Always owned by Angular |
-| Per-route frontend behaviour | `raid-ops`, as each route passes its slice gate | Pending per route | Functional, data, visual, documentation and rollback gates pass |
+| Per-route frontend behaviour | `raid-ops`, as each route passes its slice gate | Composition and Damage & Healing transferred; nine routes pending | Functional, data, visual, documentation and rollback gates pass |
 | Backend API implementation | `avoid-raid-ops/server` | Referenced, not copied | Backend moves or a stable published API contract is extracted |
 | Iris/WCL/provider/evidence doctrine | `avoid-raid-ops` root and `docs` | Referenced, not copied | The owning backend capability moves |
 | Persistence and corpus operations | `avoid-raid-ops` | Baseline copied; operating contract remains at source | Storage implementation changes owner |

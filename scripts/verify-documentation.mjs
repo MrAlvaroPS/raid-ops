@@ -36,12 +36,17 @@ const required = [
   'docs/migration/PHASE-1.md',
   'docs/migration/PHASE-2.md',
   'docs/migration/PHASE-3.md',
+  'docs/migration/PHASE-4.md',
+  'docs/features/composition/README.md',
+  'docs/features/damage-healing/README.md',
   'docs/migration/baseline/CURRENT-ARCHITECTURE-BASELINE.md',
   'docs/migration/baseline/DATA-PERSISTENCE-BASELINE.md',
   'docs/visual/LIVING-VISUAL-BASELINE.md',
   'docs/visual/LEGACY-VISUAL-BASELINE.md',
   'docs/migration/evidence/release-history.json',
   'docs/migration/evidence/phase3-verification.json',
+  'docs/migration/evidence/phase4-composition-verification.json',
+  'docs/migration/evidence/phase4-damage-healing-verification.json',
   'docs/migration/evidence/visual/offline/manifest.json',
 ];
 
@@ -70,6 +75,8 @@ for (const markdownPath of documentationFiles.filter(path => path.endsWith('.md'
 const changelog = await readFile(join(root, 'docs/releases/CHANGELOG.md'), 'utf8');
 const history = JSON.parse(await readFile(join(root, 'docs/migration/evidence/release-history.json'), 'utf8'));
 const phase3 = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase3-verification.json'), 'utf8'));
+const phase4 = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase4-composition-verification.json'), 'utf8'));
+const damageHealing = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase4-damage-healing-verification.json'), 'utf8'));
 const allReleases = [...history.documentedPreGit, ...history.mainlineProductReleases];
 for (const version of allReleases) {
   if (!changelog.includes(`v${version}`)) failures.push(`changelog omits audited version v${version}`);
@@ -88,6 +95,29 @@ if (phase3.results?.auditedReleaseVersions !== allReleases.length) failures.push
 if (phase3.results?.legacyVisualCapturesTransferred !== 20) failures.push('Phase 3 evidence has stale visual-transfer count');
 if (phase3.results?.canonicalChangelog !== 'docs/releases/CHANGELOG.md') failures.push('Phase 3 evidence points at the wrong changelog');
 if (phase3.legacyBaseline?.documentationHandoffCommit !== 'c300993') failures.push('Phase 3 evidence omits the legacy hand-off commit');
+if (phase4.surface !== 'composition' || phase4.frontendOwner !== 'angular') failures.push('Phase 4 evidence does not transfer Composition ownership');
+if (phase4.productionSwitchEnabled !== false) failures.push('Phase 4 evidence must keep the global production switch disabled');
+if (phase4.results?.wclProviderCalls !== 0 || phase4.results?.databaseOrCorpusMutations !== 0) failures.push('Phase 4 visual evidence must remain provider- and mutation-free');
+if (phase4.scopeContract?.identity !== 'encounter+difficulty' || phase4.scopeContract?.crossDifficultyComparisonForbidden !== true) failures.push('Phase 4 evidence lost difficulty isolation');
+if (phase4.visualEvidence?.captures?.length !== 4) failures.push('Phase 4 evidence must contain four Composition captures');
+for (const capture of phase4.visualEvidence?.captures ?? []) {
+  const path = join(root, 'docs/migration/evidence/visual/composition', capture.file);
+  if (!await exists(path)) { failures.push(`missing Composition visual evidence: ${capture.file}`); continue; }
+  const digest = createHash('sha256').update(await readFile(path)).digest('hex');
+  if (digest !== capture.sha256) failures.push(`Composition visual evidence hash mismatch: ${capture.file}`);
+}
+if (damageHealing.surface !== 'damage-healing' || damageHealing.frontendOwner !== 'angular') failures.push('Phase 4 evidence does not transfer Damage & Healing ownership');
+if (damageHealing.productionSwitchEnabled !== false) failures.push('Damage & Healing evidence must keep the global production switch disabled');
+if (damageHealing.results?.wclProviderCalls !== 0 || damageHealing.results?.databaseOrCorpusMutations !== 0) failures.push('Damage & Healing visual evidence must remain provider- and mutation-free');
+if (damageHealing.scopeContract?.identity !== 'encounter+difficulty' || damageHealing.scopeContract?.crossDifficultyComparisonForbidden !== true) failures.push('Damage & Healing evidence lost difficulty isolation');
+if (damageHealing.scopeContract?.phaseModel !== 'absolute-stage' || damageHealing.metricContract?.version !== 'damage-healing-view-v1') failures.push('Damage & Healing evidence lost its stage/metric contract');
+if (damageHealing.visualEvidence?.captures?.length !== 8) failures.push('Damage & Healing evidence must contain eight responsive state captures');
+for (const capture of damageHealing.visualEvidence?.captures ?? []) {
+  const path = join(root, 'docs/migration/evidence/visual/damage-healing', capture.file);
+  if (!await exists(path)) { failures.push(`missing Damage & Healing visual evidence: ${capture.file}`); continue; }
+  const digest = createHash('sha256').update(await readFile(path)).digest('hex');
+  if (digest !== capture.sha256) failures.push(`Damage & Healing visual evidence hash mismatch: ${capture.file}`);
+}
 
 const parity = await readFile(join(root, 'docs/migration/PARITY-MATRIX.md'), 'utf8');
 const requiredSurfaces = [
@@ -117,4 +147,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} visual captures · 11 parity surfaces`);
+console.log(`[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`);

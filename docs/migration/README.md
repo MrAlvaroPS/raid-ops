@@ -9,26 +9,33 @@ sequence and does not convert the migration into a big-bang rewrite.
 | 1 | Stabilise the React/Vite legacy reference without weakening contracts | Complete |
 | 2 | Order documentation and releases; retire obsolete deployment guidance; adopt a living visual baseline | Complete, including target hand-off |
 | 3 | Establish the Angular Clean Architecture foundation and coexistence boundary | Complete |
+| 4 | Migrate product surfaces incrementally with full vertical-slice gates | **In progress:** Composition and Damage & Healing complete (2/11); production switch disabled |
 
 The documentary hand-off performed at the end of Phase 3 closes an omission in
 the execution of Phase 2; it does not create, rename or reorder a phase.
 
 ## Current ownership
 
-- Angular owns its foundation, migration coordination, changelog and visual
-  migration policy.
-- The verified legacy frontend owns all eleven product surfaces.
+- Angular owns its foundation, migration coordination, changelog, visual
+  migration policy, Composition and Damage & Healing frontend routes.
+- The verified legacy frontend owns the remaining nine product surfaces and is
+  the immediate rollback for both migrated routes until production cutover.
 - The legacy Node/Nitro application owns backend, Iris, WCL, provider and
   persistence contracts.
 - Production routing remains on the legacy application.
 
 ## Gate for the next original step
 
-The next product work is the first complete vertical slice, using Composition as
-the agreed low-risk pattern. It cannot start merely by copying markup. It must
-include API decoding, domain/application boundaries, real states, responsive
-visual comparison, accessibility, documentation, ownership switch and immediate
-rollback. LIVE, Loot and Iris remain excluded from the first slice.
+The first two complete vertical slices are implemented and recorded in
+[Phase 4](./PHASE-4.md). The next product slice in that same phase should be
+**Pull Lab**: freeze same-report pull selection/comparison, analytical
+population, excluded reset, stage alignment and partial mechanics semantics
+before changing its UI. It must reuse proven scope infrastructure and must not
+absorb LIVE polling.
+
+Pull Lab is a high-complexity slice because selection state and two-pull stage
+comparisons can silently mix populations or evidence. LIVE, Loot and Iris
+remain deliberately deferred.
 
 The following files are binding inputs:
 
@@ -36,3 +43,5 @@ The following files are binding inputs:
 - [integral definition of done](../governance/MIGRATION-DEFINITION-OF-DONE.md);
 - [living visual baseline](../visual/LIVING-VISUAL-BASELINE.md);
 - [incremental ownership ADR](../architecture/ADR-001-INCREMENTAL-OWNERSHIP.md).
+- [Composition frontend contract](../features/composition/README.md).
+- [Damage & Healing frontend contract](../features/damage-healing/README.md).

@@ -11,6 +11,7 @@ import { PRODUCT_FEATURES } from '../../features/migration-control/domain/featur
 })
 export class AppShell {
   protected readonly features = PRODUCT_FEATURES;
+  protected readonly angularOwnedCount = PRODUCT_FEATURES.filter(feature => feature.owner === 'angular').length;
   protected readonly navigationOpen = signal(false);
 
   protected toggleNavigation(): void {

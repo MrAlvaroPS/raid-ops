@@ -35,13 +35,35 @@ for (const file of files) {
 }
 
 const catalog = await readFile(new URL('../src/app/features/migration-control/domain/feature-catalog.ts', import.meta.url), 'utf8');
-if (/owner:\s*'angular'/.test(catalog)) failures.push('Phase 3 cannot claim Angular ownership of a product surface');
+const angularOwners = [...catalog.matchAll(/id:\s*'([^']+)'[^\n]+owner:\s*'angular'/g)].map(match => match[1]);
+const expectedAngularOwners = ['damage-healing', 'composition'];
+if (angularOwners.length !== expectedAngularOwners.length || angularOwners.some((owner, index) => owner !== expectedAngularOwners[index])) {
+  failures.push(`incremental ownership must contain only Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`);
+}
+const routes = await readFile(new URL('../src/app/app.routes.ts', import.meta.url), 'utf8');
+if (!routes.includes("case 'composition'") || !routes.includes("features/composition/presentation/composition-page")) {
+  failures.push('Composition must resolve to its Angular presentation route');
+}
+if (!routes.includes("case 'damage-healing'") || !routes.includes("features/damage-healing/presentation/damage-healing-page")) {
+  failures.push('Damage & Healing must resolve to its Angular presentation route');
+}
+const compositionRepository = await readFile(new URL('../src/app/features/composition/infrastructure/composition-api.repository.ts', import.meta.url), 'utf8');
+for (const parameter of ['report', 'encounter', 'difficulty']) {
+  if (!compositionRepository.includes(`${parameter}:`)) failures.push(`Composition request must include explicit ${parameter}`);
+}
+const damageHealingRepository = await readFile(new URL('../src/app/features/damage-healing/infrastructure/damage-healing-api.repository.ts', import.meta.url), 'utf8');
+for (const parameter of ['report', 'encounter', 'difficulty']) {
+  if (!damageHealingRepository.includes(`${parameter}:`)) failures.push(`Damage & Healing requests must include explicit ${parameter}`);
+}
+for (const endpoint of ['/api/wcl/report?', '/api/wcl/telemetry?']) {
+  if (!damageHealingRepository.includes(endpoint)) failures.push(`Damage & Healing must reuse existing ${endpoint} read`);
+}
 const runtime = await readFile(new URL('../src/app/core/config/runtime-config.ts', import.meta.url), 'utf8');
-if (!/productionSwitchEnabled:\s*false/.test(runtime)) failures.push('Phase 3 production switch must remain statically false');
+if (!/productionSwitchEnabled:\s*false/.test(runtime)) failures.push('global production switch must remain statically false');
 
 if (failures.length) {
   for (const failure of failures) console.error(`[architecture] ${failure}`);
   process.exit(1);
 }
 
-console.log(`[architecture] PASS · ${files.length} source files · dependency direction and legacy ownership preserved`);
+console.log(`[architecture] PASS · ${files.length} source files · dependency direction and two-surface incremental ownership preserved`);
