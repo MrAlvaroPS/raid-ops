@@ -21,9 +21,10 @@ infrastructure → application/domain
 
 `npm run verify:architecture` enforces the dependency direction. During Phase 4
 it permits only the surfaces whose complete slice gate has transferred:
-Composition, Damage & Healing and Pull Lab. It verifies their explicit
+Progress, Pull Lab, Damage & Healing and Composition. It verifies their explicit
 report/encounter/difficulty adapters and the pre-existing reads used by the
-throughput and pull-comparison routes. `shared` now contains WCL scope plus the
+throughput and pull-comparison routes, plus Progress's report-independent HOME
+history boundary. `shared` now contains WCL scope plus the
 absolute-stage model, each with at least two real consumers.
 
 ## Backend boundary

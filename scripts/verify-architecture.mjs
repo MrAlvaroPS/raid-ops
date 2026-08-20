@@ -36,11 +36,14 @@ for (const file of files) {
 
 const catalog = await readFile(new URL('../src/app/features/migration-control/domain/feature-catalog.ts', import.meta.url), 'utf8');
 const angularOwners = [...catalog.matchAll(/id:\s*'([^']+)'[^\n]+owner:\s*'angular'/g)].map(match => match[1]);
-const expectedAngularOwners = ['pull-lab', 'damage-healing', 'composition'];
+const expectedAngularOwners = ['progress', 'pull-lab', 'damage-healing', 'composition'];
 if (angularOwners.length !== expectedAngularOwners.length || angularOwners.some((owner, index) => owner !== expectedAngularOwners[index])) {
   failures.push(`incremental ownership must contain only Pull Lab, Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`);
 }
 const routes = await readFile(new URL('../src/app/app.routes.ts', import.meta.url), 'utf8');
+if (!routes.includes("case 'progress'") || !routes.includes("features/progress/presentation/progress-page")) {
+  failures.push('Progress must resolve to its Angular presentation route');
+}
 if (!routes.includes("case 'composition'") || !routes.includes("features/composition/presentation/composition-page")) {
   failures.push('Composition must resolve to its Angular presentation route');
 }
@@ -66,6 +69,12 @@ for (const parameter of ['report', 'encounter', 'difficulty']) {
   if (!pullLabRepository.includes(`${parameter}:`)) failures.push(`Pull Lab request must include explicit ${parameter}`);
 }
 if (!pullLabRepository.includes('/api/wcl/operational-execution?')) failures.push('Pull Lab must reuse the existing operational-execution read');
+const progressRepository = await readFile(new URL('../src/app/features/progress/infrastructure/progress-api.repository.ts', import.meta.url), 'utf8');
+if (!progressRepository.includes("'/api/wcl/home-history'")) failures.push('Progress must discover scopes from persisted HOME history');
+for (const parameter of ['encounter', 'difficulty']) {
+  if (!progressRepository.includes(`${parameter}:`)) failures.push(`Progress request must include explicit ${parameter}`);
+}
+if (/report:/.test(progressRepository)) failures.push('Progress must not scope longitudinal history to Active Report');
 const runtime = await readFile(new URL('../src/app/core/config/runtime-config.ts', import.meta.url), 'utf8');
 if (!/productionSwitchEnabled:\s*false/.test(runtime)) failures.push('global production switch must remain statically false');
 
@@ -74,4 +83,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`[architecture] PASS · ${files.length} source files · dependency direction and three-surface incremental ownership preserved`);
+console.log(`[architecture] PASS · ${files.length} source files · dependency direction and four-surface incremental ownership preserved`);

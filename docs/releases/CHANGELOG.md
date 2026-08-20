@@ -8,6 +8,16 @@ without tags they must not be read as independently proven deployment dates.
 
 ## Unreleased — Angular migration
 
+- Completed the Progress Angular vertical slice on persisted HOME history with
+  an explicit encounter+difficulty selector, active `progress-model-v2` /
+  metrics `2.0.0`, zero-WCL normal reads and no Active Report contamination.
+- Preserved raw, metric-eligible and measured-depth populations separately;
+  exact 100% WCL rows remain auditable and are never graphed as fake depth.
+- Replaced DOM polling and Golden fixtures with router-owned state, a measured
+  best/form chart, raid-night comparison, stage matrix, health and quality audit;
+  canonical invariant failures now withhold strategic indicators.
+- Recorded eight responsive Progress captures covering HOME empty, ready,
+  depth-limited and invariant-blocked states with no provider dispatch.
 - Completed the Pull Lab Angular vertical slice with distinct URL-owned A/B
   selection, absolute-stage/death timelines, excluded-reset visibility and one
   existing exact-scope operational read.

@@ -6,6 +6,8 @@ import { AppShell } from './shell/app-shell/app-shell';
 function productRoute(feature: FeatureDefinition): Route {
   const route: Route = { path: feature.route, title: `${feature.label} · AvoiD Raid Ops`, data: { feature } };
   switch (feature.id) {
+    case 'progress':
+      return { ...route, loadComponent: () => import('./features/progress/presentation/progress-page/progress.page').then(module => module.ProgressPage) };
     case 'composition':
       return { ...route, loadComponent: () => import('./features/composition/presentation/composition-page/composition.page').then(module => module.CompositionPage) };
     case 'damage-healing':

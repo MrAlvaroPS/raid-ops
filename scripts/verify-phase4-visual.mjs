@@ -93,6 +93,23 @@ const insufficientOperationalFixture = {
   ...gatedOperationalFixture,
   telemetry: { ...pullTelemetryFixture, pullIntelligence: { pulls: [insufficientPull], excludedPulls: [], analysisPopulation: { rawPulls: 1, eligiblePulls: 1, excludedPulls: [], eligibleFightIds: [75], policy: 'called-wipe/reset pulls excluded' }, status: 'insufficient-data' } },
 };
+const progressEvidence = { source: 'persisted-home-history', homeOnly: true, activeReportDoesNotMutateHistory: true, difficultyClassifiedPerFight: true, crossDifficultyAggregationForbidden: true, readPathWclNetwork: false };
+const progressIndexPulls = Array.from({ length: 8 }, (_, index) => ({ mode: 'single', key: `${index < 4 ? 'HOMEA' : 'HOMEB'}:${index + 1}`, reportCode: index < 4 ? 'HOMEA' : 'HOMEB', reportTitle: index < 4 ? 'Night one' : 'Night two', fightId: index + 1, pullNumber: index % 4 + 1, encounterId: 3010, bossName: 'Sanitized Encounter', difficulty: 5, difficultyName: 'Mythic', scopeKey: '3010:d5', kill: false, fightPercentage: 90 - index * 8, bossPercentage: 90 - index * 8, reportStartTime: index < 4 ? 1787144400000 : 1787230800000, fightStartTime: index % 4 * 180000, fightEndTime: index % 4 * 180000 + 120000 }));
+const progressIndexFixture = { ok: true, version: 'avoid-history-read-v1', storeVersion: 'avoid-history-store-v1.2', status: 'ready', guildId: 1, zone: { id: 42, name: 'Sanitized Raid' }, syncedAt: 1787230800000, reportCount: 2, pullCount: 8, reports: [], pulls: [{ key: 'all', mode: 'all', label: 'All pulls' }, ...progressIndexPulls], networkExecuted: false, wclCallsExecuted: 0, needsRefresh: false, evidenceContract: progressEvidence };
+const progressEmptyIndexFixture = { ...progressIndexFixture, status: 'empty', reportCount: 0, pullCount: 0, pulls: [{ key: 'all', mode: 'all', label: 'All pulls' }], needsRefresh: true };
+const makeProgressPulls = limited => progressIndexPulls.map((row, index) => {
+  const exact = limited ? [0, 1, 4, 5].includes(index) : index === 0;
+  const fightPercentage = exact ? 100 : row.fightPercentage;
+  return { pullNumber: index + 1, globalPullNumber: index + 1, sessionId: index < 4 ? 'night-1' : 'night-2', sessionIndex: index < 4 ? 1 : 2, sessionTitle: index < 4 ? 'Night one' : 'Night two', absoluteStartTime: row.reportStartTime + row.fightStartTime, absoluteEndTime: row.reportStartTime + row.fightEndTime, durationMs: 120000, kill: false, fightPercentage, bossPercentage: fightPercentage, stageCount: index < 3 ? 1 : index < 6 ? 2 : 3, progressMetricEligible: true, progressMetricReason: exact ? 'wcl-no-measurable-completion' : 'wcl-fight-percentage', progressMetricSeverity: exact ? 'review' : 'confirmed', progressMetricFlags: exact ? ['exact-100-fight-progress'] : [], reportCodes: [row.reportCode], fightIds: [row.fightId] };
+});
+const makeProgressModel = (pulls, grade = 'GOOD', blocked = false) => {
+  const measured = pulls.filter(row => row.fightPercentage < 99.999).length;
+  const nights = [0, 1].map(night => ({ sessionId: `night-${night + 1}`, sessionIndex: night + 1, startTime: pulls[night * 4].absoluteStartTime, endTime: pulls[night * 4 + 3].absoluteEndTime, title: `Night ${night + 1}`, pulls: 4, metricEligiblePulls: 4, metricExcludedPulls: 0, scoredPulls: 4, unscoredPulls: 0, kills: 0, bestFightPercentage: Math.min(...pulls.slice(night * 4, night * 4 + 4).map(row => row.fightPercentage)), medianFightPercentage: night ? 42 : 78, deepPullRatePct: night ? 75 : 25, medianDeltaPp: night ? 36 : null, firstGlobalPull: night * 4 + 1, lastGlobalPull: night * 4 + 4, sourceReports: 1 }));
+  const auditRows = pulls.filter(row => row.progressMetricFlags.length).map(row => ({ globalPullNumber: row.pullNumber, sessionId: row.sessionId, sessionIndex: row.sessionIndex, reportCodes: row.reportCodes, fightIds: row.fightIds, durationMs: row.durationMs, fightPercentage: row.fightPercentage, bossPercentage: row.bossPercentage, stageCount: row.stageCount, kill: false, metricEligible: true, reason: row.progressMetricReason, severity: row.progressMetricSeverity, flags: row.progressMetricFlags }));
+  const invariants = { nightRawPullsMatch: !blocked, nightEligiblePullsMatch: true, globalPullNumbersContiguous: true, eligiblePullsReferenceCanonical: true, currentFormUsesEligiblePopulation: true };
+  return { modelVersion: 'progress-model-v2', metricsVersion: '2.0.0', eligibilityVersion: 'progress-metric-eligibility-v1', policy: { currentFormPulls: 20, previousFormPulls: 20, deepPullMarginPp: 10, breakthroughDepthPp: 2, retentionTolerancePp: 2, matrixWindowPulls: 20 }, totals: { pulls: 8, rawPulls: 8, metricEligiblePulls: 8, metricExcludedPulls: 0, scoredPulls: 8, nights: 2, kills: 0 }, block: { bestPct: 34, deepestStage: 3, currentDeepRatePct: 50, previousDeepRatePct: null, deepDeltaPp: null, currentMedianPct: 61, previousMedianPct: null, consistencyGapPp: 27, previousConsistencyGapPp: null, consistencyGapImprovementPp: null, currentStageConversionPct: 25, previousStageConversionPct: null, stageConversionDeltaPp: null, currentBlock: { metricEligiblePulls: 8 }, previousBlock: { metricEligiblePulls: 0 } }, breakthrough: { latest: { pullNumber: 8, reasons: ['stage 3', '8.0pp depth'] }, pullsSince: 0, nightsSince: 0, count: 4 }, candidateState: { key: 'baseline', label: 'BUILDING BASELINE', tone: '', detail: '8/20 metric-eligible CURRENT FORM pulls available' }, state: blocked ? { key: 'data-review', label: 'DATA REVIEW', tone: 'warn', detail: 'Canonical invariant failed' } : { key: 'baseline', label: 'BUILDING BASELINE', tone: '', detail: '8/20 metric-eligible CURRENT FORM pulls available' }, nights, health: { phaseConversionPct: 25, phaseConversionDeltaPp: null, retention: { available: false, reason: 'insufficient-eligible-pulls' }, throughput: { available: true, current: { pulls: 4, activeMinutes: 11, pullsPerHour: 21.8, medianDowntimeMinutes: 1 }, previous: { pulls: 4, activeMinutes: 11, pullsPerHour: 21.8, medianDowntimeMinutes: 1 }, deltaPullsPerHour: 0 } }, matrix: { deepestStage: 3, windowSize: 20, maxPulls: 160, population: 'metric-eligible-pulls', windows: [{ eligibleFirst: 1, eligibleLast: 8, firstGlobalPull: 1, lastGlobalPull: 8, pulls: 8, complete: false, stages: [{ stage: 1, hit: 8, pulls: 8, ratePct: 100 }, { stage: 2, hit: 5, pulls: 8, ratePct: 62.5 }, { stage: 3, hit: 2, pulls: 8, ratePct: 25 }] }] }, dataQuality: { version: 'progress-data-quality-v1', grade: blocked ? 'BLOCKED' : grade, holdStrategicState: blocked || grade === 'REVIEW', rawPulls: 8, metricEligiblePulls: 8, metricExcludedPulls: 0, eligibleCoveragePct: 100, reviewFlaggedPulls: auditRows.length, exactHundredPulls: auditRows.length, exactHundredSharePct: auditRows.length * 12.5, contradictoryPulls: 0, notes: auditRows.length ? [`${auditRows.length}/8 raw pulls have exact 100.0% WCL fight progress.`] : [], auditRows }, diagnostics: { rawNightTotal: 8, eligibleNightTotal: 8, canonicalPullTotal: 8, metricEligiblePullTotal: 8, invariants } };
+};
+const makeProgressScope = (mode = 'ready') => { const limited = mode === 'limited'; const pulls = makeProgressPulls(limited); return { ...progressIndexFixture, encounter: { id: 3010, name: 'Sanitized Encounter', difficulty: 5, difficultyName: 'Mythic', scopeKey: '3010:d5' }, progressionPulls: pulls, progressModel: makeProgressModel(pulls, limited ? 'REVIEW' : 'GOOD', mode === 'blocked'), nights: [], recentNights: [], currentNight: null, previousNight: null, delta: null, reportDiagnostics: [{ reportCode: 'HOMEA', difficulty: 5 }, { reportCode: 'HOMEB', difficulty: 5 }] }; };
 const bodies = {
   report: Buffer.from(JSON.stringify(reportFixture)).toString('base64'),
   telemetry: Buffer.from(JSON.stringify(telemetryFixture)).toString('base64'),
@@ -100,9 +117,15 @@ const bodies = {
   operational: Buffer.from(JSON.stringify(operationalFixture)).toString('base64'),
   gatedOperational: Buffer.from(JSON.stringify(gatedOperationalFixture)).toString('base64'),
   insufficientOperational: Buffer.from(JSON.stringify(insufficientOperationalFixture)).toString('base64'),
+  progressIndex: Buffer.from(JSON.stringify(progressIndexFixture)).toString('base64'),
+  progressEmptyIndex: Buffer.from(JSON.stringify(progressEmptyIndexFixture)).toString('base64'),
+  progressReady: Buffer.from(JSON.stringify(makeProgressScope('ready'))).toString('base64'),
+  progressLimited: Buffer.from(JSON.stringify(makeProgressScope('limited'))).toString('base64'),
+  progressBlocked: Buffer.from(JSON.stringify(makeProgressScope('blocked'))).toString('base64'),
 };
 let partialMode = false;
 let pullMode = 'ready';
+let progressMode = 'ready';
 let currentSurface = 'unknown';
 const edge = [process.env.RAID_OPS_BROWSER_PATH, 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe', 'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe'].find(value => value && existsSync(value));
 const sleep = milliseconds => new Promise(resolvePromise => setTimeout(resolvePromise, milliseconds));
@@ -152,7 +175,8 @@ async function evaluate(cdp, expression) {
 async function navigate(cdp, path, readyText) {
   partialMode = path.includes('visual=partial');
   pullMode = path.includes('visual=gated') ? 'gated' : path.includes('visual=insufficient') ? 'insufficient' : 'ready';
-  currentSurface = path.startsWith('/composition') ? 'composition' : path.startsWith('/damage-healing') ? 'damage-healing' : path.startsWith('/pull-lab') ? 'pull-lab' : 'unknown';
+  progressMode = path.includes('visual=empty') ? 'empty' : path.includes('visual=limited') ? 'limited' : path.includes('visual=blocked') ? 'blocked' : 'ready';
+  currentSurface = path.startsWith('/composition') ? 'composition' : path.startsWith('/damage-healing') ? 'damage-healing' : path.startsWith('/pull-lab') ? 'pull-lab' : path.startsWith('/progress') ? 'progress' : 'unknown';
   await cdp.send('Page.navigate', { url: new URL(path, baseUrl).href });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const ready = await evaluate(cdp, `document.readyState === 'complete' && document.body?.innerText?.includes(${JSON.stringify(readyText)})`);
@@ -185,6 +209,12 @@ async function audit(cdp, viewport, surface, state) {
     graphVisible: Boolean(document.querySelector('app-throughput-chart svg polyline')),
     graphUnavailable: document.body?.innerText?.includes('GRAPH UNAVAILABLE') || false,
     healingSelected: document.querySelector('.mode-toggle button[aria-pressed="true"]')?.textContent?.trim() === 'Healing',
+    progressReady: document.body?.innerText?.includes('All-pull progression') && Boolean(document.querySelector('app-progress-chart svg .best')),
+    progressLimited: document.body?.innerText?.includes('DEPTH DATA LIMITED') && document.body?.innerText?.includes('DEPTH COVERAGE'),
+    progressEmpty: document.body?.innerText?.includes('HOME HISTORY EMPTY') || false,
+    progressBlocked: document.body?.innerText?.includes('Strategic Progress indicators are withheld') || false,
+    progressScopeVisible: document.body?.innerText?.includes('HOME PROGRESSION SCOPE') || false,
+    progressReportParam: location.pathname === '/progress' && location.search.includes('report='),
     fixtureLeak: ['92%', '184 GUILDS', '18.7M', '1.82M', '21.4M', '28.7%', '1.4s', 'Execute DPS'].some(value => document.body?.innerText?.includes(value))
   }))()`);
   const entry = { viewport, surface, state, ...result };
@@ -209,6 +239,10 @@ try {
     if (pathname === '/api/wcl/report' || pathname === '/api/wcl/telemetry' || pathname === '/api/wcl/operational-execution') {
       const body = pathname.endsWith('/report') ? bodies.report : pathname.endsWith('/telemetry') ? (partialMode ? bodies.partialTelemetry : bodies.telemetry) : pullMode === 'gated' ? bodies.gatedOperational : pullMode === 'insufficient' ? bodies.insufficientOperational : bodies.operational;
       void cdp.send('Fetch.fulfillRequest', { requestId: message.params.requestId, responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'application/json' }], body });
+    } else if (pathname === '/api/wcl/home-history') {
+      const scoped = url.searchParams.has('encounter') || url.searchParams.has('difficulty');
+      const body = !scoped ? (progressMode === 'empty' ? bodies.progressEmptyIndex : bodies.progressIndex) : progressMode === 'limited' ? bodies.progressLimited : progressMode === 'blocked' ? bodies.progressBlocked : bodies.progressReady;
+      void cdp.send('Fetch.fulfillRequest', { requestId: message.params.requestId, responseCode: 200, responseHeaders: [{ name: 'Content-Type', value: 'application/json' }], body });
     } else if (url.origin !== baseOrigin) void cdp.send('Fetch.failRequest', { requestId: message.params.requestId, errorReason: 'BlockedByClient' });
     else void cdp.send('Fetch.continueRequest', { requestId: message.params.requestId });
   });
@@ -226,6 +260,10 @@ try {
     await evaluate(cdp, `(() => { const select = document.querySelectorAll('.selectors select')[1]; select.value = '75'; select.dispatchEvent(new Event('change', { bubbles: true })); })()`); await sleep(150); await audit(cdp, viewport.id, 'pull-lab', 'selected');
     await navigate(cdp, '/pull-lab?report=SANITIZED01&encounter=3010&difficulty=5&visual=gated', 'CLASSIFICATION GATED'); await audit(cdp, viewport.id, 'pull-lab', 'mechanics-gated');
     await navigate(cdp, '/pull-lab?report=SANITIZED01&encounter=3010&difficulty=5&visual=insufficient', 'One eligible pull is not a comparison'); await audit(cdp, viewport.id, 'pull-lab', 'insufficient');
+    await navigate(cdp, '/progress?visual=empty', 'HOME HISTORY EMPTY'); await audit(cdp, viewport.id, 'progress', 'history-empty');
+    await navigate(cdp, '/progress', 'All-pull progression'); await audit(cdp, viewport.id, 'progress', 'ready');
+    await navigate(cdp, '/progress?visual=limited', 'DEPTH DATA LIMITED'); await audit(cdp, viewport.id, 'progress', 'limited');
+    await navigate(cdp, '/progress?visual=blocked', 'Strategic Progress indicators are withheld'); await audit(cdp, viewport.id, 'progress', 'blocked');
   }
   await cdp.send('Browser.close').catch(() => {}); cdp.close();
 } finally {
@@ -243,9 +281,16 @@ if (audits.filter(item => item.state === 'partial-healing').some(item => !item.p
 if (audits.filter(item => item.surface === 'pull-lab' && (item.state === 'ready' || item.state === 'selected')).some(item => !item.pullReady || !item.pullSelected)) failures.push({ reason: 'Pull Lab comparison/selection state incomplete' });
 if (audits.filter(item => item.state === 'mechanics-gated').some(item => !item.pullReady || !item.mechanicsGated)) failures.push({ reason: 'Pull Lab gated mechanics state incomplete' });
 if (audits.filter(item => item.state === 'insufficient').some(item => !item.insufficientData || item.pullReady)) failures.push({ reason: 'Pull Lab insufficient-data state incomplete' });
-if (apiRequests.length !== 16 || apiRequests.some(url => !/[?&]report=SANITIZED01/.test(url) || !/[?&]encounter=3010/.test(url) || !/[?&]difficulty=5/.test(url))) failures.push({ reason: 'API requests are not exact-scope and deterministic', apiRequests });
+if (audits.filter(item => item.surface === 'progress' && item.state === 'ready').some(item => !item.progressReady || !item.progressScopeVisible || item.progressReportParam)) failures.push({ reason: 'Progress ready state or HOME scope isolation incomplete' });
+if (audits.filter(item => item.state === 'limited').some(item => !item.progressReady || !item.progressLimited)) failures.push({ reason: 'Progress limited-depth state incomplete' });
+if (audits.filter(item => item.state === 'history-empty').some(item => !item.progressEmpty || item.progressScopeVisible)) failures.push({ reason: 'Progress empty HOME history state incomplete' });
+if (audits.filter(item => item.state === 'blocked').some(item => !item.progressBlocked || !item.progressScopeVisible || item.progressReady)) failures.push({ reason: 'Progress blocked invariant state leaks strategic indicators' });
+const nonProgressApi = apiRequestRecords.filter(request => request.surface !== 'progress').map(request => request.url);
+if (nonProgressApi.length !== 16 || nonProgressApi.some(url => !/[?&]report=SANITIZED01/.test(url) || !/[?&]encounter=3010/.test(url) || !/[?&]difficulty=5/.test(url))) failures.push({ reason: 'Report-scoped API requests are not exact and deterministic', apiRequests: nonProgressApi });
+const progressApi = apiRequestRecords.filter(request => request.surface === 'progress').map(request => request.url);
+if (progressApi.length !== 14 || progressApi.some(url => /[?&]report=/.test(url)) || progressApi.filter(url => new URL(url).searchParams.has('encounter')).some(url => !/[?&]encounter=3010/.test(url) || !/[?&]difficulty=5/.test(url))) failures.push({ reason: 'Progress requests are not deterministic persisted HOME reads', apiRequests: progressApi });
 const externalRequestRecords = requests.filter(request => new URL(request.url).origin !== baseOrigin);
-for (const surface of ['composition', 'damage-healing', 'pull-lab']) {
+for (const surface of ['composition', 'damage-healing', 'pull-lab', 'progress']) {
   const report = {
     schemaVersion: 'phase4-visual-v1', surface, fixture: 'sanitized WCL-shaped local response; external traffic blocked before dispatch', baseUrl,
     audits: audits.filter(item => item.surface === surface), errors,
@@ -255,4 +300,4 @@ for (const surface of ['composition', 'damage-healing', 'pull-lab']) {
   await writeFile(join(output, surface, 'report.json'), `${JSON.stringify(report, null, 2)}\n`, 'utf8');
 }
 if (errors.length || failures.length) { console.error(JSON.stringify({ errors, apiRequests, failures }, null, 2)); process.exit(1); }
-console.log(`[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 16 exact-scope stubbed API requests - 0 provider calls`);
+console.log(`[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 30 stubbed local API reads - 0 provider calls`);

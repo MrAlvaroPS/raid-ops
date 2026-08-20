@@ -1,0 +1,49 @@
+@if (series().visible.length) {
+  <div class="chart-shell">
+    <div class="axis">
+      <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+    </div>
+    <svg
+      viewBox="0 0 100 88"
+      preserveAspectRatio="none"
+      role="img"
+      aria-label="Measured WCL depth trend with best-so-far, five-pull form, raid-night boundaries and unavailable depth shown separately"
+    >
+      @for (y of [6, 24, 42, 60, 78]; track y) {
+        <line class="grid" x1="3" [attr.y1]="y" x2="97" [attr.y2]="y" />
+      }
+      @for (x of series().nightBoundaries; track x) {
+        <line class="boundary" [attr.x1]="x" y1="5" [attr.x2]="x" y2="80" />
+      }
+      @if (bestLine()) {
+        <polyline class="best" [attr.points]="bestLine()" />
+      }
+      @if (formLine()) {
+        <polyline class="form" [attr.points]="formLine()" />
+      }
+      @for (point of series().measured; track point.pullNumber) {
+        <circle
+          [class.pb]="point.personalBest"
+          [attr.cx]="point.x"
+          [attr.cy]="point.y"
+          [attr.r]="point.personalBest ? 1.15 : 0.55"
+        >
+          <title>Global {{ point.pullNumber }} · measured WCL {{ point.value.toFixed(1) }}%</title>
+        </circle>
+      }
+      @for (point of series().unmeasured; track point.pullNumber) {
+        <line class="unmeasured" [attr.x1]="point.x" y1="81.5" [attr.x2]="point.x" y2="84">
+          <title>Global {{ point.pullNumber }} · WCL depth unavailable</title>
+        </line>
+      }
+    </svg>
+    <div class="unmeasured-label">WCL DEPTH UNAVAILABLE · {{ series().unmeasured.length }}</div>
+    <div class="pull-labels">
+      <span>GLOBAL {{ first() ?? '—' }}</span
+      ><span>GLOBAL {{ middle() ?? '—' }}</span
+      ><span>GLOBAL {{ last() ?? '—' }}</span>
+    </div>
+  </div>
+} @else {
+  <div class="chart-empty">No pulls in this raw range.</div>
+}

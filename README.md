@@ -2,8 +2,8 @@
 
 Incremental Angular replacement for the legacy `avoid-raid-ops` frontend.
 
-Current status: **Phase 4 in progress**. Composition, Damage & Healing and Pull Lab are
-Angular-owned (3/11 product surfaces); the other eight remain explicitly owned
+Current status: **Phase 4 in progress**. Progress, Pull Lab, Damage & Healing and
+Composition are Angular-owned (4/11 product surfaces); the other seven remain explicitly owned
 by the verified legacy application. The production-wide switch stays disabled
 until every vertical slice passes its data-contract, behaviour, visual,
 documentation and rollback gates.

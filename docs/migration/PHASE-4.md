@@ -1,7 +1,7 @@
 # Phase 4 — incremental product migration
 
-Status: in progress. Composition, Damage & Healing and Pull Lab are complete in
-Angular (3 of 11 product surfaces); production-wide routing remains on the legacy
+Status: in progress. Progress, Pull Lab, Damage & Healing and Composition are complete in
+Angular (4 of 11 product surfaces); production-wide routing remains on the legacy
 application.
 
 This is the next original roadmap phase after the Phase 3 Clean Architecture
@@ -179,18 +179,64 @@ route remains rollback-only until cutover.
 Detailed behaviour and contradiction decisions are canonical in
 [the Pull Lab feature contract](../features/pull-lab/README.md).
 
-## Next slice inside Phase 4 — Progress
+## Slice 4.4 — Progress (complete)
 
-The next recommended vertical slice is **Progress**. It should freeze the
-persisted HOME history source, longitudinal eligible population, report/night
-grouping, metric version/null policy and excluded-pull visibility before UI
-migration. It must ignore an active single-pull selector unless an explicit
-detail view opts in, and normal page load must remain zero WCL.
+### Completed scope
 
-Progress is a **high-complexity** slice because historical aggregation can
-silently change denominators, merge difficulties or confuse persisted HOME
-history with an Active Report. Use a high-reasoning model. LIVE, Loot and Iris
-remain deferred until their own later slices.
+- audited the Golden/React page, every Progress runtime generation, active
+  presentation contract, v1/v2 metric documents, HOME persistence/read path,
+  raid-night clustering, tests and desktop/mobile baselines before editing;
+- migrated Progress into domain, application, infrastructure and presentation
+  layers using the existing persisted HOME index and scoped reads;
+- introduced a visible encounter+difficulty HOME selector and removed report/
+  pull/Active Report parameters from the longitudinal request;
+- retained model v2 state, CURRENT/PREVIOUS FORM, breakthroughs, measured depth,
+  raw night grouping, stage matrix, retention, throughput and full audit rows;
+- separated raw, metric-eligible and depth-measured populations, preserving
+  exact-100 rows without graphing them as fake 100% depth;
+- retained signal-first presentation for REVIEW/sparse depth and withheld every
+  strategic panel when canonical invariants are BLOCKED;
+- replaced 750 ms DOM polling and text-based page ownership with Angular router
+  ownership, signals and pure presentation rules;
+- removed Golden cohort velocity, static stats/matrix and causal composition
+  recommendation while keeping the control-room hierarchy and responsive shape;
+- transferred active frontend, scope, metric/null, interaction, contradiction
+  and visual documentation to Angular.
+
+### Verified gates
+
+- active `progress-model-v2`, metrics `2.0.0` and persisted HOME evidence are
+  runtime-decoded; older v1 notes remain historical only;
+- response scope, zero-WCL declaration, raw/eligible/night reconciliation,
+  contiguous global numbering and difficulty isolation fail closed;
+- cumulative Edge/CDP verification passes 30 route/viewport checks, including
+  eight Progress captures for HOME empty, ready, limited and blocked states;
+- 30 deterministic local API reads are intercepted across the cumulative suite,
+  with zero external/provider calls and no data mutation;
+- desktop/mobile have zero page overflow, browser exception, framework overlay
+  or Golden fixture finding.
+
+### Ownership and rollback
+
+`feature-catalog.ts` now marks exactly Progress, Pull Lab, Damage & Healing and
+Composition as Angular-owned. Normal Progress load performs local reads only;
+HOME refresh remains an explicit later Data & Logs capability. The production
+switch remains disabled and the legacy route remains rollback-only.
+
+Detailed behaviour and contradiction decisions are canonical in
+[the Progress feature contract](../features/progress/README.md).
+
+## Next slice inside Phase 4 — Players
+
+The next recommended vertical slice is **Players**. It should freeze report
+roster/profile facts, longitudinal HOME attendance, Reliability metric version,
+publication/contradiction gates and null semantics before migrating dossiers.
+It must not turn missing profiles or pending Reliability into scores.
+
+Players is a **high-complexity** slice because it joins multiple scopes and
+evidence classes while preserving identity and publication provenance. Use a
+high-reasoning model. LIVE, Loot and Iris remain deferred until their own later
+slices.
 
 ## Phase exit condition
 

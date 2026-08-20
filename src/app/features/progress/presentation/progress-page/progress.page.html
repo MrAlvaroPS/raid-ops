@@ -1,0 +1,480 @@
+<section class="progress-page">
+  <header class="page-heading">
+    <div>
+      <small>AVOID // RAID OPERATIONS CENTER</small>
+      <h1>Progress</h1>
+    </div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  @if ($any(state()).index; as index) {
+    @if (index.scopes.length) {
+      <section class="history-scope" aria-label="Persisted HOME progression scope">
+        <label
+          ><span>HOME PROGRESSION SCOPE</span
+          ><select (change)="selectScope($event)" [disabled]="state().kind === 'scope-loading'">
+            @for (scope of index.scopes; track scope.scopeKey) {
+              <option
+                [value]="scope.scopeKey"
+                [selected]="scope.scopeKey === $any(state()).scope?.scopeKey"
+              >
+                {{ scope.bossName }} · {{ scope.difficultyName }} · {{ scope.completedPulls }} pulls
+              </option>
+            }
+          </select></label
+        >
+        <div>
+          <span>PERSISTED HOME</span><b>{{ index.zone?.name ?? 'Current raid' }}</b
+          ><small
+            >{{ index.scopes.length }} isolated encounter+difficulty scope(s) · 0 WCL on read</small
+          >
+        </div>
+        <div>
+          <span>LAST LOCAL SYNC</span
+          ><b>{{ index.syncedAt ? date(index.syncedAt) : 'NOT SYNCED' }}</b
+          ><small>{{
+            index.needsRefresh ? 'Refresh is managed by Data & Logs' : 'Local history index ready'
+          }}</small>
+        </div>
+      </section>
+    }
+  }
+
+  @switch (state().kind) {
+    @case ('index-loading') {
+      <section class="state-panel loading" aria-live="polite">
+        <span>PERSISTED HOME · LOCAL READ</span>
+        <h2>Loading progression history</h2>
+        <p>
+          Discovering stored encounter and difficulty scopes. No Active Report and no WCL request
+          participates.
+        </p>
+      </section>
+    }
+    @case ('history-empty') {
+      <section class="state-panel">
+        <span>HOME HISTORY EMPTY</span>
+        <h2>No persisted progression scope</h2>
+        <p>Progress needs completed HOME pulls stored by the existing Data & Logs refresh flow.</p>
+        <small>No Golden chart or synthetic raid night has been substituted.</small>
+      </section>
+    }
+    @case ('scope-loading') {
+      <section class="state-panel loading" aria-live="polite">
+        <span>PROGRESS MODEL V2 · LOCAL READ</span>
+        <h2>Reconstructing the strategic history</h2>
+        <p>
+          Reading the selected encounter+difficulty from persisted HOME evidence with zero WCL
+          calls.
+        </p>
+      </section>
+    }
+    @case ('error') {
+      <section class="state-panel error" role="alert">
+        <span>SAFE FAILURE</span>
+        <h2>Progress is unavailable</h2>
+        <p>{{ $any(state()).message }}</p>
+        @if ($any(state()).retryable) {
+          <button type="button" (click)="retry()">Retry</button>
+        }
+      </section>
+    }
+    @case ('empty') {
+      <section class="state-panel">
+        <span>OBSERVED EMPTY STATE</span>
+        <h2>No completed HOME pull in this scope</h2>
+        <p>{{ data()?.emptyReason }}</p>
+        <small
+          >The selected boss and difficulty remain isolated; another difficulty is never used as
+          fallback.</small
+        >
+      </section>
+    }
+    @case ('blocked') {
+      <section class="state-panel error" role="alert">
+        <span>DATA INTEGRITY BLOCKED</span>
+        <h2>Strategic Progress indicators are withheld</h2>
+        <p>
+          The persisted rows remain auditable, but canonical population invariants failed or the v2
+          model is unavailable.
+        </p>
+        <small>No state, rate, median or progression curve is presented as trustworthy.</small>
+      </section>
+      @if (model(); as blockedModel) {
+        <details class="quality" open>
+          <summary>DATA QUALITY · BLOCKED · {{ blockedModel.dataQuality.rawPulls }} RAW</summary>
+          <div class="quality-body">
+            @for (note of blockedModel.dataQuality.notes; track note) {
+              <p>{{ note }}</p>
+            }
+            <p>
+              Invariants:
+              @for (item of invariantEntries(); track item[0]) {
+                {{ item[0] }}={{ item[1] ? 'OK' : 'FAILED' }} ·
+              }
+            </p>
+          </div>
+        </details>
+      }
+    }
+    @case ('ready') {
+      <section class="hero-panel">
+        <div>
+          <span>PROGRESSION HISTORY</span>
+          <h2>Are we actually getting better?</h2>
+          <p>
+            Long-horizon boss progress: repeatability, stage conversion, breakthroughs and
+            raid-night efficiency. LIVE owns the current raid night.
+          </p>
+        </div>
+        <div class="signal">
+          <small>PROGRESSION SIGNAL</small><b [class]="signalTone()">{{ signalLabel() }}</b>
+          <p>{{ signalDetail() }}</p>
+          <span [class.limited]="depth()?.limited"
+            >{{ qualityLabel()
+            }}<em
+              >{{ depth()?.measured?.length }}/{{ data()!.pulls.length }} measured depth</em
+            ></span
+          >
+        </div>
+      </section>
+
+      <section class="stats-row">
+        <article>
+          <label>TOTAL PROG PULLS</label><b>{{ model()!.totals.rawPulls }}</b
+          ><em>{{ model()!.totals.nights }} NIGHTS</em
+          ><small
+            >{{ depth()!.measured.length }} measurable ·
+            {{ depth()!.unmeasuredEligible.length }} WCL-unscored</small
+          >
+        </article>
+        <article>
+          <label>{{ depth()!.limited ? 'BEST MEASURED PULL' : 'BEST PULL' }}</label
+          ><b>{{
+            percentage(
+              bestMeasured() ? (bestMeasured()!.kill ? 0 : bestMeasured()!.fightPercentage) : null
+            )
+          }}</b
+          ><em>{{ bestMeasured()?.kill ? 'KILL' : 'WCL' }}</em
+          ><small>{{
+            bestMeasured()
+              ? 'Global pull ' + bestMeasured()!.pullNumber
+              : 'No measurable WCL depth pull'
+          }}</small>
+        </article>
+        @if (depth()!.limited) {
+          <article>
+            <label>S{{ model()!.block.deepestStage }} CONVERSION</label
+            ><b>{{ percentage(model()!.block.currentStageConversionPct, 0) }}</b
+            ><em>{{ pp(model()!.block.stageConversionDeltaPp) }}</em
+            ><small
+              >CURRENT FORM · {{ model()!.block.currentBlock.metricEligiblePulls }} metric-eligible
+              pulls</small
+            >
+          </article>
+          <article class="warning">
+            <label>DEPTH COVERAGE</label><b>{{ percentage(depth()!.coveragePct, 0) }}</b
+            ><em>{{ depth()!.measured.length }}/{{ data()!.pulls.length }} MEASURED</em
+            ><small>Unavailable WCL completion is not drawn as fake 100% depth</small>
+          </article>
+        } @else {
+          <article>
+            <label>DEEP PULL RATE</label
+            ><b>{{ percentage(model()!.block.currentDeepRatePct, 0) }}</b
+            ><em>{{ pp(model()!.block.deepDeltaPp) }}</em
+            ><small>CURRENT FORM · within {{ model()!.policy.deepPullMarginPp }}pp of PB</small>
+          </article>
+          <article>
+            <label>CONSISTENCY GAP</label
+            ><b>{{
+              model()!.block.consistencyGapPp == null
+                ? '—'
+                : model()!.block.consistencyGapPp!.toFixed(1) + 'pp'
+            }}</b
+            ><em>{{ pp(model()!.block.consistencyGapImprovementPp) }}</em
+            ><small>CURRENT FORM · lower is better</small>
+          </article>
+        }
+        <article>
+          <label>LAST BREAKTHROUGH</label
+          ><b>{{
+            model()!.breakthrough.pullsSince == null
+              ? '—'
+              : model()!.breakthrough.pullsSince + ' PULLS'
+          }}</b
+          ><em>{{
+            model()!.breakthrough.nightsSince == null
+              ? '—'
+              : model()!.breakthrough.nightsSince + ' NIGHTS'
+          }}</em
+          ><small>{{
+            model()!.breakthrough.latest
+              ? 'Global ' +
+                model()!.breakthrough.latest!.pullNumber +
+                ' · ' +
+                model()!.breakthrough.latest!.reasons.join(' + ')
+              : 'No meaningful breakthrough after baseline'
+          }}</small>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel chart-panel">
+          <header>
+            <span>01</span>
+            <div>
+              <h2>All-pull progression</h2>
+              <p>Best-so-far + measured form · missing WCL depth stays missing</p>
+            </div>
+          </header>
+          <div class="range" aria-label="Raw chart range">
+            <span>RAW RANGE</span>
+            @for (
+              item of [
+                { key: 'all', label: 'ALL' },
+                { key: '100', label: 'LAST 100' },
+                { key: '50', label: 'LAST 50' },
+                { key: '25', label: 'LAST 25' },
+              ];
+              track item.key
+            ) {
+              <button
+                type="button"
+                [class.active]="range() === item.key"
+                [disabled]="item.key !== 'all' && rangeDisabled($any(item.key))"
+                [attr.aria-pressed]="range() === item.key"
+                (click)="setRange($any(item.key))"
+              >
+                {{ item.label }}
+              </button>
+            }
+            <em>{{ chart().visible.length }} raw · {{ chart().measured.length }} measured</em>
+          </div>
+          <app-progress-chart [series]="chart()" />
+          <footer class="legend">
+            <span><i class="best"></i>Best-so-far measured depth</span
+            ><span><i class="form"></i>5-measured-pull form</span
+            ><span><i class="pb"></i>New measured PB</span
+            ><span><i class="missing"></i>Depth unavailable</span>
+          </footer>
+        </article>
+
+        <article class="panel nights-panel">
+          <header>
+            <span>02</span>
+            <div>
+              <h2>Night-over-night</h2>
+              <p>
+                {{
+                  depth()!.limited
+                    ? 'Interday stage repeatability + measured best depth'
+                    : 'Raw night size + metric-eligible depth progression'
+                }}
+              </p>
+            </div>
+          </header>
+          <div class="night-list">
+            @for (night of latestNights(); track night.sessionId; let last = $last) {
+              <article [class.active]="last">
+                <span
+                  >{{ date(night.startTime) }} · {{ night.pulls }} PULLS<small
+                    >Global {{ night.firstGlobalPull }}–{{ night.lastGlobalPull }} ·
+                    {{ measuredCount(night.sessionId) }}/{{ night.pulls }} measured · Best
+                    {{ percentage(measuredBest(night.sessionId)) }}</small
+                  ></span
+                >
+                @if (depth()!.limited) {
+                  <b
+                    >S{{ model()!.block.deepestStage }} REACH
+                    {{ percentage(stageReach(night.sessionId), 0) }}</b
+                  ><em>stage repeatability</em>
+                } @else {
+                  <b>Median {{ percentage(night.medianFightPercentage) }}</b
+                  ><em>{{
+                    night.medianDeltaPp == null
+                      ? 'First loaded night'
+                      : pp(night.medianDeltaPp) + ' vs prior'
+                  }}</em>
+                }
+              </article>
+            } @empty {
+              <p>No comparable raid-night history.</p>
+            }
+          </div>
+          <aside>
+            <b>INTERDAY READ</b>
+            @if (latestNights().at(-1); as latest) {
+              <p>
+                Latest night reached S{{ model()!.block.deepestStage }} on
+                {{ percentage(stageReach(latest.sessionId), 0) }} of metric-eligible pulls. This is
+                an observed strategic signal, not a causal recommendation.
+              </p>
+            } @else {
+              <p>No comparable raid-night history is loaded.</p>
+            }
+          </aside>
+        </article>
+      </section>
+
+      <article class="panel matrix-panel">
+        <header>
+          <span>03</span>
+          <div>
+            <h2>Stage consistency matrix</h2>
+            <p>
+              {{ model()!.matrix.windowSize }} metric-eligible pull windows · independent from chart
+              range
+            </p>
+          </div>
+        </header>
+        <div
+          class="matrix"
+          [style.grid-template-columns]="
+            'minmax(130px, 1.1fr) repeat(' + model()!.matrix.deepestStage + ', minmax(58px, 1fr))'
+          "
+        >
+          <label></label>
+          @for (stage of stages(); track stage) {
+            <label>STAGE {{ stage }}</label>
+          }
+          @for (window of model()!.matrix.windows; track window.eligibleFirst) {
+            <b
+              >ELIGIBLE {{ window.eligibleFirst }}–{{ window.eligibleLast
+              }}<small
+                >GLOBAL {{ window.firstGlobalPull }}–{{ window.lastGlobalPull
+                }}{{ window.complete ? '' : ' · PARTIAL' }}</small
+              ></b
+            >
+            @for (stage of window.stages; track stage.stage) {
+              <i [class]="cellClass(stage.ratePct)"
+                ><span>{{ percentage(stage.ratePct, 0) }}</span
+                ><small>{{ stage.hit }}/{{ stage.pulls }}</small></i
+              >
+            }
+          }
+        </div>
+      </article>
+
+      <article class="panel health-panel">
+        <header>
+          <span>04</span>
+          <div>
+            <h2>Progression health</h2>
+            <p>
+              Model {{ model()!.metricsVersion }} · {{ model()!.totals.rawPulls }} raw ·
+              {{ model()!.totals.metricEligiblePulls }} eligible · invariants OK
+            </p>
+          </div>
+        </header>
+        <div class="health-grid">
+          <article>
+            <label>PHASE CONVERSION</label
+            ><b>{{ percentage(model()!.health.phaseConversionPct, 0) }}</b
+            ><em>{{ pp(model()!.health.phaseConversionDeltaPp) }}</em
+            ><small>CURRENT FORM · Stage {{ model()!.block.deepestStage }}</small>
+          </article>
+          <article>
+            <label>NIGHT RETENTION</label>
+            @if (depth()!.limited) {
+              <b>—</b><em class="warning">DEPTH LIMITED</em
+              ><small>Needs comparable measured closing depth</small>
+            } @else if (recordBoolean(model()!.health.retention, 'available')) {
+              <b>{{
+                recordBoolean(model()!.health.retention, 'recovered')
+                  ? recordNumber(model()!.health.retention, 'pullsToRecover') + ' PULLS'
+                  : 'NOT YET'
+              }}</b
+              ><em>{{ durationMinutes(recordNumber(model()!.health.retention, 'minutes')) }}</em
+              ><small>Previous eligible closing level</small>
+            } @else {
+              <b>—</b><em>NO VALID BASELINE</em
+              ><small>{{
+                $any(model()!.health.retention).reason ?? 'Needs two comparable nights'
+              }}</small>
+            }
+          </article>
+          <article>
+            <label>RAID THROUGHPUT</label>
+            @if (recordBoolean(model()!.health.throughput, 'available')) {
+              <b>{{ $any(model()!.health.throughput).current.pullsPerHour.toFixed(1) }} / H</b
+              ><em>{{
+                recordNumber(model()!.health.throughput, 'deltaPullsPerHour') == null
+                  ? 'LATEST NIGHT'
+                  : pp(recordNumber(model()!.health.throughput, 'deltaPullsPerHour')) + '/h'
+              }}</em
+              ><small>Raw timestamped analytical night</small>
+            } @else {
+              <b>—</b><em>NO TIMESTAMPS</em><small>Needs timestamped raw analytical pulls</small>
+            }
+          </article>
+        </div>
+        <details class="quality">
+          <summary>
+            DEPTH DATA · {{ depth()!.limited ? 'LIMITED' : model()!.dataQuality.grade }} ·
+            {{ depth()!.measured.length }}/{{ data()!.pulls.length }} MEASURED
+          </summary>
+          <div class="quality-body">
+            <div class="quality-kpis">
+              <span
+                ><b>{{ data()!.pulls.length }}</b
+                >RAW</span
+              ><span
+                ><b>{{ depth()!.measured.length }}</b
+                >DEPTH MEASURED</span
+              ><span
+                ><b>{{ depth()!.unmeasuredEligible.length }}</b
+                >WCL UNSCORED</span
+              ><span
+                ><b>{{ model()!.dataQuality.metricExcludedPulls }}</b
+                >EXCLUDED</span
+              >
+            </div>
+            <p>
+              Exact 100% completion rows remain raw and auditable but are not drawn as real 100%
+              depth.
+            </p>
+            @for (note of model()!.dataQuality.notes; track note) {
+              <p>{{ note }}</p>
+            }
+            @if (model()!.dataQuality.auditRows.length) {
+              <div class="audit">
+                <div class="head">
+                  <span>PULL</span><span>WCL</span><span>BOSS</span><span>STAGE</span
+                  ><span>DURATION</span><span>STATUS / SOURCE</span>
+                </div>
+                @for (row of model()!.dataQuality.auditRows; track row.globalPullNumber) {
+                  <div>
+                    <span>#{{ row.globalPullNumber }}</span
+                    ><span>{{ percentage(row.fightPercentage) }}</span
+                    ><span>{{ percentage(row.bossPercentage) }}</span
+                    ><span>S{{ row.stageCount }}</span
+                    ><span>{{
+                      durationMinutes(row.durationMs == null ? null : row.durationMs / 60000)
+                    }}</span
+                    ><span
+                      >{{ row.metricEligible ? 'REVIEW' : 'EXCLUDED' }} · {{ row.reason
+                      }}<small
+                        >{{ row.flags.join(' · ')
+                        }}{{ row.reportCodes.length ? ' · report ' + row.reportCodes.join(',') : ''
+                        }}{{
+                          row.fightIds.length ? ' · fight ' + row.fightIds.join(',') : ''
+                        }}</small
+                      ></span
+                    >
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </details>
+      </article>
+
+      <footer class="evidence">
+        <span>{{ data()!.evidence.source }}</span
+        ><span>{{ data()!.encounter.scopeKey }}</span
+        ><span>progress-model-v2 · metrics 2.0.0</span><span>HOME only · Active Report ignored</span
+        ><span>0 WCL read path</span><span>Cross-difficulty aggregation forbidden</span>
+      </footer>
+    }
+  }
+</section>

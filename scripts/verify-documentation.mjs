@@ -40,6 +40,7 @@ const required = [
   'docs/features/composition/README.md',
   'docs/features/damage-healing/README.md',
   'docs/features/pull-lab/README.md',
+  'docs/features/progress/README.md',
   'docs/migration/baseline/CURRENT-ARCHITECTURE-BASELINE.md',
   'docs/migration/baseline/DATA-PERSISTENCE-BASELINE.md',
   'docs/visual/LIVING-VISUAL-BASELINE.md',
@@ -49,6 +50,7 @@ const required = [
   'docs/migration/evidence/phase4-composition-verification.json',
   'docs/migration/evidence/phase4-damage-healing-verification.json',
   'docs/migration/evidence/phase4-pull-lab-verification.json',
+  'docs/migration/evidence/phase4-progress-verification.json',
   'docs/migration/evidence/visual/offline/manifest.json',
 ];
 
@@ -80,6 +82,7 @@ const phase3 = JSON.parse(await readFile(join(root, 'docs/migration/evidence/pha
 const phase4 = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase4-composition-verification.json'), 'utf8'));
 const damageHealing = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase4-damage-healing-verification.json'), 'utf8'));
 const pullLab = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase4-pull-lab-verification.json'), 'utf8'));
+const progress = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase4-progress-verification.json'), 'utf8'));
 const allReleases = [...history.documentedPreGit, ...history.mainlineProductReleases];
 for (const version of allReleases) {
   if (!changelog.includes(`v${version}`)) failures.push(`changelog omits audited version v${version}`);
@@ -134,6 +137,18 @@ for (const capture of pullLab.visualEvidence?.captures ?? []) {
   const digest = createHash('sha256').update(await readFile(path)).digest('hex');
   if (digest !== capture.sha256) failures.push(`Pull Lab visual evidence hash mismatch: ${capture.file}`);
 }
+if (progress.surface !== 'progress' || progress.frontendOwner !== 'angular') failures.push('Phase 4 evidence does not transfer Progress ownership');
+if (progress.productionSwitchEnabled !== false) failures.push('Progress evidence must keep the global production switch disabled');
+if (progress.results?.wclProviderCalls !== 0 || progress.results?.databaseOrCorpusMutations !== 0) failures.push('Progress visual evidence must remain provider- and mutation-free');
+if (progress.scopeContract?.identity !== 'HOME+raid+encounter+difficulty' || progress.scopeContract?.activeReportIgnored !== true || progress.scopeContract?.crossDifficultyAggregationForbidden !== true) failures.push('Progress evidence lost HOME/difficulty isolation');
+if (progress.metricContract?.modelVersion !== 'progress-model-v2' || progress.metricContract?.metricsVersion !== '2.0.0' || progress.metricContract?.chartRange !== 'raw chronological presentation only') failures.push('Progress evidence lost the active model/presentation contract');
+if (progress.visualEvidence?.captures?.length !== 8) failures.push('Progress evidence must contain eight responsive state captures');
+for (const capture of progress.visualEvidence?.captures ?? []) {
+  const path = join(root, 'docs/migration/evidence/visual/progress', capture.file);
+  if (!await exists(path)) { failures.push(`missing Progress visual evidence: ${capture.file}`); continue; }
+  const digest = createHash('sha256').update(await readFile(path)).digest('hex');
+  if (digest !== capture.sha256) failures.push(`Progress visual evidence hash mismatch: ${capture.file}`);
+}
 
 const parity = await readFile(join(root, 'docs/migration/PARITY-MATRIX.md'), 'utf8');
 const requiredSurfaces = [
@@ -163,4 +178,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length + pullLab.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`);
+console.log(`[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length + pullLab.visualEvidence.captures.length + progress.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`);

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "phase4-progress-verification-v1",
+  "verifiedAt": "2026-08-20T20:50:05+02:00",
+  "phase": 4,
+  "surface": "progress",
+  "frontendOwner": "angular",
+  "backendOwner": "avoid-raid-ops Node/Nitro",
+  "productionSwitchEnabled": false,
+  "results": {
+    "angularTests": 58,
+    "angularTestsPassed": 58,
+    "legacyContractTests": 50,
+    "legacyContractTestsPassed": 50,
+    "productionBuild": "pass",
+    "architectureGate": "pass",
+    "documentationGate": "pass",
+    "cumulativeBrowserAudits": 30,
+    "progressBrowserAudits": 8,
+    "browserErrors": 0,
+    "horizontalOverflowFindings": 0,
+    "progressLocalApiReads": 14,
+    "progressScopedLocalApiReads": 6,
+    "wclProviderCalls": 0,
+    "databaseOrCorpusMutations": 0,
+    "goldenFixtureFindings": 0
+  },
+  "scopeContract": {
+    "required": ["encounter", "difficulty"],
+    "identity": "HOME+raid+encounter+difficulty",
+    "activeReportIgnored": true,
+    "crossDifficultyAggregationForbidden": true,
+    "defaultSelection": "latest persisted exact scope; visible and URL-owned",
+    "normalReadPathWclCalls": 0
+  },
+  "metricContract": {
+    "modelVersion": "progress-model-v2",
+    "metricsVersion": "2.0.0",
+    "rawPopulation": "all deduplicated analytical pulls",
+    "strategicPopulation": "progressMetricEligible === true",
+    "currentForm": "latest 20 metric-eligible pulls",
+    "previousForm": "previous 20 metric-eligible pulls",
+    "measuredDepth": "eligible kill or finite fightPercentage < 99.999",
+    "exactHundredPolicy": "retained raw/auditable; never drawn as measured 100% depth",
+    "chartRange": "raw chronological presentation only",
+    "blockedInvariantPolicy": "withhold strategic panels; retain audit"
+  },
+  "operationalBoundary": {
+    "indexEndpoint": "/api/wcl/home-history",
+    "scopeEndpoint": "/api/wcl/home-history?encounter=&difficulty=",
+    "newBackendOrWclQuery": false,
+    "visualDispatch": false,
+    "homeRefreshOwner": "Data & Logs explicit operation; not Progress"
+  },
+  "visualEvidence": {
+    "fixture": "sanitized persisted HOME index/scope responses; external traffic blocked before dispatch",
+    "report": "docs/migration/evidence/visual/progress/report.json",
+    "captures": [
+      { "file": "desktop-blocked.png", "sha256": "92ab42efd99d850c9612f04d0bc60071c59450b5c6e5458ba6c09d0a7d32d006" },
+      { "file": "desktop-history-empty.png", "sha256": "e24a686136c2c520d96e581e1ba108a46ae9ddf05fd3a1d071aa4fbca69cdb3c" },
+      { "file": "desktop-limited.png", "sha256": "3ae1109cc8135c8f70b262d5ec16484d8b2dec836e70db211f4442f1d9c707aa" },
+      { "file": "desktop-ready.png", "sha256": "48c8769ad75c3260012f1e1f2d0d20dec13b3ec7bc24cc2fb473748639e95f69" },
+      { "file": "mobile-blocked.png", "sha256": "5518d112369589dc58d0951fa10314806c0bfbd5d2ec8fe50db5e3357e9b5738" },
+      { "file": "mobile-history-empty.png", "sha256": "626f280a1dc82bc7d39b5f4411f942ddfc9f6611b086746400a970ada0c2baf1" },
+      { "file": "mobile-limited.png", "sha256": "3cdddf8f523fd6a5cbd422d9ba099d8f0ce8e3dac3463f805f7f9cbf2122a71d" },
+      { "file": "mobile-ready.png", "sha256": "358877f328878893c0b6cf231dfae89336f923d3af2ec5c86c39f0d57e081a48" }
+    ]
+  },
+  "tooling": {
+    "primary": "cumulative repository Phase 4 Edge/CDP verifier",
+    "agentBrowserCli": "unavailable; repository verifier used without dependency changes"
+  },
+  "legacyRollback": {
+    "retained": true,
+    "newFrontendChangesAllowed": false,
+    "deletionGate": "explicit production cutover approval and closed rollback window"
+  }
+}
