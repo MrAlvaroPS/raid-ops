@@ -20,6 +20,7 @@ Status: complete, including the Phase 2–3 documentary hand-off (2026-08-20).
 - production routing or Vercel deployment changes.
 
 Source baseline: legacy Phase 2 commit `ec7968b` on `phase2-documentation-releases`.
+Legacy documentary hand-off: commit `c300993` on the same branch.
 
 ## Exit evidence
 

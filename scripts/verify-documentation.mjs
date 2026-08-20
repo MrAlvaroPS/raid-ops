@@ -41,6 +41,7 @@ const required = [
   'docs/visual/LIVING-VISUAL-BASELINE.md',
   'docs/visual/LEGACY-VISUAL-BASELINE.md',
   'docs/migration/evidence/release-history.json',
+  'docs/migration/evidence/phase3-verification.json',
   'docs/migration/evidence/visual/offline/manifest.json',
 ];
 
@@ -68,6 +69,7 @@ for (const markdownPath of documentationFiles.filter(path => path.endsWith('.md'
 
 const changelog = await readFile(join(root, 'docs/releases/CHANGELOG.md'), 'utf8');
 const history = JSON.parse(await readFile(join(root, 'docs/migration/evidence/release-history.json'), 'utf8'));
+const phase3 = JSON.parse(await readFile(join(root, 'docs/migration/evidence/phase3-verification.json'), 'utf8'));
 const allReleases = [...history.documentedPreGit, ...history.mainlineProductReleases];
 for (const version of allReleases) {
   if (!changelog.includes(`v${version}`)) failures.push(`changelog omits audited version v${version}`);
@@ -82,6 +84,10 @@ for (const version of history.mainlineProductReleases) {
   const evidence = history.evidence?.repositoryHistory?.[version];
   if (!evidence?.commit || !evidence?.class) failures.push(`repository version lacks commit/class evidence: v${version}`);
 }
+if (phase3.results?.auditedReleaseVersions !== allReleases.length) failures.push('Phase 3 evidence has stale release-audit count');
+if (phase3.results?.legacyVisualCapturesTransferred !== 20) failures.push('Phase 3 evidence has stale visual-transfer count');
+if (phase3.results?.canonicalChangelog !== 'docs/releases/CHANGELOG.md') failures.push('Phase 3 evidence points at the wrong changelog');
+if (phase3.legacyBaseline?.documentationHandoffCommit !== 'c300993') failures.push('Phase 3 evidence omits the legacy hand-off commit');
 
 const parity = await readFile(join(root, 'docs/migration/PARITY-MATRIX.md'), 'utf8');
 const requiredSurfaces = [

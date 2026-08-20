@@ -4,7 +4,8 @@
   "completedAt": "2026-08-20",
   "legacyBaseline": {
     "branch": "phase2-documentation-releases",
-    "commit": "ec7968b"
+    "sourceCommit": "ec7968b",
+    "documentationHandoffCommit": "c300993"
   },
   "results": {
     "architectureProductionFiles": 13,
@@ -20,6 +21,11 @@
     "databaseOrCorpusMutations": 0,
     "angularOwnedProductSurfaces": 0,
     "legacyOwnedProductSurfaces": 11,
-    "productionSwitchEnabled": false
+    "productionSwitchEnabled": false,
+    "documentationVerificationPassed": true,
+    "auditedReleaseVersions": 53,
+    "legacyVisualCapturesTransferred": 20,
+    "canonicalChangelog": "docs/releases/CHANGELOG.md",
+    "documentationOwnershipTransferred": true
   }
 }
