@@ -735,6 +735,73 @@ const defensiveTelemetryFixture = {
   },
   bestPullEvents: { pagesIncomplete: { deaths: false } },
 };
+function makeCommandOperational(mode = 'ready') {
+  const openOnly = mode === 'active-first';
+  if (openOnly)
+    return {
+      ok: true,
+      version: 'operational-execution-v1',
+      generatedAt: 1787230800000,
+      status: 'waiting-for-completed-pull',
+      report: { code: 'SANITIZED01' },
+      encounter: { ...encounter, pulls: 0, rawPulls: 0, inProgress: true },
+      raidKnowledge: { homeRaidEligible: true },
+      analysisPopulation: {
+        rawPulls: 0,
+        eligiblePulls: 0,
+        excludedPulls: [],
+        eligibleFightIds: [],
+      },
+      telemetry: null,
+      mechanics: null,
+      evidenceContract: { emptyOrOpenPullIsNotFailure: true },
+    };
+  const gated = mode === 'gated';
+  const partial = mode === 'partial';
+  const external = mode === 'external';
+  return {
+    ...operationalFixture,
+    status: gated ? 'boss-reference-not-ready' : 'ready',
+    report: { code: 'SANITIZED01' },
+    encounter: { ...encounter, inProgress: false },
+    analysisPopulation: pullTelemetryFixture.pullIntelligence.analysisPopulation,
+    raidKnowledge: { homeRaidEligible: !external },
+    telemetry: defensiveTelemetryFixture,
+    rulePack: gated ? null : { slug: 'sanitized', version: '1', source: 'manual-fallback' },
+    blocker: gated
+      ? null
+      : {
+          status: 'derived',
+          confidence: 'high',
+          scoringModel:
+            'severity x recurrence x normalized rate x recency x bounded death evidence',
+          blocker: {
+            key: 'sanitized-soak',
+            name: 'Sanitized soak',
+            failedOccurrences: 2,
+            recentFailures: 1,
+            opportunities: 4,
+            failureRate: 0.5,
+            fights: [76, 77],
+            recurrence: 2,
+            linkedDeaths: 1,
+            denominatorStatus: 'normalized',
+          },
+        },
+    dataCompleteness: {
+      mechanicDamage: { events: 8, pages: 1, truncated: partial },
+      assignmentAuras: { events: 4, truncated: false },
+      meaningfulDeaths: { events: 3, truncated: false },
+    },
+    evidenceContract: gated
+      ? { ...evidenceContract, noReferenceMeansNoFabricatedMechanicClassification: true }
+      : {
+          ...evidenceContract,
+          observedMechanicDoesNotImplyFailure: true,
+          observedCountsAreOccurrenceNormalized: true,
+        },
+  };
+}
 const defensiveDeathChains = {
   status: 'probable-causality',
   windowMs: 10_000,
@@ -1029,12 +1096,22 @@ const bodies = {
   defensiveExternal: Buffer.from(JSON.stringify(makeDefensiveOperational('external'))).toString(
     'base64',
   ),
+  commandReady: Buffer.from(JSON.stringify(makeCommandOperational('ready'))).toString('base64'),
+  commandGated: Buffer.from(JSON.stringify(makeCommandOperational('gated'))).toString('base64'),
+  commandActiveFirst: Buffer.from(JSON.stringify(makeCommandOperational('active-first'))).toString(
+    'base64',
+  ),
+  commandPartial: Buffer.from(JSON.stringify(makeCommandOperational('partial'))).toString('base64'),
+  commandExternal: Buffer.from(JSON.stringify(makeCommandOperational('external'))).toString(
+    'base64',
+  ),
 };
 let partialMode = false;
 let pullMode = 'ready';
 let progressMode = 'ready';
 let playersMode = 'pending';
 let defensiveMode = 'ready';
+let commandMode = 'ready';
 let currentSurface = 'unknown';
 const edge = [
   process.env.RAID_OPS_BROWSER_PATH,
@@ -1145,19 +1222,30 @@ async function navigate(cdp, path, readyText) {
       : path.includes('visual=external')
         ? 'external'
         : 'ready';
-  currentSurface = path.startsWith('/composition')
-    ? 'composition'
-    : path.startsWith('/damage-healing')
-      ? 'damage-healing'
-      : path.startsWith('/pull-lab')
-        ? 'pull-lab'
-        : path.startsWith('/progress')
-          ? 'progress'
-          : path.startsWith('/players')
-            ? 'players'
-            : path.startsWith('/defensive-audit')
-              ? 'defensive-audit'
-              : 'unknown';
+  commandMode = path.includes('visual=gated')
+    ? 'gated'
+    : path.includes('visual=active-first')
+      ? 'active-first'
+      : path.includes('visual=partial')
+        ? 'partial'
+        : path.includes('visual=external')
+          ? 'external'
+          : 'ready';
+  currentSurface = path.startsWith('/command-center')
+    ? 'command-center'
+    : path.startsWith('/composition')
+      ? 'composition'
+      : path.startsWith('/damage-healing')
+        ? 'damage-healing'
+        : path.startsWith('/pull-lab')
+          ? 'pull-lab'
+          : path.startsWith('/progress')
+            ? 'progress'
+            : path.startsWith('/players')
+              ? 'players'
+              : path.startsWith('/defensive-audit')
+                ? 'defensive-audit'
+                : 'unknown';
   await cdp.send('Page.navigate', { url: new URL(path, baseUrl).href });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const ready = await evaluate(
@@ -1218,7 +1306,14 @@ async function audit(cdp, viewport, surface, state) {
     defensivePartial: document.body?.innerText?.includes('PARTIAL / BOUNDED EVIDENCE') && document.body?.innerText?.includes('death evidence stream is truncated'),
     defensiveExternal: document.body?.innerText?.includes('EXTERNAL EVALUATION'),
     defensiveSelection: location.pathname === '/defensive-audit' && location.search.includes('death=') && Boolean(document.querySelector('.chain-list button.selected')),
-    fixtureLeak: ['92%', '184 GUILDS', 'Ravok', 'Krynn', 'Astral Shift', 'Nether Eruption', 'DIED WITH PERSONAL', 'PERSONAL COVERAGE', '18.7M', '1.82M', '21.4M', '28.7%', '1.4s', 'Execute DPS'].some(value => document.body?.innerText?.includes(value))
+    commandReady: document.body?.innerText?.includes('Report progression') && document.body?.innerText?.includes('Sanitized soak') && document.body?.innerText?.includes('NOT ASSESSED'),
+    commandGated: document.body?.innerText?.includes('CLASSIFICATION GATED') && document.body?.innerText?.includes('Safe pull telemetry'),
+    commandActiveFirst: document.body?.innerText?.includes('ACTIVE PULL OBSERVED') && document.body?.innerText?.includes('not a completed snapshot'),
+    commandPartial: document.body?.innerText?.includes('PARTIAL / SCOPED EVIDENCE') && document.body?.innerText?.includes('operational evidence stream is truncated'),
+    commandExternal: document.body?.innerText?.includes('EXTERNAL EVALUATION') && document.body?.innerText?.includes('never enter HOME history'),
+    commandChart: Boolean(document.querySelector('.progress-panel svg polyline')),
+    commandProgressLinkSafe: document.querySelector('.review-panel a[href^="/progress"]')?.getAttribute('href')?.includes('report=') === false,
+    fixtureLeak: ['68 Kill Readiness', 'KILLABLE', '92%', '184 GUILDS', 'Ravok', 'Krynn', 'Astral Shift', 'Nether Eruption', 'DIED WITH PERSONAL', 'PERSONAL COVERAGE', '18.7M', '1.82M', '21.4M', '28.7%', '1.4s', 'Execute DPS'].some(value => document.body?.innerText?.includes(value))
   }))()`,
   );
   const entry = { viewport, surface, state, ...result };
@@ -1287,19 +1382,29 @@ try {
                 : playersMode === 'external'
                   ? bodies.playersExternal
                   : bodies.playersPending
-            : currentSurface === 'defensive-audit'
-              ? defensiveMode === 'gated'
-                ? bodies.defensiveGated
-                : defensiveMode === 'partial'
-                  ? bodies.defensivePartial
-                  : defensiveMode === 'external'
-                    ? bodies.defensiveExternal
-                    : bodies.defensiveReady
-              : pullMode === 'gated'
-                ? bodies.gatedOperational
-                : pullMode === 'insufficient'
-                  ? bodies.insufficientOperational
-                  : bodies.operational;
+            : currentSurface === 'command-center'
+              ? commandMode === 'gated'
+                ? bodies.commandGated
+                : commandMode === 'active-first'
+                  ? bodies.commandActiveFirst
+                  : commandMode === 'partial'
+                    ? bodies.commandPartial
+                    : commandMode === 'external'
+                      ? bodies.commandExternal
+                      : bodies.commandReady
+              : currentSurface === 'defensive-audit'
+                ? defensiveMode === 'gated'
+                  ? bodies.defensiveGated
+                  : defensiveMode === 'partial'
+                    ? bodies.defensivePartial
+                    : defensiveMode === 'external'
+                      ? bodies.defensiveExternal
+                      : bodies.defensiveReady
+                : pullMode === 'gated'
+                  ? bodies.gatedOperational
+                  : pullMode === 'insufficient'
+                    ? bodies.insufficientOperational
+                    : bodies.operational;
       void cdp.send('Fetch.fulfillRequest', {
         requestId: message.params.requestId,
         responseCode: 200,
@@ -1345,6 +1450,38 @@ try {
     { id: 'mobile', width: 390, height: 844, mobile: true },
   ]) {
     await cdp.send('Emulation.setDeviceMetricsOverride', { ...viewport, deviceScaleFactor: 1 });
+    await navigate(cdp, '/command-center', 'CONTEXT REQUIRED');
+    await audit(cdp, viewport.id, 'command-center', 'context');
+    await navigate(
+      cdp,
+      '/command-center?report=SANITIZED01&encounter=3010&difficulty=5',
+      'Report progression',
+    );
+    await audit(cdp, viewport.id, 'command-center', 'ready');
+    await navigate(
+      cdp,
+      '/command-center?report=SANITIZED01&encounter=3010&difficulty=5&visual=gated',
+      'CLASSIFICATION GATED',
+    );
+    await audit(cdp, viewport.id, 'command-center', 'gated');
+    await navigate(
+      cdp,
+      '/command-center?report=SANITIZED01&encounter=3010&difficulty=5&visual=active-first',
+      'ACTIVE PULL OBSERVED',
+    );
+    await audit(cdp, viewport.id, 'command-center', 'active-first');
+    await navigate(
+      cdp,
+      '/command-center?report=SANITIZED01&encounter=3010&difficulty=5&visual=partial',
+      'PARTIAL / SCOPED EVIDENCE',
+    );
+    await audit(cdp, viewport.id, 'command-center', 'partial');
+    await navigate(
+      cdp,
+      '/command-center?report=SANITIZED01&encounter=3010&difficulty=5&visual=external',
+      'EXTERNAL EVALUATION',
+    );
+    await audit(cdp, viewport.id, 'command-center', 'external');
     await navigate(cdp, '/composition', 'CONTEXT REQUIRED');
     await audit(cdp, viewport.id, 'composition', 'context');
     await navigate(
@@ -1490,6 +1627,38 @@ if (
   failures.push({ reason: 'context gate is not explicit' });
 if (
   audits
+    .filter((item) => item.surface === 'command-center' && item.state === 'ready')
+    .some((item) => !item.commandReady || !item.commandChart || !item.commandProgressLinkSafe)
+)
+  failures.push({
+    reason: 'Command Center ready state, chart or HOME Progress link is incomplete',
+  });
+if (
+  audits
+    .filter((item) => item.surface === 'command-center' && item.state === 'gated')
+    .some((item) => !item.commandGated || item.commandReady)
+)
+  failures.push({ reason: 'Command Center gated classification leaks a blocker' });
+if (
+  audits
+    .filter((item) => item.surface === 'command-center' && item.state === 'active-first')
+    .some((item) => !item.commandActiveFirst || item.commandChart)
+)
+  failures.push({ reason: 'Command Center open first pull became completed analytical evidence' });
+if (
+  audits
+    .filter((item) => item.surface === 'command-center' && item.state === 'partial')
+    .some((item) => !item.commandPartial || !item.commandReady)
+)
+  failures.push({ reason: 'Command Center partial state does not retain safe completed evidence' });
+if (
+  audits
+    .filter((item) => item.surface === 'command-center' && item.state === 'external')
+    .some((item) => !item.commandExternal || !item.commandReady)
+)
+  failures.push({ reason: 'Command Center external HOME boundary is incomplete' });
+if (
+  audits
     .filter((item) => item.surface === 'composition' && item.state === 'ready')
     .some((item) => !item.rosterReady || !item.partialVisible)
 )
@@ -1597,7 +1766,7 @@ const legacyReportApi = apiRequestRecords
   .filter((request) => request.surface !== 'progress' && request.surface !== 'players')
   .map((request) => request.url);
 if (
-  legacyReportApi.length !== 24 ||
+  legacyReportApi.length !== 34 ||
   legacyReportApi.some(
     (url) =>
       !/[?&]report=SANITIZED01/.test(url) ||
@@ -1608,6 +1777,23 @@ if (
   failures.push({
     reason: 'Existing report-scoped API requests are not exact and deterministic',
     apiRequests: legacyReportApi,
+  });
+const commandApi = apiRequestRecords
+  .filter((request) => request.surface === 'command-center')
+  .map((request) => request.url);
+if (
+  commandApi.length !== 10 ||
+  commandApi.some(
+    (url) =>
+      new URL(url).pathname !== '/api/wcl/operational-execution' ||
+      !/[?&]report=SANITIZED01/.test(url) ||
+      !/[?&]encounter=3010/.test(url) ||
+      !/[?&]difficulty=5/.test(url),
+  )
+)
+  failures.push({
+    reason: 'Command Center does not use one exact operational request per loaded state',
+    apiRequests: commandApi,
   });
 const defensiveApi = apiRequestRecords
   .filter((request) => request.surface === 'defensive-audit')
@@ -1670,6 +1856,7 @@ const externalRequestRecords = requests.filter(
   (request) => new URL(request.url).origin !== baseOrigin,
 );
 for (const surface of [
+  'command-center',
   'composition',
   'damage-healing',
   'pull-lab',
@@ -1702,5 +1889,5 @@ if (errors.length || failures.length) {
   process.exit(1);
 }
 console.log(
-  `[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 62 stubbed local API reads - 0 provider calls`,
+  `[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 72 stubbed local API reads - 0 provider calls`,
 );

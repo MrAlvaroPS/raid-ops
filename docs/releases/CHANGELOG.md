@@ -8,6 +8,15 @@ without tags they must not be read as independently proven deployment dates.
 
 ## Unreleased — Angular migration
 
+- Completed the Command Center Angular vertical slice as one exact-report
+  operational snapshot with reconciled pull/death populations, raw progression,
+  absolute-stage reach, latest-pull comparison and evidence-ranked blocker.
+- Removed Golden kill-readiness, cross-night, roster-effect, wipe-signature,
+  peer-benchmark and offline fallback claims; readiness is `NOT ASSESSED`,
+  roster changes are observational and linked deaths remain non-causal.
+- Replaced mixed report/telemetry/history/intelligence reads and route-global
+  status polling with one existing operational boundary, visible snapshot
+  freshness, explicit open-pull handling and exact review navigation.
 - Completed the Defensive Audit Angular vertical slice with one exact-scope
   operational request, reconciled death populations, actor-ID attribution,
   observed consumable casts and bounded classified death-chain replay.

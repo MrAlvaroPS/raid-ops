@@ -48,6 +48,7 @@ const angularOwners = [...catalog.matchAll(/\{([\s\S]*?)\},/g)]
   .map((match) => match[1].match(/id:\s*'([^']+)'/)?.[1])
   .filter(Boolean);
 const expectedAngularOwners = [
+  'command-center',
   'progress',
   'pull-lab',
   'damage-healing',
@@ -60,10 +61,16 @@ if (
   angularOwners.some((owner, index) => owner !== expectedAngularOwners[index])
 ) {
   failures.push(
-    `incremental ownership must contain only Defensive Audit, Players, Progress, Pull Lab, Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`,
+    `incremental ownership must contain only Command Center, Defensive Audit, Players, Progress, Pull Lab, Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`,
   );
 }
 const routes = await readFile(new URL('../src/app/app.routes.ts', import.meta.url), 'utf8');
+if (
+  !routes.includes("case 'command-center'") ||
+  !routes.includes('features/command-center/presentation/command-center-page')
+) {
+  failures.push('Command Center must resolve to its Angular presentation route');
+}
 if (
   !routes.includes("case 'progress'") ||
   !routes.includes('features/progress/presentation/progress-page')
@@ -206,6 +213,35 @@ for (const invariant of [
   if (!defensiveAuditContract.includes(invariant))
     failures.push(`Defensive Audit evidence invariant is missing: ${invariant}`);
 }
+const commandCenterRepository = await readFile(
+  new URL(
+    '../src/app/features/command-center/infrastructure/command-center-api.repository.ts',
+    import.meta.url,
+  ),
+  'utf8',
+);
+for (const parameter of ['report', 'encounter', 'difficulty']) {
+  if (!commandCenterRepository.includes(`${parameter}:`))
+    failures.push(`Command Center request must include explicit ${parameter}`);
+}
+if (!commandCenterRepository.includes('/api/wcl/operational-execution?'))
+  failures.push('Command Center must reuse the existing operational-execution boundary');
+const commandCenterContract = await readFile(
+  new URL(
+    '../src/app/features/command-center/infrastructure/command-center-api.contract.ts',
+    import.meta.url,
+  ),
+  'utf8',
+);
+for (const invariant of [
+  "metricContract: 'command-center-operational-overview-v1'",
+  "killReadiness: 'not-assessed'",
+  "refresh: 'manual-snapshot'",
+  "causality: 'evidence-ranked-association-only'",
+]) {
+  if (!commandCenterContract.includes(invariant))
+    failures.push(`Command Center evidence invariant is missing: ${invariant}`);
+}
 const runtime = await readFile(
   new URL('../src/app/core/config/runtime-config.ts', import.meta.url),
   'utf8',
@@ -219,5 +255,5 @@ if (failures.length) {
 }
 
 console.log(
-  `[architecture] PASS · ${files.length} source files · dependency direction and six-surface incremental ownership preserved`,
+  `[architecture] PASS · ${files.length} source files · dependency direction and seven-surface incremental ownership preserved`,
 );

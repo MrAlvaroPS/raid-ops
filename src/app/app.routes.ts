@@ -10,6 +10,14 @@ function productRoute(feature: FeatureDefinition): Route {
     data: { feature },
   };
   switch (feature.id) {
+    case 'command-center':
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/command-center/presentation/command-center-page/command-center.page').then(
+            (module) => module.CommandCenterPage,
+          ),
+      };
     case 'progress':
       return {
         ...route,

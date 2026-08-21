@@ -7,7 +7,7 @@ export const PRODUCT_FEATURES: readonly FeatureDefinition[] = Object.freeze([
     label: 'Command Center',
     shortLabel: 'Command',
     icon: '⌂',
-    owner: 'legacy',
+    owner: 'angular',
     complexity: 'high',
   },
   {

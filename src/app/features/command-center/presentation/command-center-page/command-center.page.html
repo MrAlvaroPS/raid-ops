@@ -1,0 +1,399 @@
+<section class="command-page">
+  <header class="page-heading">
+    <div>
+      <small>AVOID // RAID OPERATIONS CENTER</small>
+      <h1>Command Center</h1>
+    </div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  @switch (state().kind) {
+    @case ('context-required') {
+      <section class="state-panel context-card">
+        <span>EXACT WCL CONTEXT REQUIRED</span>
+        <h2>Open one operational snapshot</h2>
+        <p>
+          Supply a report, encounter and difficulty. Command Center never combines reports,
+          difficulties or Golden fallback values.
+        </p>
+        <app-wcl-scope-form label="Command Center scope" (scopeSubmitted)="applyScope($event)" />
+      </section>
+    }
+    @case ('loading') {
+      <section class="state-panel" aria-live="polite">
+        <span>LOADING OPERATIONAL SNAPSHOT</span>
+        <h2>Reconciling completed pull evidence</h2>
+        <p>
+          Progress, deaths and classified execution remain separate while the contract is checked.
+        </p>
+      </section>
+    }
+    @case ('error') {
+      <section class="state-panel error" role="alert">
+        <span>{{ $any(state()).retryable ? 'TRANSPORT ERROR' : 'CONTRACT ERROR' }}</span>
+        <h2>Operational summary was withheld</h2>
+        <p>{{ $any(state()).message }}</p>
+        @if ($any(state()).retryable) {
+          <button type="button" (click)="retry()">Retry exact scope</button>
+        }
+      </section>
+    }
+    @case ('empty') {
+      <section class="state-panel">
+        <span>{{
+          data()?.encounter?.inProgress ? 'ACTIVE PULL OBSERVED' : 'NO COMPLETED EVIDENCE'
+        }}</span>
+        <h2>
+          {{
+            data()?.encounter?.inProgress
+              ? 'The open pull is not a completed snapshot'
+              : 'Command Center is waiting'
+          }}
+        </h2>
+        <p>{{ data()?.emptyReason }}</p>
+        <app-wcl-scope-form
+          label="Change Command Center scope"
+          [initialScope]="$any(state()).scope"
+          (scopeSubmitted)="applyScope($event)"
+        />
+      </section>
+    }
+    @case ('ready') {
+      <section class="hero-panel">
+        <div>
+          <span>{{
+            data()!.encounter?.inProgress
+              ? 'ACTIVE PULL · COMPLETED SNAPSHOT HELD'
+              : 'COMPLETED PULL SNAPSHOT'
+          }}</span>
+          <h2>
+            @if (data()!.bestPull?.kill) {
+              Encounter defeated in this report
+            } @else {
+              {{ percent(data()!.bestPull?.fightPercentage ?? null) }} remains on the best pull
+            }
+          </h2>
+          <p>
+            Operational overview for one exact report scope. It summarizes observed progress and
+            evidence-ranked classification without inventing kill readiness.
+          </p>
+          <div class="scope-line">
+            <b>{{ data()!.encounter?.name ?? 'Encounter ' + data()!.encounter?.id }}</b>
+            <span>{{ data()!.encounter?.difficultyName }}</span
+            ><span>{{ data()!.reportCode }}</span>
+            <em [class.external]="data()!.homeRaidEligible === false">{{
+              data()!.homeRaidEligible === true
+                ? 'HOME REPORT'
+                : data()!.homeRaidEligible === false
+                  ? 'EXTERNAL EVALUATION'
+                  : 'SOURCE UNRESOLVED'
+            }}</em>
+            <small>Snapshot {{ snapshotTime(data()!.generatedAt) }} · no polling</small>
+          </div>
+          <nav class="hero-actions" aria-label="Command Center primary review routes">
+            <a routerLink="/pull-lab" [queryParams]="scopeQuery()">Open Pull Lab</a>
+            <a routerLink="/defensive-audit" [queryParams]="scopeQuery()">Review deaths</a>
+          </nav>
+        </div>
+        <aside>
+          <small>KILL READINESS</small><b>—</b><span>NOT ASSESSED</span>
+          <em>No versioned readiness engine exists</em>
+        </aside>
+      </section>
+
+      @if (data()!.partialReasons.length) {
+        <details class="partial" open>
+          <summary>PARTIAL / SCOPED EVIDENCE</summary>
+          @for (reason of data()!.partialReasons; track reason) {
+            <p>{{ reason }}</p>
+          }
+        </details>
+      }
+
+      <section class="metric-strip" aria-label="Operational summary metrics">
+        <article>
+          <small>BEST PULL</small
+          ><b>{{
+            data()!.bestPull?.kill ? 'KILL' : percent(data()!.bestPull?.fightPercentage ?? null)
+          }}</b
+          ><span>WCL boss health remaining</span>
+        </article>
+        <article>
+          <small>DEEPEST STAGE</small><b>{{ stages().length ? 'S' + stages().length : '—' }}</b
+          ><span>Absolute-stage model</span>
+        </article>
+        <article>
+          <small>MEANINGFUL DEATHS</small><b>{{ data()!.deathCounts?.meaningful ?? '—' }}</b
+          ><span
+            >{{ data()!.deathCounts?.raw ?? '—' }} raw ·
+            {{ data()!.deathCounts?.first ?? '—' }} first</span
+          >
+        </article>
+        <article>
+          <small>BEST-PULL RAID DPS</small><b>{{ compact(data()!.bestPull?.raidDps ?? null) }}</b
+          ><span>WCL Summary throughput</span>
+        </article>
+        <article>
+          <small>ELIGIBLE PULLS</small><b>{{ data()!.population?.eligiblePulls ?? '—' }}</b
+          ><span
+            >{{ data()!.population?.excludedPulls ?? 0 }} excluded of
+            {{ data()!.population?.rawPulls ?? '—' }}</span
+          >
+        </article>
+      </section>
+
+      <section class="primary-grid">
+        <article class="panel progress-panel">
+          <header>
+            <span>01</span>
+            <div>
+              <h2>Report progression</h2>
+              <p>Raw chronological eligible pulls · lower remaining health is deeper</p>
+            </div>
+            <b>{{ data()!.pulls.length }} PULLS</b>
+          </header>
+          <div class="chart-wrap">
+            <div class="chart-axis">
+              <span>0% · KILL</span><span>50%</span><span>100% · PULL START</span>
+            </div>
+            <svg
+              viewBox="0 -4 100 108"
+              preserveAspectRatio="none"
+              role="img"
+              aria-label="Boss health remaining by eligible pull"
+            >
+              <line x1="0" y1="0" x2="100" y2="0" />
+              <line x1="0" y1="50" x2="100" y2="50" />
+              <line x1="0" y1="100" x2="100" y2="100" />
+              <polyline [attr.points]="points()" />
+              @for (pull of data()!.pulls; track pull.fightId; let index = $index) {
+                <circle
+                  [attr.cx]="chartX(index, data()!.pulls.length)"
+                  [attr.cy]="chartY(pull)"
+                  r="1.8"
+                >
+                  <title>
+                    Pull {{ pull.pullNumber }} ·
+                    {{ pull.kill ? 'kill' : percent(pull.fightPercentage) }}
+                  </title>
+                </circle>
+              }
+            </svg>
+          </div>
+          <div class="chart-labels">
+            @for (pull of data()!.pulls; track pull.fightId) {
+              <span>#{{ pull.pullNumber }}</span>
+            }
+          </div>
+        </article>
+
+        <article class="panel blocker-panel">
+          <header>
+            <span>02</span>
+            <div>
+              <h2>Current operational blocker</h2>
+              <p>Evidence-ranked classified execution, never a causal verdict</p>
+            </div>
+            <b [class.gated]="data()!.classificationStatus !== 'ready'">{{
+              data()!.classificationStatus === 'ready'
+                ? 'CLASSIFIED'
+                : data()!.classificationStatus.toUpperCase()
+            }}</b>
+          </header>
+          @if (data()!.blocker; as blocker) {
+            <div class="blocker-name">
+              <small>{{ blocker.confidence.toUpperCase() }} CONFIDENCE</small>
+              <h3>{{ blocker.name }}</h3>
+              <p>
+                {{ blocker.failedOccurrences }} failed occurrence(s) across
+                {{ blocker.affectedPulls }} eligible pull(s).
+              </p>
+            </div>
+            <div class="blocker-grid">
+              <div>
+                <small>FAILURES / OPPORTUNITIES</small
+                ><b>{{ blocker.failedOccurrences }} / {{ blocker.opportunities }}</b
+                ><span>{{
+                  blocker.failureRate == null
+                    ? 'Denominator unavailable'
+                    : percent(blocker.failureRate * 100)
+                }}</span>
+              </div>
+              <div>
+                <small>RECENT FAILURES</small><b>{{ blocker.recentFailures }}</b
+                ><span>Recent completed execution window</span>
+              </div>
+              <div>
+                <small>LINKED DEATHS</small><b>{{ blocker.linkedDeaths }}</b
+                ><span>Temporal associations, not proof</span>
+              </div>
+            </div>
+            <details class="method">
+              <summary>WHY THIS BLOCKER?</summary>
+              <p>
+                {{ blocker.scoringModel }}. Observed occurrence does not imply failure; only active
+                rule-pack classifications enter this ranking.
+              </p>
+            </details>
+          } @else {
+            <div class="gated-state">
+              <b>{{
+                data()!.classificationStatus === 'gated'
+                  ? 'CLASSIFICATION GATED'
+                  : 'NO BLOCKER ESTABLISHED'
+              }}</b>
+              <p>{{ data()!.classificationReason }}</p>
+            </div>
+          }
+        </article>
+      </section>
+
+      <section class="change-grid">
+        <article class="panel change-panel">
+          <header>
+            <span>03</span>
+            <div>
+              <h2>Latest vs previous eligible pull</h2>
+              <p>
+                Pull {{ data()!.comparison?.currentPull ?? '—' }} compared with pull
+                {{ data()!.comparison?.baselinePull ?? '—' }} · not a cross-night claim
+              </p>
+            </div>
+          </header>
+          @if (data()!.comparison; as comparison) {
+            <div class="signal-columns">
+              <div>
+                <h3>IMPROVED</h3>
+                @for (signal of improvements(); track signal.key) {
+                  <p>
+                    <b>{{ signal.label }}</b
+                    ><span
+                      >{{ signalValue(signal, 'baseline') }} →
+                      {{ signalValue(signal, 'current') }}</span
+                    >
+                  </p>
+                } @empty {
+                  <p class="none">No directional improvement established.</p>
+                }
+              </div>
+              <div>
+                <h3>REGRESSED</h3>
+                @for (signal of regressions(); track signal.key) {
+                  <p>
+                    <b>{{ signal.label }}</b
+                    ><span
+                      >{{ signalValue(signal, 'baseline') }} →
+                      {{ signalValue(signal, 'current') }}</span
+                    >
+                  </p>
+                } @empty {
+                  <p class="none">No directional regression established.</p>
+                }
+              </div>
+              <div>
+                <h3>ROSTER OBSERVATION</h3>
+                <p>
+                  <b>{{
+                    comparison.rosterChanged
+                      ? 'Roster fingerprint changed'
+                      : 'Roster fingerprint unchanged'
+                  }}</b
+                  ><span>No performance effect or causality is inferred.</span>
+                </p>
+              </div>
+            </div>
+          } @else {
+            <div class="gated-state">
+              <b>COMPARISON UNAVAILABLE</b>
+              <p>At least two eligible completed pulls are required.</p>
+            </div>
+          }
+        </article>
+      </section>
+
+      <section class="lower-grid">
+        <article class="panel stage-panel">
+          <header>
+            <span>04</span>
+            <div>
+              <h2>Stage control</h2>
+              <p>Eligible pulls reaching each absolute stage</p>
+            </div>
+          </header>
+          @for (stage of stages(); track $index) {
+            <div class="stage-row">
+              <b>STAGE {{ $index + 1 }}</b
+              ><span><i [style.width.%]="stage.percent ?? 0"></i></span
+              ><em>{{ stage.reached }}/{{ stage.total }} · {{ percent(stage.percent, 0) }}</em>
+            </div>
+          }
+        </article>
+        <article class="panel evidence-panel">
+          <header>
+            <span>05</span>
+            <div>
+              <h2>Evidence coverage</h2>
+              <p>What this snapshot may and may not claim</p>
+            </div>
+          </header>
+          <dl>
+            <div>
+              <dt>SCOPE</dt>
+              <dd>{{ data()!.encounter?.scopeKey }}</dd>
+            </div>
+            <div>
+              <dt>CLASSIFICATION</dt>
+              <dd>{{ data()!.classificationStatus.toUpperCase() }}</dd>
+            </div>
+            <div>
+              <dt>RULE PACK</dt>
+              <dd>
+                {{ data()!.rulePack?.slug ?? 'NOT CONNECTED' }}
+                {{ data()!.rulePack?.version ?? '' }}
+              </dd>
+            </div>
+            <div>
+              <dt>KILL READINESS</dt>
+              <dd>NOT ASSESSED</dd>
+            </div>
+            <div>
+              <dt>REFRESH</dt>
+              <dd>MANUAL SNAPSHOT</dd>
+            </div>
+          </dl>
+        </article>
+        <article class="panel review-panel">
+          <header>
+            <span>06</span>
+            <div>
+              <h2>Continue the review</h2>
+              <p>Each destination keeps its own evidence contract</p>
+            </div>
+          </header>
+          <nav aria-label="Command Center review destinations">
+            <a routerLink="/progress" [queryParams]="progressQuery()"
+              ><b>Progress</b><span>Persisted HOME history · no report parameter</span></a
+            >
+            <a routerLink="/pull-lab" [queryParams]="scopeQuery()"
+              ><b>Pull Lab</b><span>Compare exact completed pulls</span></a
+            >
+            <a routerLink="/defensive-audit" [queryParams]="scopeQuery()"
+              ><b>Defensive Audit</b><span>Replay observed death evidence</span></a
+            >
+            <a routerLink="/mechanics" [queryParams]="scopeQuery()"
+              ><b>Mechanics</b><span>Reference and execution evidence</span></a
+            >
+          </nav>
+        </article>
+      </section>
+
+      <footer class="evidence-footer">
+        <span>{{ data()!.evidence.source }}</span
+        ><span>{{ data()!.evidence.metricContract }}</span
+        ><span>{{ data()!.encounter?.scopeKey }}</span
+        ><span>Readiness not assessed</span><span>Roster change ≠ effect</span
+        ><span>Active pull ≠ completed evidence</span>
+      </footer>
+    }
+  }
+</section>

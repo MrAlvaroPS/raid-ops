@@ -1,8 +1,8 @@
 # Phase 4 — incremental product migration
 
-Status: in progress. Defensive Audit, Players, Progress, Pull Lab, Damage &
-Healing and Composition are complete in Angular (6 of 11 product surfaces);
-production-wide routing remains on the legacy application.
+Status: in progress. Command Center, Defensive Audit, Players, Progress, Pull
+Lab, Damage & Healing and Composition are complete in Angular (7 of 11 product
+surfaces); production-wide routing remains on the legacy application.
 
 This is the next original roadmap phase after the Phase 3 Clean Architecture
 foundation. It migrates one complete vertical capability at a time and remains
@@ -338,19 +338,96 @@ switch remains disabled and the verified React route remains rollback-only.
 Detailed behaviour and contradiction decisions are canonical in
 [the Defensive Audit feature contract](../features/defensive-audit/README.md).
 
-## Next slice inside Phase 4 — Command Center
+## Slice 4.7 — Command Center (complete)
 
-The next recommended vertical slice is **Command Center**. Before changing its
-UI it must inventory every readiness, blocker, pull, progress and roster value;
-freeze source, scope, freshness and partial/error semantics; and prove each
-navigation target. Golden dashboard values must not survive as connected,
-waiting or offline data.
+### Completed scope
 
-Command Center is a **high-complexity** slice because it aggregates several
-already-migrated and still-legacy data planes. Use a high-reasoning model to
-avoid duplicate requests, contradictory freshness, false readiness and hidden
-cross-scope joins. LIVE, Loot and Iris remain deferred until their own later
-slices.
+- audited Golden/React, its fixtures, the active dashboard runtime, report,
+  telemetry, history, intelligence and status reads, consolidated operational
+  execution, pull comparison, blocker/death-chain analysis, readiness
+  placeholder, tests, contracts, documentation and desktop/mobile baselines;
+- froze Command Center as one exact-report operational overview, not a new data
+  provider or longitudinal source;
+- replaced four mixed-freshness frontend reads and global status polling with
+  one existing exact-scope operational execution request;
+- migrated the route into domain, application, infrastructure and presentation
+  layers with a concrete fail-closed decoder;
+- reconciled raw/eligible/excluded pulls, fight identity, latest/previous/best
+  pulls, chronological order and raw/meaningful/first-death populations;
+- retained best pull, raw report progression, absolute-stage reach, best-pull
+  raid DPS, latest-vs-previous eligible pull and evidence-ranked blocker facts;
+- retained roster fingerprint change only as an observation and blocked any
+  performance-effect or causal interpretation;
+- kept linked deaths as temporal associations and observed occurrences separate
+  from classified failure;
+- removed Golden kill readiness, cross-night wording, wipe signatures, peer
+  benchmark and offline/API fallback values;
+- added context, loading, waiting, active-first-pull, ready, gated,
+  insufficient, partial/truncated, external, transport-error and contract-error
+  behaviour;
+- made snapshot freshness and no-polling ownership visible;
+- proved exact-scope Pull Lab, Defensive Audit and Mechanics navigation and a
+  report-free HOME Progress link;
+- transferred frontend behaviour, metric/null policy, contradiction and visual
+  documentation to Angular.
+
+### Contract and operational gates
+
+- request/response identity is `report + encounter + difficulty`; evidence is
+  isolated by `encounter + difficulty` and rejects cross-difficulty fallback;
+- an active pull never becomes a completed analytical pull or changes a closed
+  snapshot metric;
+- kill readiness remains `NOT ASSESSED`; a boss kill is a separate observed
+  fact, not a fabricated score;
+- blocker status, confidence, recurrence, opportunity, recent-failure,
+  eligible-fight and linked-death populations reconcile before display;
+- classification gating retains safe telemetry and never becomes zero failures;
+- the operational endpoint may acquire WCL evidence and persist eligible HOME
+  products; external evaluation never enters HOME;
+- Angular adds no endpoint, WCL query, polling, persistence or corpus mutation;
+  deterministic visual verification intercepts the endpoint before dispatch.
+
+### Verified gates
+
+- 92 Angular tests across 27 files pass, including exact request, service-level
+  gated response, active-pull, scope, population, blocker and null-policy tests;
+- 42 focused legacy tests preserve Pull Intelligence, operational execution,
+  occurrence/failure separation, screen ownership and LIVE budget contracts;
+- production build, bundle budgets, Clean Architecture and documentation gates
+  pass;
+- cumulative Edge/CDP verification passes 62 route/viewport checks, including
+  twelve Command Center captures for context, ready, gated, active-first,
+  partial and external states at 1440x900 and 390x844;
+- ten deterministic Command Center reads are intercepted with zero provider
+  calls, persistence mutations, browser errors, overflow or Golden findings;
+- the optional `agent-browser` CLI is unavailable; the repository Edge/CDP
+  verifier remains the recorded substitute. A later rerun attempt was blocked
+  by the environment execution quota after the contract-only correction; that
+  correction is covered by unit tests and does not change the accepted visual
+  fixture or presentation.
+
+### Ownership and rollback
+
+`feature-catalog.ts` now marks exactly Command Center, Defensive Audit, Players,
+Progress, Pull Lab, Damage & Healing and Composition as Angular-owned. The
+global production switch remains disabled and the verified React route remains
+rollback-only.
+
+Detailed behaviour and contradiction decisions are canonical in
+[the Command Center feature contract](../features/command-center/README.md).
+
+## Next slice inside Phase 4 — LIVE
+
+The next recommended vertical slice is **LIVE**. Before changing its UI it must
+inventory active-report manifest ownership, every polling loop and fallback,
+closed-pull change detection, cancellation, partial hydration, rate-budget and
+stop/restart behaviour. It must prove that an unchanged poll does not trigger
+rich telemetry work and that scope changes cancel obsolete activity.
+
+LIVE is a **very-high-complexity** slice. Use a high-reasoning model because a
+mistake can spend WCL budget, race scopes, duplicate persisted work or present
+an open pull as completed evidence. Loot and both Mechanics products remain
+deferred until their own later slices.
 
 ## Phase exit condition
 

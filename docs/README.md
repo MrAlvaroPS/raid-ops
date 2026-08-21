@@ -19,6 +19,7 @@ retained in the legacy repository, but it is not edited in two places.
 
 ## Migrated features
 
+- [Command Center behaviour, aggregation and evidence decisions](./features/command-center/README.md)
 - [Composition behaviour, contract and visual decisions](./features/composition/README.md)
 - [Damage & Healing behaviour, metric contract and visual decisions](./features/damage-healing/README.md)
 - [Pull Lab behaviour, comparison contract and visual decisions](./features/pull-lab/README.md)

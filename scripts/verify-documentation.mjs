@@ -43,6 +43,7 @@ const required = [
   'docs/features/progress/README.md',
   'docs/features/players/README.md',
   'docs/features/defensive-audit/README.md',
+  'docs/features/command-center/README.md',
   'docs/migration/baseline/CURRENT-ARCHITECTURE-BASELINE.md',
   'docs/migration/baseline/DATA-PERSISTENCE-BASELINE.md',
   'docs/visual/LIVING-VISUAL-BASELINE.md',
@@ -55,6 +56,7 @@ const required = [
   'docs/migration/evidence/phase4-progress-verification.json',
   'docs/migration/evidence/phase4-players-verification.json',
   'docs/migration/evidence/phase4-defensive-audit-verification.json',
+  'docs/migration/evidence/phase4-command-center-verification.json',
   'docs/migration/evidence/visual/offline/manifest.json',
 ];
 
@@ -118,6 +120,12 @@ const players = JSON.parse(
 const defensiveAudit = JSON.parse(
   await readFile(
     join(root, 'docs/migration/evidence/phase4-defensive-audit-verification.json'),
+    'utf8',
+  ),
+);
+const commandCenter = JSON.parse(
+  await readFile(
+    join(root, 'docs/migration/evidence/phase4-command-center-verification.json'),
     'utf8',
   ),
 );
@@ -359,6 +367,58 @@ for (const capture of defensiveAudit.visualEvidence?.captures ?? []) {
   if (digest !== capture.sha256)
     failures.push(`Defensive Audit visual evidence hash mismatch: ${capture.file}`);
 }
+if (commandCenter.surface !== 'command-center' || commandCenter.frontendOwner !== 'angular')
+  failures.push('Phase 4 evidence does not transfer Command Center ownership');
+if (commandCenter.productionSwitchEnabled !== false)
+  failures.push('Command Center evidence must keep the global production switch disabled');
+if (
+  commandCenter.results?.wclProviderCalls !== 0 ||
+  commandCenter.results?.databaseOrCorpusMutations !== 0
+)
+  failures.push('Command Center visual evidence must remain provider- and mutation-free');
+if (
+  commandCenter.scopeContract?.identity !== 'report+encounter+difficulty' ||
+  commandCenter.scopeContract?.evidenceIdentity !== 'encounter+difficulty' ||
+  commandCenter.scopeContract?.crossDifficultyComparisonForbidden !== true ||
+  commandCenter.scopeContract?.activePullIsCompletedEvidence !== false ||
+  commandCenter.scopeContract?.progressLinkCarriesReport !== false ||
+  commandCenter.scopeContract?.externalReportsPersistedAsHome !== false
+)
+  failures.push('Command Center evidence lost scope, active-pull or HOME isolation');
+if (
+  commandCenter.metricContract?.version !== 'command-center-operational-overview-v1' ||
+  commandCenter.metricContract?.refresh !== 'manual snapshot; no route polling' ||
+  commandCenter.metricContract?.latestComparison !==
+    'latest eligible pull versus previous eligible pull' ||
+  commandCenter.metricContract?.raidDpsDirection !== 'same absolute stage only' ||
+  commandCenter.metricContract?.rosterEffect !== 'not inferred' ||
+  commandCenter.metricContract?.killReadiness !== 'not-assessed' ||
+  commandCenter.metricContract?.blockerCausality !==
+    'evidence-ranked association only; not causal proof'
+)
+  failures.push('Command Center evidence weakened freshness, readiness or causal semantics');
+if (
+  commandCenter.operationalBoundary?.endpointMayAcquireWcl !== true ||
+  commandCenter.operationalBoundary?.endpointMayPersistHomeOperationalProducts !== true ||
+  commandCenter.operationalBoundary?.externalEvaluationNeverHome !== true ||
+  commandCenter.operationalBoundary?.routePollingAdded !== false ||
+  commandCenter.operationalBoundary?.visualDispatch !== false
+)
+  failures.push('Command Center evidence misstates the operational endpoint boundary');
+if (commandCenter.visualEvidence?.captures?.length !== 12)
+  failures.push('Command Center evidence must contain twelve responsive state captures');
+for (const capture of commandCenter.visualEvidence?.captures ?? []) {
+  const path = join(root, 'docs/migration/evidence/visual/command-center', capture.file);
+  if (!(await exists(path))) {
+    failures.push(`missing Command Center visual evidence: ${capture.file}`);
+    continue;
+  }
+  const digest = createHash('sha256')
+    .update(await readFile(path))
+    .digest('hex');
+  if (digest !== capture.sha256)
+    failures.push(`Command Center visual evidence hash mismatch: ${capture.file}`);
+}
 
 const parity = await readFile(join(root, 'docs/migration/PARITY-MATRIX.md'), 'utf8');
 const requiredSurfaces = [
@@ -405,5 +465,5 @@ if (failures.length) {
 }
 
 console.log(
-  `[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length + pullLab.visualEvidence.captures.length + progress.visualEvidence.captures.length + players.visualEvidence.captures.length + defensiveAudit.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`,
+  `[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length + pullLab.visualEvidence.captures.length + progress.visualEvidence.captures.length + players.visualEvidence.captures.length + defensiveAudit.visualEvidence.captures.length + commandCenter.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`,
 );
