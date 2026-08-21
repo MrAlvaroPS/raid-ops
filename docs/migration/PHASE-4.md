@@ -1,8 +1,8 @@
 # Phase 4 — incremental product migration
 
-Status: in progress. Players, Progress, Pull Lab, Damage & Healing and
-Composition are complete in Angular (5 of 11 product surfaces); production-wide
-routing remains on the legacy application.
+Status: in progress. Defensive Audit, Players, Progress, Pull Lab, Damage &
+Healing and Composition are complete in Angular (6 of 11 product surfaces);
+production-wide routing remains on the legacy application.
 
 This is the next original roadmap phase after the Phase 3 Clean Architecture
 foundation. It migrates one complete vertical capability at a time and remains
@@ -285,17 +285,71 @@ disabled and the React implementation remains rollback-only.
 Detailed behaviour and contradiction decisions are canonical in
 [the Players feature contract](../features/players/README.md).
 
-## Next slice inside Phase 4 — Defensive Audit
+## Slice 4.6 — Defensive Audit (complete)
 
-The next recommended vertical slice is **Defensive Audit**. Before changing its
-UI it must freeze the exact report/encounter/difficulty population, death-chain
-semantics, defensive-availability evidence, player attribution, null policy and
-the boundary between observed sequence and proven causality. Golden audit
-fixtures must never become readiness or blame claims.
+### Completed scope
 
-Defensive Audit is a **high-complexity** slice because incomplete availability
-and causal evidence can easily be presented as a player failure. Use a
-high-reasoning model. LIVE, Loot and Iris remain deferred until their own later
+- audited Golden/React, both active defensive renderers, telemetry,
+  operational execution, death extraction, probable death chains, defensive
+  analysis/rule-pack placeholders, Reliability/evidence doctrine, tests and
+  desktop/mobile baselines before editing;
+- migrated Defensive Audit into domain, application, infrastructure and
+  presentation layers using one existing exact-scope operational request;
+- reconciled raw, meaningful, first-death and classified-chain populations,
+  eligible fights and numeric actor identity;
+- retained meaningful deaths, first deaths, observed Healthstone/potion casts
+  and bounded classified evidence replay;
+- labelled the root-cause analyser output as a probable temporal association,
+  retaining its explicit no-causal-proof disclaimer;
+- kept defensive availability and inventory `UNKNOWN`, preventability
+  `NOT ASSESSED`, and removed unsupported opportunity-rate/readiness/failure
+  claims;
+- retained chain-only actors with limited provenance instead of dropping them
+  or joining them by display name;
+- added context-required, loading, empty/waiting, reference-gated, ready,
+  partial/truncated, external-evaluation, transport-error and contract-error
+  behaviour;
+- made the filter and selected chain URL-owned without triggering another API
+  read;
+- replaced the fictional assigned-cooldown plan with an explicit missing-
+  evidence boundary;
+- transferred the frontend behaviour, populations, evidence/null policy,
+  contradictions and visual decisions to Angular.
+
+### Contract and operational gates
+
+- request and response remain `report + encounter + difficulty`, with evidence
+  isolated by `encounter + difficulty` and no cross-difficulty fallback;
+- observed mechanic occurrence never implies failure, and incomplete/gated
+  classification never becomes a zero count;
+- absent consumable casts never imply absent inventory or a missed opportunity;
+- the existing endpoint may query WCL and persist operational HOME products;
+  external reports remain evaluation-only and never HOME evidence;
+- Angular adds no endpoint, query, polling loop, persistence or corpus mutation;
+- deterministic visual evidence intercepts the endpoint before dispatch and
+  therefore spends zero provider budget and performs zero mutations.
+
+### Ownership and rollback
+
+`feature-catalog.ts` now marks exactly Defensive Audit, Players, Progress, Pull
+Lab, Damage & Healing and Composition as Angular-owned. The global production
+switch remains disabled and the verified React route remains rollback-only.
+
+Detailed behaviour and contradiction decisions are canonical in
+[the Defensive Audit feature contract](../features/defensive-audit/README.md).
+
+## Next slice inside Phase 4 — Command Center
+
+The next recommended vertical slice is **Command Center**. Before changing its
+UI it must inventory every readiness, blocker, pull, progress and roster value;
+freeze source, scope, freshness and partial/error semantics; and prove each
+navigation target. Golden dashboard values must not survive as connected,
+waiting or offline data.
+
+Command Center is a **high-complexity** slice because it aggregates several
+already-migrated and still-legacy data planes. Use a high-reasoning model to
+avoid duplicate requests, contradictory freshness, false readiness and hidden
+cross-scope joins. LIVE, Loot and Iris remain deferred until their own later
 slices.
 
 ## Phase exit condition

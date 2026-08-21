@@ -16,14 +16,15 @@ retained in the legacy repository, but it is not edited in two places.
 - [Phase 2](./migration/PHASE-2.md)
 - [Phase 3](./migration/PHASE-3.md)
 - [Phase 4 — incremental product migration](./migration/PHASE-4.md)
-- [Progress frontend contract](./features/progress/README.md)
 
 ## Migrated features
 
 - [Composition behaviour, contract and visual decisions](./features/composition/README.md)
 - [Damage & Healing behaviour, metric contract and visual decisions](./features/damage-healing/README.md)
 - [Pull Lab behaviour, comparison contract and visual decisions](./features/pull-lab/README.md)
+- [Progress behaviour, longitudinal metric contract and visual decisions](./features/progress/README.md)
 - [Players behaviour, Reliability publication and identity decisions](./features/players/README.md)
+- [Defensive Audit behaviour, evidence limits and visual decisions](./features/defensive-audit/README.md)
 
 ## Architecture and governance
 

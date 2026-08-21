@@ -55,10 +55,11 @@ is never silently overwritten. No visual verification may acquire WCL/provider
 data or mutate the corpus merely to populate a screenshot.
 
 Accepted Phase 4 route baselines currently cover Composition, Damage & Healing,
-Pull Lab, Progress and Players. The Players baseline deliberately replaces the
-fictional Golden roster, score and trend with context-required, Reliability
-pending/published/data-error and external-not-applicable evidence on desktop and
-mobile; it retains the compact roster+dossier visual hierarchy.
+Pull Lab, Progress, Players and Defensive Audit. The Defensive Audit baseline
+retains the dense metrics, participant ledger and evidence-replay hierarchy but
+replaces fictional preventability, personal readiness, opportunity rates and
+cooldown plans with observed counts, probable-association labels and explicit
+unknown/not-assessed boundaries on desktop and mobile.
 
 The former immutable hash manifest is archived because it had drifted from the
 retained files before this policy was adopted. `npm run verify:visual-reference`

@@ -715,6 +715,120 @@ const playersTelemetryFixture = {
     },
   })),
 };
+const defensiveTelemetryFixture = {
+  ...playersTelemetryFixture,
+  analysisPopulation: pullTelemetryFixture.pullIntelligence.analysisPopulation,
+  pullIntelligence: pullTelemetryFixture.pullIntelligence,
+  deaths: {
+    rawCount: 5,
+    meaningfulCount: 3,
+    firstDeathCount: 2,
+    wipeCutoff: 5,
+  },
+  consumables: {
+    detectedUsesByPlayerName: {
+      aster: { healthstone: 1, potion: 1 },
+      birch: { healthstone: 0, potion: 1 },
+      cinder: { healthstone: 1, potion: 0 },
+    },
+    availability: 'not-proven-by-wcl',
+  },
+  bestPullEvents: { pagesIncomplete: { deaths: false } },
+};
+const defensiveDeathChains = {
+  status: 'probable-causality',
+  windowMs: 10_000,
+  total: 3,
+  classified: 2,
+  disclaimer: 'Probable cause is an evidence-ranked temporal association, not proof of causation.',
+  chains: [
+    {
+      fightId: 76,
+      actorId: 1,
+      player: 'Aster',
+      deathAtMs: 1787230810000,
+      fightRelativeMs: 96_000,
+      killingBlow: 'Sanitized impact',
+      confidence: 'high',
+      probableCause: {
+        mechanicKey: 'sanitized-soak',
+        mechanicName: 'Sanitized soak',
+        reason: 'Observed impact did not satisfy the active rule.',
+        occurredMsBeforeDeath: 2_800,
+      },
+      evidence: [
+        {
+          mechanicKey: 'sanitized-wave',
+          mechanicName: 'Sanitized wave',
+          reason: 'Observed pressure window.',
+          deltaMs: 7_200,
+          confidence: 'medium',
+        },
+        {
+          mechanicKey: 'sanitized-soak',
+          mechanicName: 'Sanitized soak',
+          reason: 'Observed impact did not satisfy the active rule.',
+          deltaMs: 2_800,
+          confidence: 'high',
+        },
+      ],
+    },
+    {
+      fightId: 77,
+      actorId: 3,
+      player: 'Cinder',
+      deathAtMs: 1787230820000,
+      fightRelativeMs: 128_000,
+      killingBlow: 'Sanitized wave',
+      confidence: 'medium',
+      probableCause: {
+        mechanicKey: 'sanitized-wave',
+        mechanicName: 'Sanitized wave',
+        reason: 'Classified exposure preceded the death.',
+        occurredMsBeforeDeath: 4_100,
+      },
+      evidence: [
+        {
+          mechanicKey: 'sanitized-wave',
+          mechanicName: 'Sanitized wave',
+          reason: 'Classified exposure preceded the death.',
+          deltaMs: 4_100,
+          confidence: 'medium',
+        },
+      ],
+    },
+    {
+      fightId: 77,
+      actorId: 9,
+      player: 'Ember',
+      deathAtMs: 1787230824000,
+      fightRelativeMs: 132_000,
+      killingBlow: 'Unclassified damage',
+      confidence: 'unknown',
+      probableCause: null,
+      evidence: [],
+    },
+  ],
+};
+const makeDefensiveOperational = (mode) => ({
+  ...operationalFixture,
+  status: mode === 'gated' ? 'boss-reference-not-ready' : 'ready',
+  raidKnowledge: {
+    scope: mode === 'external' ? 'external-evaluation-only' : 'home-raid',
+    homeRaidEligible: mode !== 'external',
+  },
+  telemetry: defensiveTelemetryFixture,
+  mechanics: mode === 'gated' ? null : operationalFixture.mechanics,
+  deathChains: mode === 'gated' ? null : defensiveDeathChains,
+  dataCompleteness: {
+    ...operationalFixture.dataCompleteness,
+    meaningfulDeaths: { events: 3, truncated: mode === 'partial' },
+  },
+  evidenceContract:
+    mode === 'gated'
+      ? { sameDifficultyOnly: true, noUnrehearsedMechanicClassification: true }
+      : { ...evidenceContract, observedMechanicDoesNotImplyFailure: true },
+});
 const reliabilityComponent = (
   dimension,
   status = 'pending',
@@ -907,11 +1021,20 @@ const bodies = {
     'base64',
   ),
   playersHistory: Buffer.from(JSON.stringify(playersHistoryFixture)).toString('base64'),
+  defensiveReady: Buffer.from(JSON.stringify(makeDefensiveOperational('ready'))).toString('base64'),
+  defensiveGated: Buffer.from(JSON.stringify(makeDefensiveOperational('gated'))).toString('base64'),
+  defensivePartial: Buffer.from(JSON.stringify(makeDefensiveOperational('partial'))).toString(
+    'base64',
+  ),
+  defensiveExternal: Buffer.from(JSON.stringify(makeDefensiveOperational('external'))).toString(
+    'base64',
+  ),
 };
 let partialMode = false;
 let pullMode = 'ready';
 let progressMode = 'ready';
 let playersMode = 'pending';
+let defensiveMode = 'ready';
 let currentSurface = 'unknown';
 const edge = [
   process.env.RAID_OPS_BROWSER_PATH,
@@ -1015,6 +1138,13 @@ async function navigate(cdp, path, readyText) {
       : path.includes('visual=external')
         ? 'external'
         : 'pending';
+  defensiveMode = path.includes('visual=gated')
+    ? 'gated'
+    : path.includes('visual=partial')
+      ? 'partial'
+      : path.includes('visual=external')
+        ? 'external'
+        : 'ready';
   currentSurface = path.startsWith('/composition')
     ? 'composition'
     : path.startsWith('/damage-healing')
@@ -1025,7 +1155,9 @@ async function navigate(cdp, path, readyText) {
           ? 'progress'
           : path.startsWith('/players')
             ? 'players'
-            : 'unknown';
+            : path.startsWith('/defensive-audit')
+              ? 'defensive-audit'
+              : 'unknown';
   await cdp.send('Page.navigate', { url: new URL(path, baseUrl).href });
   for (let attempt = 0; attempt < 100; attempt += 1) {
     const ready = await evaluate(
@@ -1081,7 +1213,12 @@ async function audit(cdp, viewport, surface, state) {
     playersDataError: document.body?.innerText?.includes('WHY BLOCKED') && document.body?.innerText?.includes('DATA ERROR'),
     playersExternal: document.body?.innerText?.includes('External players are not applicable'),
     playersSelection: location.pathname === '/players' && location.search.includes('player=2') && document.querySelector('app-player-dossier h2')?.textContent?.trim() === 'Birch',
-    fixtureLeak: ['92%', '184 GUILDS', 'Ravok', 'Krynn', '18.7M', '1.82M', '21.4M', '28.7%', '1.4s', 'Execute DPS'].some(value => document.body?.innerText?.includes(value))
+    defensiveGated: document.body?.innerText?.includes('PROBABLE LINKS GATED') && document.body?.innerText?.includes('NOT ASSESSED'),
+    defensiveReady: document.body?.innerText?.includes('highest-ranked preceding classified event') && document.body?.innerText?.includes('Observed cast') && document.body?.innerText?.includes('availability'),
+    defensivePartial: document.body?.innerText?.includes('PARTIAL / BOUNDED EVIDENCE') && document.body?.innerText?.includes('death evidence stream is truncated'),
+    defensiveExternal: document.body?.innerText?.includes('EXTERNAL EVALUATION'),
+    defensiveSelection: location.pathname === '/defensive-audit' && location.search.includes('death=') && Boolean(document.querySelector('.chain-list button.selected')),
+    fixtureLeak: ['92%', '184 GUILDS', 'Ravok', 'Krynn', 'Astral Shift', 'Nether Eruption', 'DIED WITH PERSONAL', 'PERSONAL COVERAGE', '18.7M', '1.82M', '21.4M', '28.7%', '1.4s', 'Execute DPS'].some(value => document.body?.innerText?.includes(value))
   }))()`,
   );
   const entry = { viewport, surface, state, ...result };
@@ -1150,11 +1287,19 @@ try {
                 : playersMode === 'external'
                   ? bodies.playersExternal
                   : bodies.playersPending
-            : pullMode === 'gated'
-              ? bodies.gatedOperational
-              : pullMode === 'insufficient'
-                ? bodies.insufficientOperational
-                : bodies.operational;
+            : currentSurface === 'defensive-audit'
+              ? defensiveMode === 'gated'
+                ? bodies.defensiveGated
+                : defensiveMode === 'partial'
+                  ? bodies.defensivePartial
+                  : defensiveMode === 'external'
+                    ? bodies.defensiveExternal
+                    : bodies.defensiveReady
+              : pullMode === 'gated'
+                ? bodies.gatedOperational
+                : pullMode === 'insufficient'
+                  ? bodies.insufficientOperational
+                  : bodies.operational;
       void cdp.send('Fetch.fulfillRequest', {
         requestId: message.params.requestId,
         responseCode: 200,
@@ -1292,6 +1437,34 @@ try {
       'External players are not applicable',
     );
     await audit(cdp, viewport.id, 'players', 'external');
+    await navigate(cdp, '/defensive-audit', 'CONTEXT REQUIRED');
+    await audit(cdp, viewport.id, 'defensive-audit', 'context');
+    await navigate(
+      cdp,
+      '/defensive-audit?report=SANITIZED01&encounter=3010&difficulty=5&visual=gated',
+      'PROBABLE LINKS GATED',
+    );
+    await audit(cdp, viewport.id, 'defensive-audit', 'gated');
+    await navigate(
+      cdp,
+      '/defensive-audit?report=SANITIZED01&encounter=3010&difficulty=5',
+      'Participant evidence ledger',
+    );
+    await evaluate(cdp, `document.querySelector('.chain-list button')?.click()`);
+    await sleep(100);
+    await audit(cdp, viewport.id, 'defensive-audit', 'ready');
+    await navigate(
+      cdp,
+      '/defensive-audit?report=SANITIZED01&encounter=3010&difficulty=5&visual=partial',
+      'PARTIAL / BOUNDED EVIDENCE',
+    );
+    await audit(cdp, viewport.id, 'defensive-audit', 'partial');
+    await navigate(
+      cdp,
+      '/defensive-audit?report=SANITIZED01&encounter=3010&difficulty=5&visual=external',
+      'EXTERNAL EVALUATION',
+    );
+    await audit(cdp, viewport.id, 'defensive-audit', 'external');
   }
   await cdp.send('Browser.close').catch(() => {});
   cdp.close();
@@ -1390,13 +1563,41 @@ if (audits.filter((item) => item.state === 'published').some((item) => !item.pla
   failures.push({ reason: 'Players published state incomplete' });
 if (audits.filter((item) => item.state === 'data-error').some((item) => !item.playersDataError))
   failures.push({ reason: 'Players data-integrity state incomplete' });
-if (audits.filter((item) => item.state === 'external').some((item) => !item.playersExternal))
+if (
+  audits
+    .filter((item) => item.surface === 'players' && item.state === 'external')
+    .some((item) => !item.playersExternal)
+)
   failures.push({ reason: 'Players external HOME boundary incomplete' });
+if (
+  audits
+    .filter((item) => item.surface === 'defensive-audit' && item.state === 'gated')
+    .some((item) => !item.defensiveGated || item.defensiveReady)
+)
+  failures.push({ reason: 'Defensive Audit gated evidence boundary incomplete' });
+if (
+  audits
+    .filter((item) => item.surface === 'defensive-audit' && item.state === 'ready')
+    .some((item) => !item.defensiveReady || !item.defensiveSelection)
+)
+  failures.push({ reason: 'Defensive Audit ready replay or URL selection incomplete' });
+if (
+  audits
+    .filter((item) => item.surface === 'defensive-audit' && item.state === 'partial')
+    .some((item) => !item.defensivePartial)
+)
+  failures.push({ reason: 'Defensive Audit partial evidence state incomplete' });
+if (
+  audits
+    .filter((item) => item.surface === 'defensive-audit' && item.state === 'external')
+    .some((item) => !item.defensiveExternal)
+)
+  failures.push({ reason: 'Defensive Audit external evaluation label incomplete' });
 const legacyReportApi = apiRequestRecords
   .filter((request) => request.surface !== 'progress' && request.surface !== 'players')
   .map((request) => request.url);
 if (
-  legacyReportApi.length !== 16 ||
+  legacyReportApi.length !== 24 ||
   legacyReportApi.some(
     (url) =>
       !/[?&]report=SANITIZED01/.test(url) ||
@@ -1407,6 +1608,23 @@ if (
   failures.push({
     reason: 'Existing report-scoped API requests are not exact and deterministic',
     apiRequests: legacyReportApi,
+  });
+const defensiveApi = apiRequestRecords
+  .filter((request) => request.surface === 'defensive-audit')
+  .map((request) => request.url);
+if (
+  defensiveApi.length !== 8 ||
+  defensiveApi.some(
+    (url) =>
+      new URL(url).pathname !== '/api/wcl/operational-execution' ||
+      !/[?&]report=SANITIZED01/.test(url) ||
+      !/[?&]encounter=3010/.test(url) ||
+      !/[?&]difficulty=5/.test(url),
+  )
+)
+  failures.push({
+    reason: 'Defensive Audit does not use one exact operational request per loaded state',
+    apiRequests: defensiveApi,
   });
 const playersApi = apiRequestRecords
   .filter((request) => request.surface === 'players')
@@ -1451,7 +1669,14 @@ if (
 const externalRequestRecords = requests.filter(
   (request) => new URL(request.url).origin !== baseOrigin,
 );
-for (const surface of ['composition', 'damage-healing', 'pull-lab', 'progress', 'players']) {
+for (const surface of [
+  'composition',
+  'damage-healing',
+  'pull-lab',
+  'progress',
+  'players',
+  'defensive-audit',
+]) {
   const report = {
     schemaVersion: 'phase4-visual-v1',
     surface,
@@ -1477,5 +1702,5 @@ if (errors.length || failures.length) {
   process.exit(1);
 }
 console.log(
-  `[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 54 stubbed local API reads - 0 provider calls`,
+  `[visual] PASS - ${audits.length} route/viewport checks - 0 browser errors - 62 stubbed local API reads - 0 provider calls`,
 );

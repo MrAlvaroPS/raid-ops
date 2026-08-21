@@ -50,6 +50,14 @@ function productRoute(feature: FeatureDefinition): Route {
             (module) => module.PlayersPage,
           ),
       };
+    case 'defensive-audit':
+      return {
+        ...route,
+        loadComponent: () =>
+          import('./features/defensive-audit/presentation/defensive-audit-page/defensive-audit.page').then(
+            (module) => module.DefensiveAuditPage,
+          ),
+      };
     default:
       return {
         ...route,

@@ -61,7 +61,7 @@ export const PRODUCT_FEATURES: readonly FeatureDefinition[] = Object.freeze([
     label: 'Defensive Audit',
     shortLabel: 'Defensives',
     icon: '◇',
-    owner: 'legacy',
+    owner: 'angular',
     complexity: 'high',
   },
   {

@@ -8,6 +8,15 @@ without tags they must not be read as independently proven deployment dates.
 
 ## Unreleased — Angular migration
 
+- Completed the Defensive Audit Angular vertical slice with one exact-scope
+  operational request, reconciled death populations, actor-ID attribution,
+  observed consumable casts and bounded classified death-chain replay.
+- Removed Golden preventable-death, coverage, ready-personal, opportunity-rate
+  and cooldown-plan claims; availability and inventory remain `UNKNOWN`,
+  preventability is `NOT ASSESSED` and chain evidence is labelled as probable
+  temporal association rather than causal proof.
+- Added context, operational-reference-gated, ready, partial/truncated and
+  external-evaluation states with URL-owned filtering/selection and no refetch.
 - Completed the Players Angular vertical slice with explicit report, encounter
   and difficulty scope; HOME-only population enforcement; real best-pull roster,
   execution evidence, persisted attendance and Reliability `1.1.0` decoding.

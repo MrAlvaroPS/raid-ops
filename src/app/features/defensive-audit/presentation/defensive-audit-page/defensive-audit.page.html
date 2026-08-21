@@ -1,0 +1,349 @@
+<section class="defensive-page">
+  <header class="page-heading">
+    <div>
+      <small>AVOID // RAID OPERATIONS CENTER</small>
+      <h1>Defensive Audit</h1>
+    </div>
+    <div class="guild-mark"><b>AVOID</b><small>EU · DRAENOR</small></div>
+  </header>
+
+  @switch (state().kind) {
+    @case ('context-required') {
+      <section class="context-card">
+        <span>EXACT WCL CONTEXT REQUIRED</span>
+        <h2>Audit observed survival evidence</h2>
+        <p>
+          Supply a report, encounter and difficulty. No death, defensive, consumable or causal claim
+          is borrowed from another scope.
+        </p>
+        <app-wcl-scope-form label="Defensive Audit scope" (scopeSubmitted)="applyScope($event)" />
+      </section>
+    }
+    @case ('loading') {
+      <section class="state-panel" aria-live="polite">
+        <span>LOADING OBSERVED EVIDENCE</span>
+        <h2>Reconstructing the exact report scope</h2>
+        <p>Deaths, observed casts and operational mechanic evidence remain separate.</p>
+      </section>
+    }
+    @case ('error') {
+      <section class="state-panel error" role="alert">
+        <span>{{ $any(state()).retryable ? 'TRANSPORT ERROR' : 'CONTRACT ERROR' }}</span>
+        <h2>Defensive evidence was withheld</h2>
+        <p>{{ $any(state()).message }}</p>
+        @if ($any(state()).retryable) {
+          <button type="button" (click)="retry()">Retry exact scope</button>
+        }
+      </section>
+    }
+    @case ('empty') {
+      <section class="state-panel">
+        <span>NO COMPLETED EVIDENCE</span>
+        <h2>Nothing is classified as a defensive failure</h2>
+        <p>{{ data()?.emptyReason }}</p>
+        <app-wcl-scope-form
+          label="Change Defensive Audit scope"
+          [initialScope]="$any(state()).scope"
+          (scopeSubmitted)="applyScope($event)"
+        />
+      </section>
+    }
+    @case ('ready') {
+      <section class="hero-panel">
+        <div>
+          <span>OBSERVED DEATH EVIDENCE</span>
+          <h2>Defensive Audit</h2>
+          <p>
+            What WCL observed before each meaningful death. Availability, inventory and
+            preventability remain unasserted until their evidence contracts are satisfied.
+          </p>
+          <div class="scope-line">
+            <b>{{ data()!.encounter?.name ?? 'Encounter ' + data()!.encounter?.id }}</b>
+            <span>{{ data()!.encounter?.difficultyName }}</span
+            ><span>{{ data()!.reportCode }}</span>
+            <em [class.external]="data()!.homeRaidEligible === false">{{
+              data()!.homeRaidEligible === true
+                ? 'HOME REPORT'
+                : data()!.homeRaidEligible === false
+                  ? 'EXTERNAL EVALUATION'
+                  : 'SOURCE UNRESOLVED'
+            }}</em>
+          </div>
+        </div>
+        <aside>
+          <small>PREVENTABLE DEATHS</small><b>—</b><span>NOT ASSESSED</span
+          ><em>No counterfactual is calculated</em>
+        </aside>
+      </section>
+
+      <section class="metric-strip">
+        <article>
+          <small>RAW DEATH EVENTS</small><b>{{ data()!.deathCounts.raw }}</b
+          ><span>All friendly WCL deaths</span>
+        </article>
+        <article>
+          <small>MEANINGFUL DEATHS</small><b>{{ data()!.deathCounts.meaningful }}</b
+          ><span>wipeCutoff {{ data()!.deathCounts.wipeCutoff }}</span>
+        </article>
+        <article>
+          <small>FIRST DEATHS</small><b>{{ data()!.deathCounts.first }}</b
+          ><span>First friendly death per pull</span>
+        </article>
+        <article>
+          <small>PROBABLE LINKS</small><b>{{ data()!.deathCounts.linked }}</b
+          ><span>Temporal association only</span>
+        </article>
+        <article>
+          <small>OBSERVED CONSUMABLE CASTS</small
+          ><b>{{
+            data()!.observedConsumables.healthstones + data()!.observedConsumables.potions
+          }}</b
+          ><span
+            >{{ data()!.observedConsumables.healthstones }} healthstone ·
+            {{ data()!.observedConsumables.potions }} potion</span
+          >
+        </article>
+      </section>
+
+      @if (data()!.partialReasons.length) {
+        <details class="data-disclosure" open>
+          <summary>
+            PARTIAL / BOUNDED EVIDENCE · {{ data()!.partialReasons.length }} note(s)
+          </summary>
+          @for (reason of data()!.partialReasons; track reason) {
+            <p>{{ reason }}</p>
+          }
+        </details>
+      }
+
+      <section class="panel accountability-panel">
+        <header>
+          <span>01</span>
+          <div>
+            <h2>Participant evidence ledger</h2>
+            <p>Observed uses and deaths; no inferred personal readiness or consumable inventory</p>
+          </div>
+          <b [class.gated]="data()!.classificationStatus === 'gated'">{{
+            data()!.classificationStatus === 'ready'
+              ? 'CHAIN EVIDENCE READY'
+              : 'CLASSIFICATION GATED'
+          }}</b>
+        </header>
+        <div class="audit-controls" role="group" aria-label="Filter participant evidence">
+          <button type="button" [class.active]="filter() === 'all'" (click)="setFilter('all')">
+            All participants
+          </button>
+          <button
+            type="button"
+            [class.active]="filter() === 'deaths'"
+            (click)="setFilter('deaths')"
+          >
+            Deaths only
+          </button>
+          <button
+            type="button"
+            [class.active]="filter() === 'linked'"
+            (click)="setFilter('linked')"
+          >
+            Probable links
+          </button>
+        </div>
+        <div class="audit-table" role="table" aria-label="Defensive participant evidence">
+          <div class="audit-head" role="row">
+            <span>PARTICIPANT</span><span>MEANINGFUL / FIRST</span><span>HEALTHSTONE CASTS</span
+            ><span>POTION CASTS</span><span>PROBABLE LINKS</span><span>PERSONAL AVAILABILITY</span>
+          </div>
+          @for (participant of visibleParticipants(); track participant.actorId) {
+            <article role="row" [class.linked]="participant.linkedChains > 0">
+              <span class="participant"
+                ><i>{{ initial(participant) }}</i
+                ><span
+                  ><b>{{ participant.name }}</b
+                  ><small
+                    >{{ participantMeta(participant) }} ·
+                    {{
+                      participant.source === 'best-pull-roster'
+                        ? 'best-pull roster'
+                        : 'death-chain actor'
+                    }}</small
+                  ></span
+                ></span
+              >
+              <span
+                ><b
+                  >{{ count(participant.meaningfulDeaths) }} /
+                  {{ count(participant.firstDeaths) }}</b
+                ><small>observed death populations</small></span
+              >
+              <span
+                ><b>{{ participant.observedHealthstones }}</b
+                ><small>cast observed · inventory unknown</small></span
+              >
+              <span
+                ><b>{{ participant.observedPotions }}</b
+                ><small>cast observed · inventory unknown</small></span
+              >
+              <span
+                ><b>{{ participant.linkedChains }}</b
+                ><small>not proof of causality</small></span
+              >
+              <span><em>UNKNOWN</em><small>catalogue + cooldown reconstruction absent</small></span>
+            </article>
+          } @empty {
+            <p class="empty-row">No participant matches this evidence filter.</p>
+          }
+        </div>
+      </section>
+
+      <section class="evidence-layout">
+        <article class="panel chain-list">
+          <header>
+            <span>02</span>
+            <div>
+              <h2>Meaningful death evidence</h2>
+              <p>
+                Every normalized death remains visible, including deaths with no classified
+                predecessor
+              </p>
+            </div>
+          </header>
+          @if (data()!.classificationStatus === 'gated') {
+            <div class="gated-state">
+              <b>PROBABLE LINKS GATED</b>
+              <p>{{ data()!.classificationReason }}</p>
+            </div>
+          } @else {
+            @for (chain of data()!.chains; track chain.key) {
+              <button
+                type="button"
+                [class.selected]="selectedChain()?.key === chain.key"
+                (click)="selectChain(chain)"
+              >
+                <span
+                  ><b>{{ chain.player ?? 'Unknown actor' }}</b
+                  ><small
+                    >Fight {{ chain.fightId }} · {{ duration(chain.fightRelativeMs) }}</small
+                  ></span
+                >
+                <span
+                  ><em [class]="confidenceTone(chain.confidence)">{{
+                    confidenceLabel(chain.confidence)
+                  }}</em
+                  ><small>{{
+                    chain.probableCause?.mechanicName ?? 'No classified predecessor'
+                  }}</small></span
+                >
+              </button>
+            } @empty {
+              <div class="gated-state">
+                <b>NO MEANINGFUL DEATHS</b>
+                <p>No death chain exists in the complete eligible population.</p>
+              </div>
+            }
+          }
+        </article>
+
+        <article class="panel replay-panel">
+          <header>
+            <span>03</span>
+            <div>
+              <h2>
+                Evidence replay{{
+                  selectedChain() ? ' · ' + (selectedChain()!.player ?? 'Unknown actor') : ''
+                }}
+              </h2>
+              <p>
+                {{
+                  selectedChain()
+                    ? 'Fight ' +
+                      selectedChain()!.fightId +
+                      ' · ' +
+                      duration(selectedChain()!.fightRelativeMs) +
+                      ' · bounded 10-second window'
+                    : 'Select a classified death chain'
+                }}
+              </p>
+            </div>
+          </header>
+          @if (selectedChain(); as chain) {
+            <div class="death-replay">
+              @for (event of timeline(chain); track $index) {
+                <div>
+                  <time>{{ eventTime(chain, event.occurredMsBeforeDeath) }}</time
+                  ><span
+                    ><b>{{ event.mechanicName }}</b
+                    ><small>{{ event.reason ?? 'Classified mechanic evidence' }}</small></span
+                  ><em>{{ (event.occurredMsBeforeDeath / 1000).toFixed(1) }}s BEFORE</em>
+                </div>
+              }
+              <div class="death">
+                <time>{{ duration(chain.fightRelativeMs) }}</time
+                ><span
+                  ><b>{{ chain.player ?? 'Participant' }} dies</b
+                  ><small>{{ chain.killingBlow ?? 'Killing blow unavailable' }}</small></span
+                ><em>DEATH</em>
+              </div>
+            </div>
+            <div class="verdict" [class.unlinked]="!chain.probableCause">
+              <b>{{
+                chain.probableCause ? confidenceLabel(chain.confidence) : 'NO CLASSIFIED LINK'
+              }}</b>
+              <p>
+                @if (chain.probableCause) {
+                  {{ chain.probableCause.mechanicName }} is the highest-ranked preceding classified
+                  event. This is not proof of causality and does not establish defensive
+                  availability or preventability.
+                } @else {
+                  No classified mechanic evidence was linked inside the bounded window. Absence of a
+                  link does not prove an unavoidable death.
+                }
+              </p>
+            </div>
+          } @else {
+            <div class="gated-state">
+              <b>REPLAY UNAVAILABLE</b>
+              <p>No classified chain can be selected in the current evidence state.</p>
+            </div>
+          }
+        </article>
+      </section>
+
+      <section class="panel readiness-panel">
+        <header>
+          <span>04</span>
+          <div>
+            <h2>Defensive plan vs execution boundary</h2>
+            <p>The Golden plan is withheld until every required evidence owner exists</p>
+          </div>
+          <b>NOT IMPLEMENTED BY BACKEND</b>
+        </header>
+        <div class="readiness-grid">
+          <article>
+            <small>CLASS / SPEC / BUILD ABILITY</small><b>NOT PROVIDED</b>
+            <p>A versioned defensive catalogue is required.</p>
+          </article>
+          <article>
+            <small>COOLDOWN AVAILABILITY</small><b>UNKNOWN</b>
+            <p>No missing cast is interpreted as an available personal.</p>
+          </article>
+          <article>
+            <small>CONSUMABLE INVENTORY</small><b>UNKNOWN</b>
+            <p>WCL can observe a cast, never prove unused inventory.</p>
+          </article>
+          <article>
+            <small>RAID COOLDOWN ASSIGNMENT</small><b>NOT CONNECTED</b>
+            <p>No plan source or assignment ownership is available.</p>
+          </article>
+        </div>
+      </section>
+
+      <footer class="evidence-footer">
+        <span>{{ data()!.evidence.source }}</span
+        ><span>{{ data()!.encounter?.scopeKey }}</span
+        ><span>{{ data()!.evidence.metricContract }}</span
+        ><span>Probable link ≠ cause</span><span>Observed cast ≠ availability</span
+        ><span>Preventability not assessed</span>
+      </footer>
+    }
+  }
+</section>

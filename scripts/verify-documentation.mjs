@@ -42,6 +42,7 @@ const required = [
   'docs/features/pull-lab/README.md',
   'docs/features/progress/README.md',
   'docs/features/players/README.md',
+  'docs/features/defensive-audit/README.md',
   'docs/migration/baseline/CURRENT-ARCHITECTURE-BASELINE.md',
   'docs/migration/baseline/DATA-PERSISTENCE-BASELINE.md',
   'docs/visual/LIVING-VISUAL-BASELINE.md',
@@ -53,6 +54,7 @@ const required = [
   'docs/migration/evidence/phase4-pull-lab-verification.json',
   'docs/migration/evidence/phase4-progress-verification.json',
   'docs/migration/evidence/phase4-players-verification.json',
+  'docs/migration/evidence/phase4-defensive-audit-verification.json',
   'docs/migration/evidence/visual/offline/manifest.json',
 ];
 
@@ -112,6 +114,12 @@ const progress = JSON.parse(
 );
 const players = JSON.parse(
   await readFile(join(root, 'docs/migration/evidence/phase4-players-verification.json'), 'utf8'),
+);
+const defensiveAudit = JSON.parse(
+  await readFile(
+    join(root, 'docs/migration/evidence/phase4-defensive-audit-verification.json'),
+    'utf8',
+  ),
 );
 const allReleases = [...history.documentedPreGit, ...history.mainlineProductReleases];
 for (const version of allReleases) {
@@ -304,6 +312,53 @@ for (const capture of players.visualEvidence?.captures ?? []) {
   if (digest !== capture.sha256)
     failures.push(`Players visual evidence hash mismatch: ${capture.file}`);
 }
+if (defensiveAudit.surface !== 'defensive-audit' || defensiveAudit.frontendOwner !== 'angular')
+  failures.push('Phase 4 evidence does not transfer Defensive Audit ownership');
+if (defensiveAudit.productionSwitchEnabled !== false)
+  failures.push('Defensive Audit evidence must keep the global production switch disabled');
+if (
+  defensiveAudit.results?.wclProviderCalls !== 0 ||
+  defensiveAudit.results?.databaseOrCorpusMutations !== 0
+)
+  failures.push('Defensive Audit visual evidence must remain provider- and mutation-free');
+if (
+  defensiveAudit.scopeContract?.identity !== 'report+encounter+difficulty' ||
+  defensiveAudit.scopeContract?.evidenceIdentity !== 'encounter+difficulty' ||
+  defensiveAudit.scopeContract?.actorJoin !== 'numeric actor ID only' ||
+  defensiveAudit.scopeContract?.crossDifficultyComparisonForbidden !== true ||
+  defensiveAudit.scopeContract?.externalReportsPersistedAsHome !== false
+)
+  failures.push('Defensive Audit evidence lost exact scope, identity or external isolation');
+if (
+  defensiveAudit.metricContract?.version !== 'defensive-audit-observational-v1' ||
+  defensiveAudit.metricContract?.causality !==
+    'probable temporal association only; not causal proof' ||
+  defensiveAudit.metricContract?.defensiveAvailability !== 'unknown' ||
+  defensiveAudit.metricContract?.inventoryAvailability !== 'unknown' ||
+  defensiveAudit.metricContract?.preventability !== 'not-assessed'
+)
+  failures.push('Defensive Audit evidence weakened causality, availability or null semantics');
+if (
+  defensiveAudit.operationalBoundary?.endpointMayAcquireWcl !== true ||
+  defensiveAudit.operationalBoundary?.endpointMayPersistHomeOperationalProducts !== true ||
+  defensiveAudit.operationalBoundary?.externalEvaluationNeverHome !== true ||
+  defensiveAudit.operationalBoundary?.visualDispatch !== false
+)
+  failures.push('Defensive Audit evidence misstates the operational endpoint boundary');
+if (defensiveAudit.visualEvidence?.captures?.length !== 10)
+  failures.push('Defensive Audit evidence must contain ten responsive state captures');
+for (const capture of defensiveAudit.visualEvidence?.captures ?? []) {
+  const path = join(root, 'docs/migration/evidence/visual/defensive-audit', capture.file);
+  if (!(await exists(path))) {
+    failures.push(`missing Defensive Audit visual evidence: ${capture.file}`);
+    continue;
+  }
+  const digest = createHash('sha256')
+    .update(await readFile(path))
+    .digest('hex');
+  if (digest !== capture.sha256)
+    failures.push(`Defensive Audit visual evidence hash mismatch: ${capture.file}`);
+}
 
 const parity = await readFile(join(root, 'docs/migration/PARITY-MATRIX.md'), 'utf8');
 const requiredSurfaces = [
@@ -350,5 +405,5 @@ if (failures.length) {
 }
 
 console.log(
-  `[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length + pullLab.visualEvidence.captures.length + progress.visualEvidence.captures.length + players.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`,
+  `[docs] PASS · ${allReleases.length} audited versions · ${manifest.captures.length} legacy + ${phase4.visualEvidence.captures.length + damageHealing.visualEvidence.captures.length + pullLab.visualEvidence.captures.length + progress.visualEvidence.captures.length + players.visualEvidence.captures.length + defensiveAudit.visualEvidence.captures.length} Phase 4 captures · 11 parity surfaces`,
 );

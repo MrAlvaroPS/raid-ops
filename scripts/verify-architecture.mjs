@@ -47,13 +47,20 @@ const angularOwners = [...catalog.matchAll(/\{([\s\S]*?)\},/g)]
   .filter((match) => /owner:\s*'angular'/.test(match[1]))
   .map((match) => match[1].match(/id:\s*'([^']+)'/)?.[1])
   .filter(Boolean);
-const expectedAngularOwners = ['progress', 'pull-lab', 'damage-healing', 'players', 'composition'];
+const expectedAngularOwners = [
+  'progress',
+  'pull-lab',
+  'damage-healing',
+  'defensive-audit',
+  'players',
+  'composition',
+];
 if (
   angularOwners.length !== expectedAngularOwners.length ||
   angularOwners.some((owner, index) => owner !== expectedAngularOwners[index])
 ) {
   failures.push(
-    `incremental ownership must contain only Players, Progress, Pull Lab, Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`,
+    `incremental ownership must contain only Defensive Audit, Players, Progress, Pull Lab, Damage & Healing and Composition; found: ${angularOwners.join(', ') || 'none'}`,
   );
 }
 const routes = await readFile(new URL('../src/app/app.routes.ts', import.meta.url), 'utf8');
@@ -86,6 +93,12 @@ if (
   !routes.includes('features/players/presentation/players-page')
 ) {
   failures.push('Players must resolve to its Angular presentation route');
+}
+if (
+  !routes.includes("case 'defensive-audit'") ||
+  !routes.includes('features/defensive-audit/presentation/defensive-audit-page')
+) {
+  failures.push('Defensive Audit must resolve to its Angular presentation route');
 }
 const compositionRepository = await readFile(
   new URL(
@@ -164,6 +177,35 @@ if (
   failures.push(
     'Players longitudinal attendance must remain HOME encounter+difficulty scoped, not Active Report scoped',
   );
+const defensiveAuditRepository = await readFile(
+  new URL(
+    '../src/app/features/defensive-audit/infrastructure/defensive-audit-api.repository.ts',
+    import.meta.url,
+  ),
+  'utf8',
+);
+for (const parameter of ['report', 'encounter', 'difficulty']) {
+  if (!defensiveAuditRepository.includes(`${parameter}:`))
+    failures.push(`Defensive Audit request must include explicit ${parameter}`);
+}
+if (!defensiveAuditRepository.includes('/api/wcl/operational-execution?'))
+  failures.push('Defensive Audit must reuse the existing operational-execution boundary');
+const defensiveAuditContract = await readFile(
+  new URL(
+    '../src/app/features/defensive-audit/infrastructure/defensive-audit-api.contract.ts',
+    import.meta.url,
+  ),
+  'utf8',
+);
+for (const invariant of [
+  "preventability: 'not-assessed'",
+  "defensiveAvailability: 'unknown'",
+  "inventoryAvailability: 'unknown'",
+  "causality: 'probable-temporal-association-only'",
+]) {
+  if (!defensiveAuditContract.includes(invariant))
+    failures.push(`Defensive Audit evidence invariant is missing: ${invariant}`);
+}
 const runtime = await readFile(
   new URL('../src/app/core/config/runtime-config.ts', import.meta.url),
   'utf8',
@@ -177,5 +219,5 @@ if (failures.length) {
 }
 
 console.log(
-  `[architecture] PASS · ${files.length} source files · dependency direction and five-surface incremental ownership preserved`,
+  `[architecture] PASS · ${files.length} source files · dependency direction and six-surface incremental ownership preserved`,
 );

@@ -9,7 +9,7 @@ sequence and does not convert the migration into a big-bang rewrite.
 | 1     | Stabilise the React/Vite legacy reference without weakening contracts                                 | Complete                                                                                                                   |
 | 2     | Order documentation and releases; retire obsolete deployment guidance; adopt a living visual baseline | Complete, including target hand-off                                                                                        |
 | 3     | Establish the Angular Clean Architecture foundation and coexistence boundary                          | Complete                                                                                                                   |
-| 4     | Migrate product surfaces incrementally with full vertical-slice gates                                 | **In progress:** Players, Progress, Pull Lab, Damage & Healing and Composition complete (5/11); production switch disabled |
+| 4     | Migrate product surfaces incrementally with full vertical-slice gates                                 | **In progress:** Defensive Audit, Players, Progress, Pull Lab, Damage & Healing and Composition complete (6/11); production switch disabled |
 
 The documentary hand-off performed at the end of Phase 3 closes an omission in
 the execution of Phase 2; it does not create, rename or reorder a phase.
@@ -17,9 +17,9 @@ the execution of Phase 2; it does not create, rename or reorder a phase.
 ## Current ownership
 
 - Angular owns its foundation, migration coordination, changelog, visual
-  migration policy, Players, Progress, Pull Lab, Damage & Healing and Composition
-  frontend routes.
-- The verified legacy frontend owns the remaining six product surfaces and is
+  migration policy, Defensive Audit, Players, Progress, Pull Lab, Damage &
+  Healing and Composition frontend routes.
+- The verified legacy frontend owns the remaining five product surfaces and is
   the immediate rollback for all migrated routes until production cutover.
 - The legacy Node/Nitro application owns backend, Iris, WCL, provider and
   persistence contracts.
@@ -27,15 +27,15 @@ the execution of Phase 2; it does not create, rename or reorder a phase.
 
 ## Gate for the next original step
 
-The first five complete vertical slices are implemented and recorded in
+The first six complete vertical slices are implemented and recorded in
 [Phase 4](./PHASE-4.md). The next product slice in that same phase should be
-**Defensive Audit**: freeze death-chain populations, defensive-availability
-evidence, observed-versus-causal labels, null policy and player attribution
-before changing its UI.
+**Command Center**: freeze every aggregated metric's source, freshness, scope,
+partial-data semantics and navigation target before replacing its Golden-only
+dashboard.
 
-Defensive Audit is a high-complexity slice because partial availability or an
-observed temporal sequence must never be promoted into blame, readiness or a
-proven defensive failure. LIVE, Loot and Iris remain deliberately deferred.
+Command Center is a high-complexity slice because it composes several data
+planes and can easily turn missing or stale evidence into a false readiness,
+blocker or active-pull claim. LIVE, Loot and Iris remain deliberately deferred.
 
 The following files are binding inputs:
 
@@ -48,3 +48,4 @@ The following files are binding inputs:
 - [Pull Lab frontend contract](../features/pull-lab/README.md).
 - [Progress frontend contract](../features/progress/README.md).
 - [Players frontend contract](../features/players/README.md).
+- [Defensive Audit frontend contract](../features/defensive-audit/README.md).
